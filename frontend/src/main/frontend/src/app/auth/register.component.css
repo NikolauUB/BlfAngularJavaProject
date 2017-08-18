@@ -1,0 +1,39 @@
+.selected {
+  background-color: #dc6b1a !important;
+  padding: 0;
+  height: 210px;
+  color: white;
+}
+.regItems {
+  margin: 0 0 2em 0;
+  list-style-type: none;
+  padding: 0;
+  max-width: 1000px;
+  height: 210px;
+}
+
+.regItems span {
+  cursor: pointer;
+  position: relative;
+  left: 0;
+  background-color: #EEE;
+  margin: .5em;
+  padding: .3em 0;
+  display:inline-block;
+  border-radius: 4px;
+}
+.regItems span:hover {
+  color: #607D8B;
+  background-color: #DDD;
+  display:inline-block;
+  left: .1em;
+}
+.ng-invalid:not(form)  {
+  border: 1px solid #a94442;
+}
+
+.regItems span.selected:hover {
+  background-color: #dc6b1a !important;
+  display:inline-block;
+  color: white;
+}

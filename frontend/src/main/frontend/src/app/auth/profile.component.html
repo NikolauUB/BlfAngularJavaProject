@@ -1,0 +1,30 @@
+<h2>Редактирование профайла</h2>
+<div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+<div class="regItems">
+  <form #profileForm="ngForm">
+    <div class="form-group">
+      <label for="usernameRD">Ваше имя:</label>
+      <input type="text" id="usernameRD" class="form-control" required [(ngModel)]="userData.username" name="usernameRD"/>
+    </div>
+    <div class="form-group">
+        <label for="imagePath">Загрузить новую фотографию:</label>
+        <input type="file" #imagePath id="imagePath" class="form-control" (change)="fileChangeEvent($event, userData, imagePreview)" name="imagePath"/>
+    </div>
+    <div class="form-group">
+     &nbsp;&nbsp;<img  #imagePreview src="{{userData.previewImage}}"/>
+    </div>
+      &nbsp;&nbsp;<button *ngIf="userData.previewImage"(click)="deleteProfileImage(profileForm)">Удалить фотографию</button>
+    <br/>
+    <br/>
+    <button (click)="saveProfile(profileForm); $event.stopPropagation()">Сохранить профайл</button>
+    <button (click)="loadProfile(profileForm); $event.stopPropagation()">Сбросить изменения</button>
+  </form>
+</div>
+<div>
+  <span><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a>&nbsp;&nbsp;</span>
+  <span><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a>&nbsp;&nbsp;</span>
+  <span><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></span>
+</div>
+
+
+

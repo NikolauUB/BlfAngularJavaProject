@@ -1,0 +1,149 @@
+
+.mainPageWidth {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    max-width: 1600px;
+}
+.nodeList {
+    zoom: 1;
+}
+.nodeList .node {
+    zoom: 1;
+    vertical-align: bottom;
+}
+.nodeList .categoryStrip {
+    font-size: 14px;
+    color: #000;
+    padding: 5px 10px;
+    margin: 3px auto 0;
+    background-color: rgb(100, 125, 146);
+    padding: 5px 10px;
+    margin: 0;
+    border-style: none;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+}
+.node .nodeInfo {
+    overflow: hidden;
+    zoom: 1;
+    position: relative;
+}
+.node .nodeIcon {
+    margin: 10px 0 10px 10px;
+    float: left;
+    width: 36px;
+    height: 36px;
+}
+.node .nodeText {
+    padding-top: 10px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    float: left;
+}
+.node .nodeText .nodeTitle {
+    font-size: 19px;
+    font-family: 'Roboto',Helvetica,Arial,sans-serif;
+}
+.node .nodeStats {
+    font-size: 11px;
+    margin-top: 2px;
+}
+.node .tinyIcon {
+    margin: 1px 4px;
+    display: none;
+    white-space: nowrap;
+    text-indent: 9999px;
+    overflow: hidden;
+    opacity: 0.25;
+    width: 14px;
+    height: 14px;
+}
+.discussionList {
+    position: relative;
+    zoom: 1;
+}
+.discussionList .posterAvatar {
+    width: 52px;
+}
+.conkursImage {
+    width: 100px;
+}
+.discussionList .sectionHeaders dt, .discussionList .sectionHeaders dd, .discussionListItem .listBlock {
+    display: table-cell;
+    vertical-align: middle;
+}
+.discussionList .stats {
+    width: 200px;
+}
+.discussionList .lastPost {
+    width: 200px;
+    text-align: left;
+    overflow: hidden;
+}
+
+.discussionList .sectionHeaders, .discussionListItem {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    word-wrap: normal;
+}
+.discussionList .main {
+    width: auto;
+}
+.discussionListItem .posterAvatar .avatarContainer {
+    display: block;
+    position: relative;
+}
+
+.discussionListItem .stats .major {
+    font-size: 16px;
+    line-height: 18px;
+    margin-top: 5px;
+    color: black;
+}
+.discussionListItem .stats .minor {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: black;
+}
+.discussionListItem .title {
+    font-size: 16px;
+    line-height: 18px;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+a.avatar {
+    float: left;
+}
+
+
+.form-group input[type="checkbox"] {
+    display: none;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span {
+    width: 20px;
+}
+
+.form-group input[type="checkbox"] + .btn-group > label span:first-child {
+    display: none;
+}
+.form-group input[type="checkbox"] + .btn-group > label span:last-child {
+    display: inline-block;
+}
+
+.form-group input[type="checkbox"]:checked + .btn-group > label span:first-child {
+    display: inline-block;
+}
+.form-group input[type="checkbox"]:checked + .btn-group > label span:last-child {
+    display: none;
+}
+.audioExpender {
+    height:102px;
+    width:100%;
+    clear:both;
+}

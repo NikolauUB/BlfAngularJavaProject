@@ -1,0 +1,33 @@
+<h2>Смена адреса электронной почты</h2>
+<div class="alert alert-danger" *ngIf="commonErrorMsg">{{commonErrorMsg}}</div>
+<div class="regItems">
+  <form #emailForm="ngForm">
+    <div class="form-group">
+      <label for="emailOld">Cтарый адрес электронной почты:</label>
+      <input type="email"
+             autocomplete="off"
+             id="emailOld"
+             name="emailOld"
+             class="form-control"
+             [(ngModel)]="emailData.oldEmail"
+             required email/>
+    </div>
+    <div class="form-group">
+      <label for="emailNew">Новый адрес электронной почты:</label>
+      <input type="email"
+             autocomplete="off"
+             id="emailNew"
+             name="emailNew"
+             class="form-control"
+             [(ngModel)]="emailData.newEmail"
+             required email/>
+      <small>
+        Формат поля: <i>john@doe.com</i>.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <button [disabled]="!emailForm.valid" (click)="changeEmail(); $event.stopPropagation();">Сменить</button>
+    </div>
+  </form>
+</div>

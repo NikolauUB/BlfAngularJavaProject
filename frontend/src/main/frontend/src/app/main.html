@@ -1,0 +1,30 @@
+<div id="header-inner" class="clear-block">
+  <div id="logo-title">
+    <div id="logo"><a href="/" title="Home" rel="home"><img src="../assets/images/logo.jpg" alt="Home" id="logo-image"></a></div>
+  </div> <!-- /#logo-title -->
+</div>
+<div id="main">
+
+  <div id="navbar"><div id="navbar-inner" class="clear-block region region-navbar">
+    <a name="navigation" id="navigation"></a>
+
+
+    <div id="primary" class="clear-block">
+
+      <nav>
+        <a routerLink="/about" routerLinkActive="active">О сайте</a>
+        <a routerLink="/history" routerLinkActive="active">История создания</a>
+        <a *ngIf="!isUsersAuthentificated()" routerLink="/login" routerLinkActive="active">Вход</a>
+        <a *ngIf="isUsersAuthentificated()" routerLink="/profile" routerLinkActive="active">Личный кабинет</a>
+        <a routerLink="/partake" routerLinkActive="active">Заявки на участие</a>
+      </nav>
+
+
+    </div> <!-- /#primary -->
+
+  </div></div>
+  <div *ngIf="isUsersAuthentificated()" style="float: right;">Добро пожаловать, {{getUserName()}}
+    <button (click)="doLogout(); $event.stopPropagation()">Выйти</button>
+  </div>
+  <router-outlet></router-outlet>
+</div>

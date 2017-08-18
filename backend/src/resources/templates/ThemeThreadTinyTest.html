@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- apiKey=3plr68fetfxk9t2g43ed3u242ti6hardxsy3ud1n2a7rbd3o -->
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector:'#mytextarea',
+            theme: 'modern',
+            plugins: [
+                'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code fullscreen',
+                'insertdatetime media nonbreaking save table contextmenu directionality',
+                'emoticons template paste textcolor colorpicker textpattern imagetools codesample toc help'
+            ],
+            toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+            toolbar2: 'print preview media | forecolor backcolor emoticons | codesample help',
+            image_advtab: true,
+            templates: [
+                { title: 'Test template 1', content: 'Test 1' },
+                { title: 'Test template 2', content: 'Test 2' }
+            ],
+            content_css: [
+                '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+                '//www.tinymce.com/css/codepen.min.css'
+            ],
+            setup : function(ed) {
+                ed.on("skinLoaded", function() {
+                    if(confirm("Do you want to remove service message? This is a hack due to their code vulnerability. Press 'cancel' to see how in goes without hacks and  registration!")) {
+                        ed.settings.service_message = "";
+                    }
+                });
+            }
+        });
+        function test() {
+            $('.modal-body').text(tinymce.get('mytextarea').getContent());
+            var ml = $('#myModal').modal();
+            ml.show();
+        };
+
+    </script>
+</head>
+<body>
+<p>Test TinyMCE  See also <a th:href="@{/editBynicEdit}">NicEdit</a></p>
+<form method="post">
+    <textarea id="mytextarea"></textarea>
+</form><br/>
+<input type="button" id="submit_bt" onclick="test();" value="View entered value"/>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</body>
+</html>

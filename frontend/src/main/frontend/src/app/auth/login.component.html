@@ -1,0 +1,15 @@
+<div>
+  <h2>Вход в личный кабинет</h2>
+  <div class="error">{{errorMsg}}</div>
+  <div class="form-group">
+    <label for="userEmail">Адрес электронной почты:</label>
+    <input type="text" id="userEmail" class="form-control" required [(ngModel)]="loginData.email" name="userEmail"/>
+  </div>
+  <div class="form-group">
+    <label for="userPassword">Пароль:</label>
+    <input type="password" id="userPassword" class="form-control" required [(ngModel)]="loginData.password" name="userPassword"/>
+  </div>
+  <button (click)="doLogin(); $event.stopPropagation()">Войти</button>
+
+  <p><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></p>
+</div>

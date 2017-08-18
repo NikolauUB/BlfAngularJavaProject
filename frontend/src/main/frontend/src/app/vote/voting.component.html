@@ -1,0 +1,18 @@
+<h2>Please select one or all</h2>
+<span>You are logoned as {{authInfo.username}}</span>
+<ul class="voteItems">
+  <li *ngFor="let voteItem of voteInfo.voteData" (click)="onSelect(voteItem)"
+      [class.selected]="selectedItem.has(voteItem)">
+    <span class="badge">{{voteItem.id}}</span>
+    <span>{{voteItem.username}}</span>
+    <span>{{voteItem.description}}</span>
+    <span>{{voteItem.videoUrl}}</span>
+    <span>{{voteItem.audioUrl}}</span>
+  </li>
+  <button (click)="sendResult(); $event.stopPropagation()" *ngIf="authInfo.autheticated">Send result</button>
+  <button #elseBlock>Login first to Vote</button>
+</ul>
+
+<p>Thanks for viewing</p>
+<app-modal-component></app-modal-component>
+
