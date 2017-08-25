@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {Router} from "@angular/router";
-import {UserData} from "../model/auth/UserData";
-import {AuthService} from "./auth.service";
-import {ProfileChangedReply} from "../model/auth/ProfileChangedReply";
+import {UserData} from "../../model/auth/UserData";
+import {AuthService} from "../auth.service";
+import {ProfileChangedReply} from "../../model/auth/ProfileChangedReply";
 import {NgForm} from "@angular/forms";
 
 
 @Component({
   selector: 'profile-app',
   templateUrl: './profile.component.html',
-  styleUrls: [ '../vote/voting.component.css' ]
+  styleUrls: [ '../../vote/voting.component.css' ]
 })
 export class ProfileComponent implements OnInit {
   @ViewChild('imagePath')

@@ -1,4 +1,4 @@
-import {Component}          from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavigationError, Router} from "@angular/router";
 import {AuthService} from "./auth/auth.service";
 import {AuthData} from "./model/auth/AuthData";
@@ -9,7 +9,7 @@ import {AuthData} from "./model/auth/AuthData";
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent{
   auth:  AuthService;
 
   constructor(private router: Router,

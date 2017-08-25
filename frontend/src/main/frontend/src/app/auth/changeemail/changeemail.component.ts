@@ -1,12 +1,12 @@
 import {Component} from "@angular/core";
-import {EmailData} from "../model/auth/EmailData";
-import {AuthService} from "./auth.service";
+import {EmailData} from "../../model/auth/EmailData";
+import {AuthService} from "../auth.service";
 import {Router} from "@angular/router";
 
 @Component({
   selector: 'change-email-app',
   templateUrl: './changeemail.component.html',
-  styleUrls: [ './register.component.css' ]
+  styleUrls: [ '../register/register.component.css' ]
 })
 export class ChangeEmailComponent {
   emailData: EmailData = new EmailData();

@@ -1,0 +1,43 @@
+<div *ngIf="!isAutheticated()">Для участия необходимо зайти на сайт <button (click)="goToLogin(); $event.stopPropagation()">Вход на сайт</button></div>
+<div *ngIf="isAutheticated()">Если Ваша запись готова <button (click)="addNewItem(); $event.stopPropagation()">Принять участие</button></div>
+<div *ngIf="isAutheticated()">Вы участвуете! <button (click)="showThread(); $event.stopPropagation()">Показать заявку</button></div>
+<edit-modal-component></edit-modal-component>
+    <div *ngFor="let item of discussionItems">
+      <div style="width:60%; min-height: 200px; margin-left:5%">
+      <hr  style="height: 12px;border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);"/>
+      <div class="header">
+        <b>{{item.authorId}}</b>&nbsp;&nbsp;&nbsp;{{item.creationDate | date : 'fullDate'}}&nbsp;{{item.creationDate | date : 'shortTime'}}
+      </div>
+      <div class="body">
+        <div style="display: inline-block; vertical-align: top"><img  src="{{getAvatar(item)}}" height="150px"/></div>
+        <div style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>
+      </div>
+      <div class="footer">
+        <div *ngIf="isUpdated(item)" style="float: left">
+          <small>Изменено:</small>&nbsp;{{item.updateDate | date : 'short'}}
+        </div>
+        <div style="float: right">
+          <button  *ngIf="canReply(item)" class="btn btn-xs"(click)="reply(item); $event.stopPropagation()">Ответить</button>
+          <button  *ngIf="canEdit(item)" class="btn btn-xs" (click)="editItem(item); $event.stopPropagation()">Редактировать</button>
+          <button *ngIf="canDelete(item)" class="btn btn-xs" (click)="deleteItem(item); $event.stopPropagation()">Удалить</button>
+        </div>
+      </div>
+      <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"/>
+      </div>
+    </div>
+
+<!--
+    <span *ngIf="item.parentMsgId !== null"> - </span>
+    <span>ThreadId: {{item.msgThreadId}}</span>
+    <span>Id: {{item.msgId}}</span>
+    <span>ParentId: {{item.parentMsgId}}</span>
+    <span>UserId:  {{item.authorId}}</span>
+    <span>Text: {{item.msgText}}</span>
+    <span>Created: {{item.creationDate}}</span>
+    <span>Updated: {{item.updateDate}}</span>
+    <span>Comp: {{item.competitionId}}</span>
+    <span *ngIf="canReply(item)"><button (click)="reply(item); $event.stopPropagation()">Ответить</button></span>
+    <span *ngIf="canEdit(item)"><button (click)="editItem(item); $event.stopPropagation()">Редактировать</button></span>
+    <span *ngIf="canDelete(item)"><button (click)="deleteItem(item); $event.stopPropagation()">Удалить</button></span>
+-->
+

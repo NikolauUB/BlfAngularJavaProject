@@ -7,19 +7,26 @@ public class CompetitionData {
     private String name;
     private int type;
     private String description;
+    private String sampleUrl;
     private Date start;
     private Date end;
     public CompetitionData() {}
+    public CompetitionData(long id, int type) {
+        this.id = id;
+        this.type = type;
+    }
     public CompetitionData(long id,
                            String name,
                            int type,
                            String description,
+                           String sampleUrl,
                            Date start,
                            Date end) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.description = description;
+        this.sampleUrl = sampleUrl;
         this.start = start;
         this.end = end;
     }
@@ -70,5 +77,13 @@ public class CompetitionData {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public String getSampleUrl() {
+        return sampleUrl;
+    }
+
+    public void setSampleUrl(String sampleUrl) {
+        this.sampleUrl = sampleUrl;
     }
 }

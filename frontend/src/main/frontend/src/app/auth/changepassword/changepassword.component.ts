@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from "@angular/core";
-import {PasswordData} from "../model/auth/PasswordData";
-import {AuthService} from "./auth.service";
+import {PasswordData} from "../../model/auth/PasswordData";
+import {AuthService} from "../auth.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'change-password-app',
   templateUrl: './changepassword.component.html',
-  styleUrls: [ './register.component.css' ]
+  styleUrls: [ '../register/register.component.css' ]
 })
 export class ChangePasswordComponentComponent implements OnInit, OnDestroy {
   passwordData: PasswordData = new PasswordData();

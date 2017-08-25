@@ -3,6 +3,7 @@ package wind.instrument.competitions.rest;
 import wind.instrument.competitions.data.*;
 import wind.instrument.competitions.rest.model.ActiveCompetitions;
 import wind.instrument.competitions.rest.model.CompetitionData;
+import wind.instrument.competitions.rest.model.CompetitionMember;
 import wind.instrument.competitions.rest.model.PartakeThread;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 import wind.instrument.competitions.rest.model.status.StatusOfDiscussionItem;
@@ -16,14 +17,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @RestController
 @Transactional
 public class DiscussService {
     private static Logger LOG = LoggerFactory.getLogger(DiscussService.class);
+    /**
+     * Russian messages
+     */
+    private static ResourceBundle bundle = ResourceBundle.getBundle("Messages");
 
     @PersistenceContext
     private EntityManager em;
@@ -32,82 +39,96 @@ public class DiscussService {
     private HttpSession httpSession;
 
     @RequestMapping(value = "/api/getActiveCompetitions", method = RequestMethod.GET)
-    public ActiveCompetitions getActiveCompetitions() {
+    public ActiveCompetitions getActiveCompetitions(HttpServletResponse response) {
         ActiveCompetitions result = new ActiveCompetitions();
-        result.setCode(200);
         TypedQuery<CompetitionEntity> activeCometQuery =
                 em.createQuery("select c from CompetitionEntity c where c.active = true",
                         CompetitionEntity.class);
         try {
             List<CompetitionEntity>  competList = activeCometQuery.getResultList();
-            ArrayList<CompetitionData> list = new ArrayList<CompetitionData>();
+            ArrayList<Integer> list = new ArrayList<Integer>();
             competList.forEach((item)->{
-                list.add(new CompetitionData(
-                        item.getCompetitionId(),
-                        item.getCompetitionName(),
-                        item.getCompetitionType().getValue(),
-                        item.getCompetitionDesc(),
-                        item.getCompetitionStart(),
-                        item.getCompetitionEnd()));
+                list.add(item.getCompetitionType().getValue());
             });
-            result.setActiveList(list);
+            result.setTypes(list);
         } catch (NoResultException ex) {
-            result.setCode(404);
-            result.setErrorMsg("No active competitions are not available");
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, bundle.getString("ACTIVE_COMPETIONS_IS_NOT_FOUND"), response);
         }
         return result;
     }
 
-    //todo it in future
-    /*@RequestMapping(value = "/api/getPartakeChanges", method = RequestMethod.GET)
-    public PartakeThreadChanges getPartakeChanges(@RequestParam("time") Long time, @RequestParam("threadId") Long threadId) {
-        PartakeThreadChanges result = new PartakeThreadChanges();
-        result.setCode(200);
-        if (time == null) {
-            result.setCode(400);
-            result.setErrorMsg("Time is not set!");
+
+    @RequestMapping(value = "/api/getActiveCompetitionData", method = RequestMethod.GET)
+    public CompetitionData getActiveCompetitionData(@RequestParam("tp") Integer competitionType,
+                                                   HttpServletResponse response) {
+        CompetitionData result = null;
+        if (competitionType == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Type is not set", response);
             return result;
         }
 
-        if (threadId == null) {
-            result.setCode(400);
-            result.setErrorMsg("Thread id is not set!");
-            return result;
-        }
-
-        TypedQuery<MessageEntity> messagesQuery =
-                em.createQuery("select m from MessageEntity m where m.themeId = :themeId and m.updated > :time",
-                        MessageEntity.class);
+        TypedQuery<CompetitionEntity> activeCometQuery =
+                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type",
+                        CompetitionEntity.class);
         try {
-            List<MessageEntity> messList = messagesQuery.setParameter("themeId", threadId).setParameter("time", new Date(time)).getResultList();
-            for (MessageEntity mess: messList) {
-                if (mess.getHidden()) {
-                    result.getDeletedIds().add(mess.getMsgId());
-                } else {
-                    result.getChangedIds().add(mess.getMsgId());
-                }
-            }
+            CompetitionEntity competitionEntity = activeCometQuery.setParameter("type", competitionType).getSingleResult();
+
+            result = new CompetitionData(
+                    competitionEntity.getCompetitionId(),
+                    competitionEntity.getCompetitionName(),
+                    competitionEntity.getCompetitionType().getValue(),
+                    competitionEntity.getCompetitionDesc(),
+                    competitionEntity.getCompetitionSampleVideo(),
+                    competitionEntity.getCompetitionStart(),
+                    competitionEntity.getCompetitionEnd());
             return result;
         } catch (NoResultException ex) {
-            LOG.debug("Error getting partake changes: ",ex);
-            result.setCode(500);
-            result.setErrorMsg("Server error getting partake changes!");
-            return result;
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, bundle.getString("ACTIVE_COMPETIONS_IS_NOT_FOUND"), response);
         }
-    }*/
+        return result;
+    }
 
-    @RequestMapping(value = "/api/getPartakeDiscuss", method = RequestMethod.GET)
-    public PartakeThread getPartakeDiscussion(@RequestParam("cId") Long competitionId) {
-        PartakeThread result = new PartakeThread();
-        result.setCode(200);
-        if (httpSession.getAttribute("USER_ID") == null) {
-            result.setCode(403);
-            result.setErrorMsg("Login first please");
-            return result;
+    /**
+     * Checks every time when user sees|removes partake request
+     *
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/api/getCompetitionMembers", method = RequestMethod.GET)
+    public ArrayList<CompetitionMember> getCompetitionMembers(HttpServletResponse response) {
+        ArrayList<CompetitionMember> result = new ArrayList<CompetitionMember>();
+        TypedQuery<CompetitionEntity> activeCometQuery =
+                em.createQuery("select c from CompetitionEntity c where c.active = true",
+                        CompetitionEntity.class);
+        try {
+            List<CompetitionEntity>  competitionList = activeCometQuery.getResultList();
+            competitionList.forEach((item)->{
+                item.getThemesByMembers().forEach((theme) -> {
+                    CompetitionMember competitionMember = new CompetitionMember();
+                    UserEntity member = theme.getOwner();
+                    competitionMember.setmId(member.getUserId());
+                    competitionMember.setmUsername(member.getUsername());
+                    competitionMember.setCompType(item.getCompetitionType().getValue());
+                    result.add(competitionMember);
+                });
+            });
+        } catch (NoResultException ex) {
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, bundle.getString("ACTIVE_COMPETIONS_IS_NOT_FOUND"), response);
         }
+        return result;
+    }
+    /**
+     * Discussion user's thread and all threads for admin for competition
+     *
+     * @param competitionId - discussed competition id
+     * @param response
+     * @return
+     */
+    @RequestMapping(value = "/api/getPartakeDiscuss", method = RequestMethod.GET)
+    public PartakeThread getPartakeDiscussion(@RequestParam("cId") Long competitionId, HttpServletResponse response) {
+        PartakeThread result = new PartakeThread();
         if (competitionId == null) {
-            result.setCode(400);
-            result.setErrorMsg("Competition id is not set!");
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition id is not set!", response);
             return result;
         }
         UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
@@ -115,6 +136,8 @@ public class DiscussService {
             return getAllPartakesForAdmin(competitionId, result);
         }
 
+        //simple user see own requests and admins replies
+        //find theme first
         TypedQuery<ThemeEntity> themeQuery =
                 em.createQuery("select t from ThemeEntity t where t.userId = :userId and t.themeType = :type and t.competitionId = :cId",
                         ThemeEntity.class);
@@ -125,9 +148,11 @@ public class DiscussService {
                     .setParameter("cId", competitionId)
                     .getSingleResult();
         } catch (NoResultException ex) { }
+
+        //find messages in the theme
         if (usersPartakeTheme != null) {
             TypedQuery<MessageEntity> msgQuery =
-                    em.createQuery("select m from MessageEntity m where  m.themeId = :threadId",
+                    em.createQuery("select m from MessageEntity m where  m.themeId = :threadId order by m.created",
                             MessageEntity.class);
             try {
                 List<MessageEntity> msgList = msgQuery.setParameter("threadId", usersPartakeTheme.getId()).getResultList();
@@ -137,6 +162,13 @@ public class DiscussService {
         return result;
     }
 
+    /**
+     * Admin see all requests
+     *
+     * @param competitionId
+     * @param result
+     * @return
+     */
     private PartakeThread getAllPartakesForAdmin(Long competitionId, PartakeThread result) {
         TypedQuery<MessageEntity> msgQuery =
                 em.createQuery("select m from MessageEntity m," +
@@ -171,18 +203,9 @@ public class DiscussService {
     }
 
     @RequestMapping(value = "/api/deletePartake", method = RequestMethod.DELETE)
-    public StatusOfDiscussionItem deletePartakeMessage(@RequestParam("iid") Long itemId) {
-        StatusOfDiscussionItem result = new StatusOfDiscussionItem();
-        result.setCode(200);
-        if (httpSession.getAttribute("USER_ID") == null) {
-            result.setCode(403);
-            result.setErrorMsg("Login first please");
-            return result;
-        }
+    public void deletePartakeMessage(@RequestParam("iid") Long itemId, HttpServletResponse response) {
         if (itemId == null) {
-            result.setCode(400);
-            result.setErrorMsg("Item Id is not set!");
-            return result;
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Item Id is not set!", response);
         }
         UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
         MessageEntity messageEntity = null;
@@ -192,14 +215,12 @@ public class DiscussService {
             //do nothing
         }
         if (messageEntity == null) {
-            result.setCode(404);
-            result.setErrorMsg("Message doesn't exist!");
-            return result;
+            //todo translate
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Message doesn't exist!", response);
         }
         if (messageEntity.getUserId() != currentUser.getUserId()) {
-            result.setCode(403);
-            result.setErrorMsg("Message belongs to other user! It cannot be deleted!");
-            return result;
+            //todo translate
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message belongs to other user! It cannot be deleted!", response);
         } else {
             try {
                 if(messageEntity.getParentMsgId() == null) {
@@ -214,37 +235,26 @@ public class DiscussService {
 
             } catch(Exception ex) {
                 LOG.debug("Error deleting partake message: ", ex);
-                result.setCode(500);
-                result.setErrorMsg("Server error when deleting message");
+                this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
             }
         }
-
-        return result;
     }
 
 
     @RequestMapping(value = "/api/submitPartake", method = RequestMethod.POST)
-    public StatusOfDiscussionItem submitPartake(@RequestBody DiscussionItem discussionItem) {
-        StatusOfDiscussionItem result = new StatusOfDiscussionItem();
-        result.setCode(200);
-        if (httpSession.getAttribute("USER_ID") == null) {
-            result.setCode(403);
-            result.setErrorMsg("Login first please");
-            return result;
-        }
-        if(discussionItem.getMsgText() == null || discussionItem.getMsgText().length() == 0) {
-            result.setCode(400);
-            result.setErrorMsg("Text can not be empty!");
-            return result;
+    public DiscussionItem submitPartake(@RequestBody DiscussionItem discussionItem, HttpServletResponse response) {
+
+        if(discussionItem.getMsgText() == null || discussionItem.getMsgText().trim().length() == 0) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, bundle.getString("EMPTY_MSG_BODY"), response);
+            return discussionItem;
         }
         if (discussionItem.getCompetitionId() == null) {
-            result.setCode(400);
-            result.setErrorMsg("Competition id is not set!");
-            return result;
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition id is not set!", response);
+            return discussionItem;
         }
         UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
-        if (AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
-            return persistMessage(discussionItem, null, currentUser, result);
+        if (AuthService.ADMIN_USERNAME.equals(currentUser.getUsername()) && discussionItem.getParentMsgId() != null) {
+            return persistMessage(discussionItem, null, currentUser, response);
         }
 
         TypedQuery<ThemeEntity> themeQuery =
@@ -270,38 +280,34 @@ public class DiscussService {
             }
             if (discussionItem.getMsgThreadId() != null && discussionItem.getMsgThreadId() != usersPartakeTheme.getId()) {
                 LOG.info("Bad request from client. Tries to save data for theme " + discussionItem.getMsgThreadId());
-                result.setCode(400);
-                result.setErrorMsg("Bad request. The thread doesn't belongs to you!");
-                return result;
+                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request. The thread doesn't belongs to you!", response);
+                return discussionItem;
             }
-            return persistMessage(discussionItem, usersPartakeTheme, currentUser, result);
+            return persistMessage(discussionItem, usersPartakeTheme, currentUser, response);
         } catch (Exception ex) {
             LOG.debug("Error saving partake message: ",ex);
-            result.setCode(500);
-            result.setErrorMsg("Server error saving partake changes!");
-            return result;
+            this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
+            return discussionItem;
         }
 
     }
 
-    private StatusOfDiscussionItem persistMessage(DiscussionItem discussionItem,
+    private DiscussionItem persistMessage(DiscussionItem discussionItem,
                                 ThemeEntity usersPartakeTheme, //null for admin
                                 UserEntity currentUser,
-                                StatusOfDiscussionItem result) {
+                                HttpServletResponse response) {
         MessageEntity message = new MessageEntity();
         if(discussionItem.getMsgId() != null) {
             message = em.find(MessageEntity.class, discussionItem.getMsgId());
             if(usersPartakeTheme != null && message.getThemeId() != usersPartakeTheme.getId()) {
                 LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to theme " + usersPartakeTheme.getId());
-                result.setCode(403);
-                result.setErrorMsg("Bad request Message " + message.getMsgId() + " doesn't belong to theme " + usersPartakeTheme.getId());
-                return result;
+                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + usersPartakeTheme.getId()", response);
+                return discussionItem;
             }
             if(message.getUserId() != currentUser.getUserId()) {
                 LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to user " + currentUser.getUserId());
-                result.setCode(403);
-                result.setErrorMsg("Bad request Message doesn't belongs you");
-                return result;
+                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request! Message doesn't belongs to you", response);
+                return discussionItem;
             }
         } else {
             message.setUserId(currentUser.getUserId());
@@ -316,7 +322,14 @@ public class DiscussService {
         discussionItem.setCreationDate(message.getCreated());
         discussionItem.setUpdateDate(message.getUpdated());
         discussionItem.setMsgThreadId(message.getThemeId());
-        result.setItem(discussionItem);
-        return result;
+        return discussionItem;
+    }
+
+    private void  sendResponseError(int code, String text,  HttpServletResponse response) {
+        try {
+            response.sendError(code, text);
+        } catch (Exception ex) {
+            LOG.error("Something wrong sending error responses", ex);
+        }
     }
 }

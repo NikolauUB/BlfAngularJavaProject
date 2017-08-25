@@ -19,11 +19,14 @@ public class ThemeEntity {
     private Integer themeType;
     @Column(name =  "user_id")
     private Long userId;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
     @OneToMany(mappedBy = "theme", targetEntity=MessageEntity.class, fetch = FetchType.EAGER)
     private Collection<MessageEntity> messages;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
+    private CompetitionEntity competition;
 
 
     private Date created;
@@ -34,7 +37,7 @@ public class ThemeEntity {
     @PrePersist
     protected void onCreate() {
         this.created = new Date();
-        this.updated = this.created;
+        this.updated = this.getCreated();
     }
 
     @PreUpdate
@@ -99,4 +102,11 @@ public class ThemeEntity {
         this.competitionId = competitionId;
     }
 
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
 }

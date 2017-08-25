@@ -15,7 +15,7 @@ public class MessageEntity {
     private Boolean isHidden;
     @Column(name = "reason_to_hide")
     private Integer reasonToHidden;
-    @Column(name =  "msg_body", nullable = false)
+    @Column(name =  "msg_body", nullable = false, columnDefinition = "TEXT")
     private String msgBody;
     @Column(name =  "msg_positive_rate")
     private Integer msgPositiveRate;
@@ -27,7 +27,7 @@ public class MessageEntity {
     private Long userIdRepliedTo;
     @Column(name =  "user_id")
     private Long userId;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
     @ManyToOne(optional = false)

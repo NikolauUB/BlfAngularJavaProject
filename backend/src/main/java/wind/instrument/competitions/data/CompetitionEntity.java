@@ -1,5 +1,8 @@
 package wind.instrument.competitions.data;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -15,8 +18,10 @@ public class CompetitionEntity implements Serializable {
     private Long competitionId;
     @Column(name =  "competition_name")
     private String competitionName;
-    @Column(name =  "competition_desc", columnDefinition = "text")
+    @Column(name =  "competition_desc", columnDefinition = "TEXT")
     private String competitionDesc;
+    @Column(name =  "competition_sample_video")
+    private String competitionSampleVideo;
     @Column(name =  "competition_start")
     private Date competitionStart;
     @Column(name =  "competition_end")
@@ -30,6 +35,10 @@ public class CompetitionEntity implements Serializable {
     @OneToMany(mappedBy = "competition", targetEntity=CompetitionItemEntity.class, fetch = FetchType.EAGER)
     private Collection<CompetitionItemEntity> competitionItems;
 
+    @OneToMany(mappedBy = "competition", targetEntity=ThemeEntity.class, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Collection<ThemeEntity> themesByMembers;
+
 
     private Date created;
     private Date updated;
@@ -37,6 +46,7 @@ public class CompetitionEntity implements Serializable {
     @PrePersist
     protected void onCreate() {
         this.created = new Date();
+        this.updated = this.created;
     }
 
     @PreUpdate
@@ -116,5 +126,21 @@ public class CompetitionEntity implements Serializable {
 
     public void setCompetitionDesc(String competitionDesc) {
         this.competitionDesc = competitionDesc;
+    }
+
+    public String getCompetitionSampleVideo() {
+        return competitionSampleVideo;
+    }
+
+    public void setCompetitionSampleVideo(String competitionSampleVideo) {
+        this.competitionSampleVideo = competitionSampleVideo;
+    }
+
+    public Collection<ThemeEntity> getThemesByMembers() {
+        return themesByMembers;
+    }
+
+    public Date getUpdated() {
+        return updated;
     }
 }
