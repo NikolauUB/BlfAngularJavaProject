@@ -166,12 +166,12 @@ public class AuthService {
 
     @RequestMapping(value = "/api/changepasswordtid", method = RequestMethod.PUT)
     public int restChangePasswordByToken(@RequestBody PasswordData passwordData, HttpServletResponse response) {
-        SendEmailToUser sendEmail = new SendEmailToUser();
-        sendEmail.sendLinkForResetPassword(passwordData.getNewPassword());
+        //SendEmailToUser sendEmail = new SendEmailToUser();
+        //sendEmail.sendLinkForResetPassword(passwordData.getNewPassword());
 
-        //this.sendResponseError(HttpServletResponse.SC_NOT_IMPLEMENTED,
-        //        "Сменя пароля по ссылке из электронной почты еще не реализована",
-        //        response);
+        this.sendResponseError(HttpServletResponse.SC_NOT_IMPLEMENTED,
+                "Сменя пароля по ссылке из электронной почты еще не реализована",
+                response);
         return  HttpServletResponse.SC_OK;
     }
 

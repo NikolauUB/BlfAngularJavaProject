@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {Router} from "@angular/router";
-import {AuthData} from "../model/auth/AuthData";
-import {QuestionData} from "../model/auth/QuestionData";
-import {RegistrationData} from "../model/auth/RegistrationData";
-import {RegistrationReply} from "../model/auth/RegistrationReply";
-import {LoginData} from "../model/auth/LoginData";
-import {AuthService} from "./auth.service";
+import {AuthData} from "../../model/auth/AuthData";
+import {QuestionData} from "../../model/auth/QuestionData";
+import {RegistrationData} from "../../model/auth/RegistrationData";
+import {RegistrationReply} from "../../model/auth/RegistrationReply";
+import {LoginData} from "../../model/auth/LoginData";
+import {AuthService} from "../auth.service";
 
 @Component({
   selector: 'reqister-app',

@@ -1,0 +1,16 @@
+<app-modal>
+  <div class="app-modal-header">
+  </div>
+  <div class="app-modal-body">
+    <div class="form-group">
+      <h4>{{modalName}}</h4>
+      <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+      <label>{{whatToDo}}</label>
+      <div [froalaEditor]="froalaOptions"  [(froalaModel)]="model.msgText"></div>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+    <button (click)="saveItem(); $event.stopPropagation()">Сохранить</button>
+    <button type="button" class="btn btn-default" (click)="modal.hide()">Закрыть</button>
+  </div>
+</app-modal>

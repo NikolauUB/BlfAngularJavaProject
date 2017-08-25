@@ -16,7 +16,7 @@ import {EmailData} from "../model/auth/EmailData";
 @Injectable()
 export class AuthService {
   private postHeaders: Headers;
-  private auth: AuthData;
+  public auth: AuthData;
   private checkAuthUrl = 'api/checkAuth';
   private loginUrl = 'api/login';
   private logoutUrl = 'api/logout';
@@ -38,7 +38,6 @@ export class AuthService {
     this.checkAuth()
       .then(authInfo => this.auth = authInfo)
       .catch(this.handleError);
-    alert('auth init done in AuthService');
   }
 
   private setCSRFHeaders(token: string): void {

@@ -1,6 +1,4 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
-import {AppModalComponent} from "../modal/appmodal.component";
-import {AuthData} from "../model/auth/AuthData";
 import {PartakingService} from "./partaking.service";
 import {AuthService} from "../auth/auth.service";
 import {Router} from "@angular/router";
@@ -16,8 +14,8 @@ import {CompetitionData} from "../model/CompetitionData";
   styleUrls: [ '../vote/voting.component.css' ]
 })
 export class PartakingComponent implements OnInit {
-  @ViewChild(AppModalComponent)
-  modal: AppModalComponent = new AppModalComponent();
+//  @ViewChild(AppModalComponent)
+//  modal: AppModalComponent = new AppModalComponent();
   newDiscussItem: DiscussionItem = new DiscussionItem();
   activeCompetitions: ActiveCompetitions;
   currentCompetition: CompetitionData;
@@ -25,18 +23,19 @@ export class PartakingComponent implements OnInit {
   errorMsg: string;
   reply: boolean = false;
   edit: boolean = false;
-  authInfo: AuthData;
 
   constructor(
     private partakingService: PartakingService,
     private authService: AuthService,
     private router: Router) {
-    this.authInfo = this.authService.getAuth();
+    this.init();
   }
 
-
   ngOnInit(): void {
-    this.authInfo = this.authService.getAuth();
+    this.init();
+  }
+
+  private init(): void {
     this.loadActiveCompetitions()
     this.refreshAddEditStatus();
   }
@@ -55,25 +54,27 @@ export class PartakingComponent implements OnInit {
   saveDiscussItem(): void {
     this.newDiscussItem.competitionId = this.currentCompetition.id;
     this.partakingService
-      .saveItem(this.newDiscussItem, this.authInfo)
-      .then(reply => this.handleSaveReply(reply));
+      .saveItem(this.newDiscussItem)
+      .then(reply => this.handleSaveReply(reply))
+      .catch(e => this.handleError(e));
 
   }
 
   deleteMsg(item: DiscussionItem, competition: CompetitionData): void {
     this.partakingService
-      .deleteItem(item, this.authInfo)
-      .then(reply => this.handleRemoveReply(reply, item, competition));
+      .deleteItem(item)
+      .then(reply => this.handleRemoveReply(reply, item, competition))
+      .catch(e => this.handleError(e));
   }
 
 
 
   handleCompetitionReply(reply: any): void {
     this.activeCompetitions = reply;
-    if(this.authInfo.autheticated) {
-      for (let competition of this.activeCompetitions.activeList) {
-        this.loadDiscussion(competition);
-      }
+    if(this.authService.getAuth().autheticated) {
+      //for (let competition of this.activeCompetitions.activeList) {
+        //this.loadDiscussion(competition);
+      //}
     }
   }
 
@@ -134,7 +135,7 @@ export class PartakingComponent implements OnInit {
   }
 
   public canDelete(item: DiscussionItem, competition: CompetitionData): boolean {
-      if (item.authorId !== this.authInfo.userId) {
+      if (item.authorId !== this.authService.getAuth().userId) {
         return false;
       } else if (item.parentMsgId === null && this.threadMap.get(competition).length > 1) {
         return false;
@@ -143,7 +144,7 @@ export class PartakingComponent implements OnInit {
   }
 
   public canEdit(item: DiscussionItem): boolean {
-    return item.authorId === this.authInfo.userId;
+    return item.authorId === this.authService.getAuth().userId;
   }
 
   public refreshAddEditStatus(): void {
@@ -173,11 +174,20 @@ export class PartakingComponent implements OnInit {
   }
 
   public addPartakeRequest(competition: CompetitionData): void {
-    if (this.authInfo.autheticated) {
+    if (this.authService.getAuth().autheticated) {
       this.currentCompetition = competition;
       this.reply = true;
     } else {
-      this.errorMsg = "Please login or register first";
+      this.errorMsg = "Пожалуйста, сначала зайдите на сайт или зарегистрируйтесь!";
+    }
+  }
+
+  private handleError(e: any) : void {
+    if(e.status === 403) {
+      alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт снова!");
+      this.router.navigateByUrl("login");
+    } else {
+      this.errorMsg = e.json().message || e.toString();
     }
   }
 

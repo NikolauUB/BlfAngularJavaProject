@@ -5,93 +5,83 @@ import 'rxjs/add/operator/toPromise';
 
 import { PartakeThread } from '../model/PartakeThread';
 import { DiscussionItem } from '../model/DiscussionItem';
-import {AuthData} from "../model/auth/AuthData";
-//!import {ChangesRequest} from "../model/ChangesRequest";
-//!import {PartakeThreadChanges} from "../model/PartakeThreadChanges";
 import {StatusOfDiscussionItem} from "../model/StatusOfDiscussionItem";
 import {ActiveCompetitions} from "app/model/ActiveCompetitions";
+import {AuthService} from "../auth/auth.service";
+import {CompetitionData} from "../model/CompetitionData";
+import {EditInterface} from "../modal/edit.interface";
+import {CompetitionMember} from "../model/CompetitionMember";
 
 
 @Injectable()
-export class PartakingService {
+export class PartakingService implements EditInterface {
+    //currentType: number;
     private postHeaders:Headers;
     private saveItemUrl = 'api/submitPartake';
     private deleteItemUrl = 'api/deletePartake';
     private partakeDiscussUrl = 'api/getPartakeDiscuss';
-    //!private partakeChangesUrl = 'api/getPartakeChanges';
     private activeCompetitionsUrl = 'api/getActiveCompetitions';
+    private competitionDataUrl = 'api/getActiveCompetitionData';
+    private competitionsMembersUrl = 'api/getCompetitionMembers';
 
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private authService: AuthService) { }
 
     private setCSRFHeaders(token: string): void {
         this.postHeaders = new Headers({'Content-Type': 'application/json', 'X-CSRF-TOKEN': token});
     }
-    //todo future improvement
-/*
-    getPartakeChanges(changesRequest: ChangesRequest): Promise<PartakeThreadChanges> {
-        let params = new URLSearchParams();
-        params.set('time', '' + changesRequest.controlDate.getTime());
-        params.set('threadId', '' + changesRequest.threadId);
-        let options = new RequestOptions({
-          search: params
-        });
-        return this.http.get(this.partakeChangesUrl, options)
-          .toPromise()
-          .then(response => response.json() as PartakeThreadChanges)
-          .catch(this.handleError);
-    }
-*/
-    //remove partakeThreadChanges.deletedIds before
-  /*
-    getPartakeDiscussChangedItems(partakeThreadChanges: PartakeThreadChanges, authData: AuthData): Promise<PartakeThread> {
-        this.setCSRFHeaders(authData.token);
-        return this.http.
-          post(this.partakeDiscussUrl,
-          JSON.stringify(partakeThreadChanges),
-          {headers: this.postHeaders})
-          .toPromise()
-          .then(response => response.json() as PartakeThread)
-          .catch(this.handleError);
-    }
-*/
 
-    getActiveCompetitions(): Promise<ActiveCompetitions> {
+    public getActiveCompetitions(): Promise<ActiveCompetitions> {
       return this.http.get(this.activeCompetitionsUrl)
         .toPromise()
         .then(response => response.json() as ActiveCompetitions)
         .catch(this.handleError);
     }
 
-    getPartakeDiscuss(competitionId: number): Promise<PartakeThread> {
+    public getCompetitionData(type: number): Promise<CompetitionData> {
+      return this.http
+        .get(this.competitionDataUrl + "?tp=" + type)
+        .toPromise()
+        .then(response => response.json() as CompetitionData)
+        .catch(this.handleError);
+    }
+
+    public getCompetitionsMembers(): Promise<Array<CompetitionMember>> {
+      return this.http
+        .get(this.competitionsMembersUrl)
+        .toPromise()
+        .then(response => response.json() as Array<CompetitionMember>)
+        .catch(this.handleError);
+    }
+
+    public getPartakeDiscuss(competitionId: number): Promise<PartakeThread> {
         return this.http.get(this.partakeDiscussUrl + "?cId=" + competitionId)
             .toPromise()
             .then(response => response.json() as PartakeThread)
             .catch(this.handleError);
     }
 
-    saveItem(discussionItem: DiscussionItem, authData: AuthData): Promise<StatusOfDiscussionItem>  {
-        this.setCSRFHeaders(authData.token);
+    public saveItem(discussionItem: DiscussionItem): Promise<DiscussionItem>  {
+        this.setCSRFHeaders(this.authService.getAuth().token);
         return this.http
             .post(this.saveItemUrl,
             JSON.stringify(discussionItem),
             {headers: this.postHeaders})
             .toPromise()
-            .then(response => response.json() as StatusOfDiscussionItem)
+            .then(response => response.json() as DiscussionItem)
             .catch(this.handleError);
     }
-    deleteItem(discussionItem: DiscussionItem, authData: AuthData): Promise<StatusOfDiscussionItem>  {
-      this.setCSRFHeaders(authData.token);
+    deleteItem(discussionItem: DiscussionItem): Promise<any>  {
+      this.setCSRFHeaders(this.authService.getAuth().token);
       return this.http
         .delete(this.deleteItemUrl + "?iid=" + discussionItem.msgId,
           {headers: this.postHeaders})
         .toPromise()
-        .then(response => response.json() as StatusOfDiscussionItem)
         .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {
-        console.error('An error occurred in PartakingService service', error); // for demo purposes only
+        console.error('An error occurred in PartakingService service', error);
         return Promise.reject(error.message || error);
     }
 

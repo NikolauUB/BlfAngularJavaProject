@@ -19,7 +19,7 @@ public class CompetitionItemEntity implements Serializable {
     private String cnItemAuthor;
     @Column(name =  "cn_item_instruments")
     private String cnItemInstruments;
-    @Column(name =  "cn_item_description")
+    @Column(name =  "cn_item_description", columnDefinition = "TEXT")
     private String cnItemDescription;
     @Column(name =  "cn_item_audio")
     private String cnItemAudio;

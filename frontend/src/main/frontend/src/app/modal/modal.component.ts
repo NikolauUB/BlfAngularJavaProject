@@ -4,7 +4,7 @@ import {Component} from "@angular/core";
   template: `
   <div (click)="onContainerClicked($event)" class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
        [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
-    <div class="modal-dialog">
+    <div class="modal-dialog" [ngStyle]="{'width': '70%', 'height':'80%'}">
       <div class="modal-content">
         <div class="modal-header">
           <ng-content select=".app-modal-header"></ng-content>

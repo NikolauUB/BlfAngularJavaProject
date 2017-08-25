@@ -60,6 +60,7 @@ public class VoteDataService {
                 competition.getCompetitionName(),
                 competition.getCompetitionType().getValue(),
                 competition.getCompetitionDesc(),
+                competition.getCompetitionSampleVideo(),
                 competition.getCompetitionStart(),
                 competition.getCompetitionEnd()
                 ));
@@ -84,7 +85,13 @@ public class VoteDataService {
         System.out.println("Result: " + votingResult);
     }
 
-
+    private void  sendResponseError(int code, String text,  HttpServletResponse response) {
+        try {
+            response.sendError(code, text);
+        } catch (Exception ex) {
+            //do nothing
+        }
+    }
 
     //for testing only
     @RequestMapping("/migrate")
@@ -94,11 +101,12 @@ public class VoteDataService {
             return "Access Error!";
         }
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
+        cal.set(2017, 10, 16);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
-        competitionEntity.setCompetitionName("PRESCRIBED_BAROQUE");
-        competitionEntity.setCompetitionDesc("Description of competition");
+        competitionEntity.setCompetitionName("Обязательная классическая программа");
+        competitionEntity.setCompetitionDesc(this.getClassicDescription());
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/rxunt-uyDPc");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
@@ -107,10 +115,26 @@ public class VoteDataService {
         query.executeUpdate();
         em.persist(competitionEntity);
 
+        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
+        cal.set(2017, 10, 16);
+        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
+        competitionEntityJazz.setCompetitionName("Обязательная джазовая программа");
+        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
+        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/kHtwF-gpluc");
+        competitionEntityJazz.setCompetitionStart(cal.getTime());
+
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityJazz.setCompetitionEnd(cal.getTime());
+        competitionEntityJazz.setActive(true);
+        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 1");
+        queryJazz.executeUpdate();
+        em.persist(competitionEntityJazz);
+
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
+        cal.set(2017, 10, 30);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
-        competitionEntityFree.setCompetitionName("PRESCRIBED_FREE");
-        competitionEntityFree.setCompetitionDesc("Description of competition FREE");
+        competitionEntityFree.setCompetitionName("Свободная программа");
+        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору.");
         competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
@@ -119,18 +143,8 @@ public class VoteDataService {
         queryFree.executeUpdate();
         em.persist(competitionEntityFree);
 
-        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
-        competitionEntityJazz.setCompetitionName("Джазовая программа");
-        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-        competitionEntityJazz.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityJazz.setCompetitionEnd(cal.getTime());
-        competitionEntityJazz.setActive(true);
-        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 1");
-        queryJazz.executeUpdate();
-        em.persist(competitionEntityJazz);
 
+/*
         Collection<CompetitionItemEntity> items = new ArrayList<CompetitionItemEntity>();
         CompetitionItemEntity competitionTypeEntity = new CompetitionItemEntity();
         competitionTypeEntity.setCompetitionId(competitionEntity.getCompetitionId());
@@ -162,15 +176,30 @@ public class VoteDataService {
         competitionTypeEntity.setCnItemComposition("Bandeneria");
         competitionTypeEntity.setCnItemDescription("Bach on alto recorder");
         em.persist(competitionTypeEntity);
+        */
         return "done";
+    }
+
+    private String getClassicDescription() {
+        return "<div>" +
+        "Jean Daniel Braun,  \"Pièces sans Basse pour la Flute Traversiere\" " +
+        "Largo и Double  из сюйты соло для флейты-траверс<br>" +
+        "<a href=\"https://www.youtube.com/watch?v=rxunt-uyDPc\" target=\"_blank\">https://www.youtube.com/watch?v=rxunt-uyDPc</a><br>"+
+        "<div>" +
+        "<iframe width=\"420\" height=\"315\" src=\"https://www.youtube.com/embed/rxunt-uyDPc\" " +
+        "allowfullscreen=\"true\" webkitallowfullscreen=\"true\" mozallowfullscreen=\"true\">" +
+        "</iframe>" +
+        "</div>" +
+        "Ноты в оригинальной тональности подходят для сопрано, тенора и для гобоя - смотрите на 11 странице Largo и Double (в записи с гобоисткой они звучат в первые 2 минуты): [url]https://cloud.mail.ru/public/AMNE/DQFvcYmD8[/url]<br>" +
+        "Сделал ноты только с нужными частями: " +
+        " - Сопрано, тенор, грандбас, гобой, флейта траверс и оркестровая: <a href=\"https://cloud.mail.ru/public/FBm7/JWKFshctx\">ми-минор(тональность оригинала)</a>, <a href=\"https://cloud.mail.ru/public/HU6f/jT4c1pfeX\">ре-минор</a><br>" +
+        " - Сопранино, альт, бас, кларнет (вроде ля-минор удобная тональность для кларнета): <a href=\"https://cloud.mail.ru/public/B7th/hUB4ATSLz\">ля-минор</a>, <a href=\"https://cloud.mail.ru/public/A4BJ/pD4C8wck1\">соль-минор</a><br>" +
+        "</div>";
     }
 
 
     private String getJazzDescription() {
         return "<div>"+
-                "<b><font size=\"3\">Обязательная программа</font></b><br>"+
-                "Нужно выбрать одно задание из двух (джаз или барокко):<br>"+
-                "1) <b>Джазовое с минусовкой</b> (а то без, джаз - не джаз)<br>"+
                 "Scott Joplin \"The Entertainer\"<br>"+
                 "Ноты: <a href=\"https://cloud.mail.ru/public/52rG/TDexuQCrF\" target=\"_blank\">https://cloud.mail.ru/public/52rG/TDexuQCrF</a><br>"+
                 "Минусовки в разных темпах (под авторством участника форума blf.ru Husim, о работах которого очень вовремя вспомнила ЛюдМила)<br>"+
@@ -182,20 +211,12 @@ public class VoteDataService {
                 "<br>"+
                 "Есть также плюс под эту минусовку: <a href=\"https://cloud.mail.ru/public/2xYE/1emrzc1eX\" target=\"_blank\">https://cloud.mail.ru/public/2xYE/1emrzc1eX</a><br>"+
                 "И вот гитарный вариант:<br>"+
-                "<a href=\"https://www.youtube.com/watch?v=kHtwF-gpluc\" target=\"_blank\">https://www.youtube.com/watch?v=kHtwF-gpluc</a><br>"+
-                "<table class=\"tborder\" cellpadding=\"6\" cellspacing=\"1\" border=\"0\" width=\"400\" style=\"margin:10px 0\">"+
-                "<tbody>"+
-                "<tr>"+
-                "    <td class=\"panelsurround\" align=\"center\">"+
-                "        <object width=\"425\" height=\"355\" type=\"application/x-shockwave-flash\" data=\"http://www.youtube.com/v/kHtwF-gpluc\">"+
-                "            <param name=\"movie\" value=\"http://www.youtube.com/v/kHtwF-gpluc\">"+
-                "            <param name=\"wmode\" value=\"transparent\">"+
-                "            <em><strong>ERROR:</strong> If you can see this, then <a href=\"http://www.youtube.com/\">YouTube</a> is down or you don't have Flash installed.</em>"+
-                "            </object>"+
-                "    </td>"+
-                "</tr>"+
-                "</tbody>"+
-                "</table><br>"+
+                "<a href=\"https://www.youtube.com/watch?v=kHtwF-gpluc\" target=\"_blank\">https://www.youtube.com/watch?v=kHtwF-gpluc</a><br>" +
+                "<div>" +
+                "<iframe width=\"420\" height=\"315\" src=\"https://www.youtube.com/embed/kHtwF-gpluc\" " +
+                "allowfullscreen=\"true\" webkitallowfullscreen=\"true\" mozallowfullscreen=\"true\">" +
+                "</iframe>" +
+                "</div>" +
                 "</div>";
     }
 
