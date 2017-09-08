@@ -4,6 +4,7 @@ public class CompetitionMember {
     private Long mId;
     private Integer compType;
     private String mUsername;
+    private Long threadId;
 
 
     public Long getmId() {
@@ -28,5 +29,13 @@ public class CompetitionMember {
 
     public void setmUsername(String mUsername) {
         this.mUsername = mUsername;
+    }
+
+    public Long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(Long threadId) {
+        this.threadId = threadId;
     }
 }

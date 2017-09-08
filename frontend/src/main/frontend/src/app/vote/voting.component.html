@@ -1,6 +1,11 @@
-<h2>Please select one or all</h2>
-<span>You are logoned as {{authInfo.username}}</span>
-<ul class="voteItems">
+<h2>Голосование по конкурсам начнется с 16 ноября 2017 года</h2>
+
+<ul>
+  <li>Узнать о сайте: <a routerLink="/about" routerLinkActive="active">О сайте</a></li>
+  <li>Узнать о программе и оставить заявку на участие: <a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a></li>
+</ul>
+
+<!--<ul class="voteItems">
   <li *ngFor="let voteItem of voteInfo.voteData" (click)="onSelect(voteItem)"
       [class.selected]="selectedItem.has(voteItem)">
     <span class="badge">{{voteItem.id}}</span>
@@ -13,5 +18,5 @@
   <button #elseBlock>Login first to Vote</button>
 </ul>
 
-<p>Thanks for viewing</p>
+<p>Thanks for viewing</p>-->
 

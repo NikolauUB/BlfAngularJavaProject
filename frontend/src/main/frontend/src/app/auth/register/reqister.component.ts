@@ -13,7 +13,7 @@ import {AuthService} from "../auth.service";
   styleUrls: [ './register.component.css' ]
 })
 export class RegisterComponent implements OnInit {
-  questionData: QuestionData;
+  questionData: QuestionData = new QuestionData();
   loginData: LoginData = new LoginData();
   registrationData: RegistrationData = new RegistrationData();
   selectedAnswers: Set<string> = new Set<string>();
@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
       this.registrationData.password = password;
     } else {
       this.doLogin();
-      this.router.navigateByUrl("profile");
+      this.router.navigateByUrl("welcome");
     }
     this.selectedAnswers = new Set<string>();
   }

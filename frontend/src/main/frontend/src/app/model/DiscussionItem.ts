@@ -7,4 +7,8 @@ export class DiscussionItem {
     msgText: string;
     creationDate: Date;
     updateDate: Date;
+    authorUsername: string = "";
+    authorAvatar: string = "";
+    isChangedLatest:boolean = false;
+
 }

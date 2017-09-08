@@ -12,13 +12,16 @@ import {CompetitionData} from "../model/CompetitionData";
 import {EditInterface} from "../modal/edit.interface";
 import {CompetitionMember} from "../model/CompetitionMember";
 
-
+/**
+ * This is common service for all partake components
+ */
 @Injectable()
-export class PartakingService implements EditInterface {
+export class PartakingService {
     //currentType: number;
     private postHeaders:Headers;
     private saveItemUrl = 'api/submitPartake';
     private deleteItemUrl = 'api/deletePartake';
+    private deleteThemeUrl = 'api/deleteTheme';
     private partakeDiscussUrl = 'api/getPartakeDiscuss';
     private activeCompetitionsUrl = 'api/getActiveCompetitions';
     private competitionDataUrl = 'api/getActiveCompetitionData';
@@ -71,10 +74,20 @@ export class PartakingService implements EditInterface {
             .then(response => response.json() as DiscussionItem)
             .catch(this.handleError);
     }
-    deleteItem(discussionItem: DiscussionItem): Promise<any>  {
+
+    public deleteItem(discussionItem: DiscussionItem): Promise<any>  {
       this.setCSRFHeaders(this.authService.getAuth().token);
       return this.http
         .delete(this.deleteItemUrl + "?iid=" + discussionItem.msgId,
+          {headers: this.postHeaders})
+        .toPromise()
+        .catch(this.handleError);
+    }
+
+    public deleteTheme(themeId: number): Promise<any>  {
+      this.setCSRFHeaders(this.authService.getAuth().token);
+      return this.http
+        .delete(this.deleteThemeUrl + "?thid=" + themeId,
           {headers: this.postHeaders})
         .toPromise()
         .catch(this.handleError);

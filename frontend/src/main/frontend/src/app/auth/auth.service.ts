@@ -28,14 +28,15 @@ export class AuthService {
   private changePasswordUrl = 'api/changepassword';
   private changePasswordByTidUrl = 'api/changepasswordtid';
   private changeemailUrl = 'api/changeemail';
+  private userDetailsUrl = 'api/getUserDetails';
 
 
   constructor(private http: Http) {
     this.init();
   }
 
-  public init() {
-    this.checkAuth()
+  public init(): Promise<any> {
+    return this.checkAuth()
       .then(authInfo => this.auth = authInfo)
       .catch(this.handleError);
   }
@@ -78,6 +79,19 @@ export class AuthService {
         .toPromise()
         .then(response => response.json() as UserData)
         .catch(this.handleErrorWithoutAlerts);
+  }
+
+  /**
+   * Used by user details controller which obtains avatar and username for any user by id
+   *
+   * @param {number} userId
+   * @returns {Promise<UserData>}
+   */
+  public getUserDetails(userId: number): Promise<UserData> {
+    return this.http.get(this.userDetailsUrl + "?uid=" + userId)
+      .toPromise()
+      .then(response => response.json() as UserData)
+      .catch(this.handleErrorWithoutAlerts);
   }
 
   /**

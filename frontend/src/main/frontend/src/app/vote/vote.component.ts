@@ -32,7 +32,7 @@ export class VoteComponent implements OnInit {
 
   ngOnInit(): void {
     this.authInfo = this.authService.getAuth();
-    this.getVoteInfo();
+    //this.getVoteInfo();
   }
 
   sendResult(): void {

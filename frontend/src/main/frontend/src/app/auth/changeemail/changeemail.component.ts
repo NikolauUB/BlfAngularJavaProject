@@ -20,8 +20,12 @@ export class ChangeEmailComponent {
     this.commonErrorMsg = "";
     this.authService
       .changeEmail(this.emailData)
-      .then(reply => this.router.navigateByUrl("profile"))
+      .then(reply => this.success())
       .catch(e => this.handleError(e));
+  }
+
+  private success() {
+    this.router.navigateByUrl("profile")
   }
 
   private handleError(e: any) : void {

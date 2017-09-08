@@ -1,9 +1,9 @@
 package wind.instrument.competitions.rest;
 
+import org.springframework.web.bind.annotation.*;
 import wind.instrument.competitions.configuration.SessionParameters;
 import wind.instrument.competitions.data.UserEntity;
-import wind.instrument.competitions.middle.BotCheckException;
-import wind.instrument.competitions.middle.Question;
+import wind.instrument.competitions.middle.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import wind.instrument.competitions.middle.SendEmailToUser;
-import wind.instrument.competitions.middle.Utils;
 import wind.instrument.competitions.rest.model.*;
 
 import javax.persistence.EntityManager;
@@ -154,14 +148,31 @@ public class AuthService {
      * @return
      */
     @RequestMapping(value = "/api/profile", method = RequestMethod.GET)
-    public UserData getProfile(HttpServletRequest request, HttpServletResponse response) {
+    public UserData getProfile() {
+        return this.getUserProfile((Long)httpSession.getAttribute(SessionParameters.USER_ID.name()));
+    }
+
+    private UserData getUserProfile(Long userId) {
         UserData result = new UserData();
-        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute(SessionParameters.USER_ID.name()));
-        result.setUsername(currentUser.getUsername());
-        if (currentUser.getImage() != null && currentUser.getImage().length > 0) {
-            result.setPreviewImage("data:image/jpeg;base64," + Base64.getEncoder().encodeToString(currentUser.getImage()));
+        UserEntity user = em.find(UserEntity.class, userId);
+        result.setUsername(user.getUsername());
+        result.setUpdated(user.getUpdated());
+        result.setCreated(user.getCreated());
+        if (user.getImage() != null && user.getImage().length > 0) {
+            result.setPreviewImage("data:image/jpeg;base64," + Base64.getEncoder().encodeToString(user.getImage()));
         }
         return result;
+    }
+
+
+    @RequestMapping(value = "/api/getUserDetails", method = RequestMethod.GET)
+    public UserData getUserDetails(@RequestParam("uid") Long userId, HttpServletResponse response) {
+        if (userId == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST,
+                    "User id is not set",
+                    response);
+        }
+        return this.getUserProfile(userId);
     }
 
     @RequestMapping(value = "/api/changepasswordtid", method = RequestMethod.PUT)
@@ -325,6 +336,14 @@ public class AuthService {
                     response);
         }
 
+        if (ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(userData.getUsername().trim().toLowerCase())
+                && !ReservedUsernames.RESERVED_USERNAMES.checkEmail(userData.getUsername().trim().toLowerCase(), currentUser.getEmail())) {
+            return this.prepareProfileReplyWithError(result,
+                    userData,
+                    new Exception(bundle.getString("USERNAME_RESERVED")),
+                    HttpServletResponse.SC_BAD_REQUEST);
+        }
+
         //username
         if (userData.getUsername() != null
                 && userData.getUsername().trim().length() > 0
@@ -341,6 +360,8 @@ public class AuthService {
             currentUser.setUsername(userData.getUsername().trim());
             anyChanges = true;
         }
+
+
 
         //image
         if (userData.getSaveImage() != null && userData.getSaveImage().length() > 0) {
@@ -428,6 +449,11 @@ public class AuthService {
         newUser.setEmail(regData.getEmail().trim().toLowerCase());
         if (this.isEmailExist(newUser.getEmail())) {
             return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_EMAIL_EXISTS")), 422);
+        }
+
+        if (ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(regData.getUsername().trim().toLowerCase())
+                && !ReservedUsernames.RESERVED_USERNAMES.checkEmail(regData.getUsername().trim().toLowerCase(), newUser.getEmail())) {
+            return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("USERNAME_RESERVED")), 422);
         }
 
         //password

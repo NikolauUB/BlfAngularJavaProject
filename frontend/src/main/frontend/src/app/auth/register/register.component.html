@@ -1,4 +1,5 @@
 <script src="../PasswordConfirmValidator.ts"></script>
+<div>
 <h2>Регистрация</h2>
 <div class="alert alert-danger" *ngIf="commonErrorMsg">{{commonErrorMsg}}</div>
 <div class="regItems">
@@ -52,14 +53,17 @@
            [(ngModel)]="passwordRD1"
            />
   </div>
+  <div>
   <h3>Выберите только духовые музыкальные инструменты!</h3>
   <span  *ngFor="let answer of questionData.questionAnswers " (click)="onSelect(answer)"
       [class.selected]="selectedAnswers.has(answer)">
     <input type="image" name="pict" src="../assets/images/first/{{answer}}.jpg"  alt="" vspace="5" hspace="5" width="200" height="200"/>
   </span>
+  </div>
   <div class="form-group">
     <button [disabled]="!regForm.valid" (click)="doReqistration(); $event.stopPropagation();">Зарегистрироваться</button>
   </div>
   </form>
+</div>
 </div>
 

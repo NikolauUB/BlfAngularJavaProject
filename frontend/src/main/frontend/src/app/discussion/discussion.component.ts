@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
 import {DiscussionItem} from "../model/DiscussionItem";
 import {PartakeThread} from "../model/PartakeThread";
 import {CompetitionComponent} from "../partaking/competition.component";
@@ -6,94 +6,112 @@ import {EditModalComponent} from "../modal/editmodal.component";
 import {CompetitionMember} from "../model/CompetitionMember";
 import {CompetitionShortInfo} from "../partaking/CompetitionShortInfo";
 import {ChangesController} from "../changescontrol/changes.controller";
+import {EditInterface} from "../modal/edit.interface";
+import {DetailsController} from "../auth/userdetails/details.controller";
+import {ThreadChanges} from "../changescontrol/ThreadChanges";
+
 
 @Component({
   selector: 'discussion-thread-app',
   templateUrl: './discussion.component.html',
   styleUrls: [ '../vote/voting.component.css' ]
 })
-export class DiscussionComponent extends CompetitionComponent implements OnInit {
+export class DiscussionComponent extends CompetitionComponent implements OnInit, EditInterface, AfterViewInit {
   @ViewChild(EditModalComponent)
   editModal: EditModalComponent = new EditModalComponent(this.router);
   discussionItems: Array<DiscussionItem> = new Array<DiscussionItem>();
   newDiscussItem: DiscussionItem = new DiscussionItem();
-  currentCompTypeMembers: Array<CompetitionMember>;
+
 
 
   ngOnInit(): void {
-    //this.readMembers();
   }
 
-  //readMembers(): void {
-  //  var members: string = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + this.competitionShortInfo.compType);
-  //  if (members != null) {
-  //    this.currentCompTypeMembers = JSON.parse(members);
-  //  }
-  //}
+  ngAfterViewInit(): void {
+    var hideDiscuss = localStorage.getItem(ChangesController.HIDE_PARTAKE_DISCUSS_PREFIX + this.competitionShortInfo.compType);
+    if (hideDiscuss != null && hideDiscuss == "0") {
+      this.showDiscuss();
+    }
+  }
+
+  private showDiscuss(): void {
+    if (this.isTakenPart() && !this.isAdmin()) {
+      if (this.competitionShortInfo.userThread > 0) {
+        this.userDetailsController
+            .getMaxUpdatedDate()
+            .then(uTime => this.loadThemedUpdateduTime(uTime));
+      }
+
+    }
+
+  }
+
+  private loadThemedUpdateduTime(uTime: Date) {
+      this.themeController
+          .loadUpdatedByThemeId(this.competitionShortInfo.userThread)
+          .then(thTime => this.checkChangesInThread(uTime, thTime))
+  }
+
+  private checkChangesInThread(uTime: Date, thTime: Date) {
+      this.changesController
+          .checkChangesInThread(uTime, thTime, this.competitionShortInfo.userThread)
+          .then(reply => this.updateThemeDetails(reply));
+  }
+
+
+  private updateThemeDetails(threadChanges: ThreadChanges) {
+    threadChanges.userIds.forEach((userId)=>{
+      this.userDetailsController.updateUserDetails(userId);
+    });
+    this.themeController
+        .loadThemeById(this.competitionShortInfo.userThread)
+        .then(res => {
+          if (res == null || threadChanges.thChanged) {
+            this.loadDiscussion();
+          } else {
+            this.discussionItems = res;
+            this.discussionItems.forEach((item)=> {
+              this.getAuthorDetails(item);
+            });
+          }
+        });
+  }
+
+  //debug method
+  public showMaxUpdated() {
+      this.userDetailsController.getMaxUpdatedDate().then(result => alert(result));
+  }
+
+  public goToLogin(): void {
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
+  }
+
+
+  private getAuthorDetails(item: DiscussionItem): void {
+    item.authorUsername = "Пользователь " + item.authorId;
+    item.authorAvatar = DetailsController.defaultAvatar;
+    this.userDetailsController.loadUserDetails(item);
+    //item.isChangedLatest = (this.changedMsgIds.length > 0 && this.changedMsgIds.indexOf(item.msgId) !== -1);
+  }
+
+
+  //************************************
+  //check permission section
+  //************************************
+  public isAdmin(): boolean {
+    return this.isAutheticated() && this.authService.getAuth().username === "NikolayUB";
+  }
 
   public isAutheticated(): boolean {
     return (this.authService && this.authService.getAuth()) ? this.authService.getAuth().autheticated : false;
   }
 
+  public hasOtherRestrictions(): boolean {
+    return this.competitionShortInfo.isUserChooseAlternativeProgramm();
+  }
+
   public isTakenPart(): boolean {
-    if(this.isAutheticated() && this.currentCompTypeMembers) {
-      return (this.currentCompTypeMembers.filter( (item) => {
-        return item.mId === this.authService.getAuth().userId;
-        }).length === 1) || this.discussionItems.length > 0;
-    } else {
-      return false;
-    }
-  }
-
-  public addNewItem(): void {
-    this.newDiscussItem = new DiscussionItem();
-    this.newDiscussItem.competitionId = this.competitionShortInfo.compId;
-    this.editModal.showModal("Новая заявка на участие",
-          this.newDiscussItem,
-          this.discussionItems,
-          this.partakingService,
-          "Ссылка на запись и описание:");
-  }
-
-  public reply(item: DiscussionItem): void {
-    this.newDiscussItem = new DiscussionItem();
-    this.newDiscussItem.competitionId = item.competitionId;
-    this.newDiscussItem.parentMsgId = (item.parentMsgId == null)? item.msgId: item.parentMsgId;
-    this.newDiscussItem.msgThreadId = item.msgThreadId;
-    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorId,
-      this.newDiscussItem,
-      this.discussionItems,
-      this.partakingService,
-      "Ваш комментарий:");
-  }
-
-  public editItem(item: DiscussionItem): void {
-    this.editModal.showModal("Редактирование",
-      item,
-      null,
-      this.partakingService,
-      "Ссылка на запись и описание:");
-  }
-
-  public deleteItem(item: DiscussionItem): void {
-    this.partakingService
-      .deleteItem(item)
-      .then(reply => this.removeItemFromList(item))
-      .catch(e => this.handleError(e));
-  }
-
-  private removeItemFromList(item: DiscussionItem): void {
-    this.discussionItems = this.discussionItems.filter((itm)=>{itm.msgId !==  item.msgId});
-    super.reloadMembers();
-
-  }
-
-  public showThread(): void {
-    this.loadDiscussion();
-  }
-
-  public goToLogin(): void {
-    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
+    return (this.isAutheticated() && this.competitionShortInfo.userThread != -1)
   }
 
   public canEdit(item: DiscussionItem): boolean {
@@ -105,11 +123,13 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit 
   }
 
   public canDelete(item: DiscussionItem): boolean {
-    return this.isAutheticated() && this.isAmItemOwner(item)
-      && (item.parentMsgId != null ||  this.discussionItems.length == 1);
+    return this.isAutheticated() && this.isAmItemOwner(item);
   }
 
-  public isAmItemOwner(item: DiscussionItem): boolean {
+  //*****************************
+  // check state of item
+  //*****************************
+  private isAmItemOwner(item: DiscussionItem): boolean {
     return item.authorId === this.authService.getAuth().userId;
   }
 
@@ -117,25 +137,160 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit 
     return item.updateDate !== item.creationDate;
   }
 
-  public getAvatar(item: DiscussionItem): string {
-      return "../../assets/images/defaultAvatar.jpg"
+
+  //****************************
+  // add, edit item section
+  //****************************
+  /**
+   * add root item
+   */
+  public addNewItem(): void {
+    if(!this.isAutheticated()) return;
+    this.newDiscussItem = new DiscussionItem();
+    this.newDiscussItem.competitionId = this.competitionShortInfo.compId;
+    this.editModal.showModal("Новая заявка на участие",
+          this.newDiscussItem,
+          this,
+          "Ссылка на запись и описание:");
+  }
+
+  /**
+   * Reply to other item
+   * @param {DiscussionItem} item
+   */
+  public reply(item: DiscussionItem): void {
+    if(!this.canReply(item)) return;
+    this.newDiscussItem = new DiscussionItem();
+    this.newDiscussItem.competitionId = item.competitionId;
+    this.newDiscussItem.parentMsgId = (item.parentMsgId == null)? item.msgId: item.parentMsgId;
+    this.newDiscussItem.msgThreadId = item.msgThreadId;
+    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorUsername,
+      this.newDiscussItem,
+      this,
+      "Ваш комментарий:");
+  }
+
+  /**
+   * Edit existing item
+   * @param {DiscussionItem} item
+   */
+  public editItem(item: DiscussionItem): void {
+    if(!this.canEdit(item)) return;
+    this.editModal.showModal("Редактирование",
+      item,
+      this,
+      "Ссылка на запись и описание:");
   }
 
 
+  /**
+   * This method is called by edit modal on submit changes
+   * @param {DiscussionItem} discussionItem
+   */
+ saveItem(discussionItem: DiscussionItem): void {
+    var isNew =  (discussionItem.msgId == null);
+    if (isNew) {
+      discussionItem.authorId = this.authService.getAuth().userId;
+    }
+    this.partakingService
+      .saveItem(discussionItem)
+      .then(reply => this.handleSaveReply(reply, isNew))
+      .catch(e => this.editModal.handleError(e));
+
+  }
+
+  private handleSaveReply(reply: DiscussionItem, isNew: boolean) {
+    if (isNew) {
+      this.newDiscussItem = reply;
+      if (this.discussionItems.length === 0) {
+        //if first message then reload member list
+        super.reloadMembers();
+      }
+      this.discussionItems.push(this.newDiscussItem);
+      this.getAuthorDetails(this.newDiscussItem);
+    } else {
+      //update updateDate
+      var discItem = this.discussionItems
+        .filter((itm)=>{
+          return itm.msgId ===  reply.msgId;
+      });
+      if(discItem.length == 1) {
+        discItem[0].updateDate = reply.updateDate;
+      }
+      //this.loadDiscussion();
+    }
+    this.editModal.hide();
+  }
+
+  //*********************
+  // delete item section
+  //*********************
+  public deleteItem(item: DiscussionItem): void {
+    if(!this.canDelete(item)) return;
+    if (item.parentMsgId == null && confirm("Вы уверены, что хотите удалить заявку?")) {
+      this.partakingService
+        .deleteTheme(item.msgThreadId)
+        .then(reply => this.removeDiscussion())
+        .catch(e => this.handleError(e));
+    } else {
+      this.partakingService
+        .deleteItem(item)
+        .then(reply => this.removeItemFromList(item))
+        .catch(e => this.handleError(e));
+    }
+  }
+  private removeDiscussion(): void {
+    this.discussionItems = new Array<DiscussionItem>();
+    //to reload member list
+    super.reloadMembers();
+  }
+
+  private removeItemFromList(item: DiscussionItem): void {
+    this.discussionItems = this.discussionItems.filter((itm)=>{
+      return itm.msgId !== item.msgId;
+    });
+    if(this.discussionItems.length === 0) {
+      super.reloadMembers();
+    }
+    //this.loadDiscussion();
+  }
+
+
+  //*************************
+  // load discussion section
+  //*************************
+  public hideThread(): void {
+    this.discussionItems = new Array<DiscussionItem>();
+    localStorage.setItem(ChangesController.HIDE_PARTAKE_DISCUSS_PREFIX + this.competitionShortInfo.compType, "1");
+  }
+  public showThread(): void {
+    this.showDiscuss();
+    localStorage.setItem(ChangesController.HIDE_PARTAKE_DISCUSS_PREFIX + this.competitionShortInfo.compType, "0");
+  }
+
+
+
+  public showAdminThread(): void {
+    this.loadDiscussion();
+  }
 
   private loadDiscussion(): void {
     this.partakingService
       .getPartakeDiscuss(this.competitionShortInfo.compId)
-      .then(reply => this.handleThreadReply(reply))
+      .then(reply => this.handleLoadDiscussionReply(reply))
       .catch(e => this.handleError(e));
   }
 
-
-
-  private handleThreadReply(reply: PartakeThread): void {
+  private handleLoadDiscussionReply(reply: PartakeThread): void {
     this.discussionItems = reply.discussionItems;
+    if (!this.isAdmin()) {
+      this.themeController.cleanTheme(reply.threadId);
+      this.themeController.saveThemeInDBbyId(this.discussionItems, reply.threadId, reply.thUpdated);
+    }
+    this.discussionItems.forEach((item)=>{
+      this.getAuthorDetails(item);
+    });
+
+
   }
-
-
-
 }

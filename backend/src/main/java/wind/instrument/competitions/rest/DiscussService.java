@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -41,11 +42,12 @@ public class DiscussService {
     @RequestMapping(value = "/api/getActiveCompetitions", method = RequestMethod.GET)
     public ActiveCompetitions getActiveCompetitions(HttpServletResponse response) {
         ActiveCompetitions result = new ActiveCompetitions();
+        Date currentDate = new Date();
         TypedQuery<CompetitionEntity> activeCometQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true",
+                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionStart > :currentDate",
                         CompetitionEntity.class);
         try {
-            List<CompetitionEntity>  competList = activeCometQuery.getResultList();
+            List<CompetitionEntity>  competList = activeCometQuery.setParameter("currentDate", currentDate).getResultList();
             ArrayList<Integer> list = new ArrayList<Integer>();
             competList.forEach((item)->{
                 list.add(item.getCompetitionType().getValue());
@@ -66,12 +68,15 @@ public class DiscussService {
             this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Type is not set", response);
             return result;
         }
-
+        Date currentDate = new Date();
         TypedQuery<CompetitionEntity> activeCometQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type",
+                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type and c.competitionStart > :currentDate",
                         CompetitionEntity.class);
         try {
-            CompetitionEntity competitionEntity = activeCometQuery.setParameter("type", competitionType).getSingleResult();
+            CompetitionEntity competitionEntity = activeCometQuery
+                    .setParameter("type", competitionType)
+                    .setParameter("currentDate", currentDate)
+                    .getSingleResult();
 
             result = new CompetitionData(
                     competitionEntity.getCompetitionId(),
@@ -109,6 +114,7 @@ public class DiscussService {
                     competitionMember.setmId(member.getUserId());
                     competitionMember.setmUsername(member.getUsername());
                     competitionMember.setCompType(item.getCompetitionType().getValue());
+                    competitionMember.setThreadId(theme.getId());
                     result.add(competitionMember);
                 });
             });
@@ -151,6 +157,8 @@ public class DiscussService {
 
         //find messages in the theme
         if (usersPartakeTheme != null) {
+            result.setThreadId(usersPartakeTheme.getId());
+            result.setThUpdated(usersPartakeTheme.getUpdated());
             TypedQuery<MessageEntity> msgQuery =
                     em.createQuery("select m from MessageEntity m where  m.themeId = :threadId order by m.created",
                             MessageEntity.class);
@@ -218,21 +226,27 @@ public class DiscussService {
             //todo translate
             this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Message doesn't exist!", response);
         }
-        if (messageEntity.getUserId() != currentUser.getUserId()) {
+        System.out.println("MSG USER: " + messageEntity.getUserId());
+        System.out.println("CURRENT USER: " + currentUser.getUserId());
+        if (!messageEntity.getUserId().equals(currentUser.getUserId())) {
             //todo translate
             this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message belongs to other user! It cannot be deleted!", response);
         } else {
             try {
+                //ThemeEntity themeEntity = em.find(ThemeEntity.class, messageEntity.getThemeId());
+                ThemeEntity themeEntity = messageEntity.getTheme();
+                themeEntity.setUpdated(new Date());
                 if(messageEntity.getParentMsgId() == null) {
-                    ThemeEntity themeEntity = em.find(ThemeEntity.class, messageEntity.getThemeId());
                     em.remove(messageEntity);
                     if(themeEntity.getUserId() == currentUser.getUserId()) {
                         em.remove(themeEntity);
+                    } else {
+                        em.persist(themeEntity);
                     }
                 } else {
                     em.remove(messageEntity);
+                    em.persist(themeEntity);
                 }
-
             } catch(Exception ex) {
                 LOG.debug("Error deleting partake message: ", ex);
                 this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
@@ -240,6 +254,39 @@ public class DiscussService {
         }
     }
 
+
+    @RequestMapping(value = "/api/deleteTheme", method = RequestMethod.DELETE)
+    public void deleteTheme(@RequestParam("thid") Long itemId, HttpServletResponse response) {
+        if (itemId == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Item Id is not set!", response);
+        }
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        ThemeEntity themeEntity = em.find(ThemeEntity.class, itemId);
+        if (themeEntity == null) {
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Item Id is not found!", response);
+        }
+
+        System.out.println("MSG USER: " + themeEntity.getUserId());
+        System.out.println("CURRENT USER: " + currentUser.getUserId());
+        if (!themeEntity.getUserId().equals(currentUser.getUserId())) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message belongs to other user! It cannot be deleted!", response);
+        } else {
+            try {
+                themeEntity.getMessages().forEach((message) -> {
+                    if (message.getParentMsgId() != null) {
+                        em.remove(message);
+                    }
+                });
+                themeEntity.getMessages().forEach((rootMessage) -> {
+                    em.remove(rootMessage);
+                });
+                em.remove(themeEntity);
+            } catch(Exception ex) {
+                LOG.debug("Error deleting partake message: ", ex);
+                this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
+            }
+        }
+    }
 
     @RequestMapping(value = "/api/submitPartake", method = RequestMethod.POST)
     public DiscussionItem submitPartake(@RequestBody DiscussionItem discussionItem, HttpServletResponse response) {
@@ -278,7 +325,7 @@ public class DiscussService {
                 usersPartakeTheme.setThemeType(ThemeType.COMPETITION_REQUEST);
                 em.persist(usersPartakeTheme);
             }
-            if (discussionItem.getMsgThreadId() != null && discussionItem.getMsgThreadId() != usersPartakeTheme.getId()) {
+            if (discussionItem.getMsgThreadId() != null && !discussionItem.getMsgThreadId().equals(usersPartakeTheme.getId())) {
                 LOG.info("Bad request from client. Tries to save data for theme " + discussionItem.getMsgThreadId());
                 this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request. The thread doesn't belongs to you!", response);
                 return discussionItem;
@@ -299,7 +346,7 @@ public class DiscussService {
         MessageEntity message = new MessageEntity();
         if(discussionItem.getMsgId() != null) {
             message = em.find(MessageEntity.class, discussionItem.getMsgId());
-            if(usersPartakeTheme != null && message.getThemeId() != usersPartakeTheme.getId()) {
+            if(usersPartakeTheme != null && !message.getThemeId().equals(usersPartakeTheme.getId())) {
                 LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to theme " + usersPartakeTheme.getId());
                 this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + usersPartakeTheme.getId()", response);
                 return discussionItem;
@@ -316,6 +363,12 @@ public class DiscussService {
         }
         message.setMsgBody(discussionItem.getMsgText());
         em.persist(message);
+
+        //change updated for Theme
+        ThemeEntity theme = em.find(ThemeEntity.class, message.getThemeId());
+        theme.setUpdated(message.getUpdated());
+        em.persist(theme);
+
         //return back
         discussionItem.setMsgId(message.getMsgId());
         discussionItem.setAuthorId(message.getUserId());

@@ -27,8 +27,7 @@ public class ThemeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
     private CompetitionEntity competition;
-
-
+  
     private Date created;
     private Date updated;
 
@@ -104,6 +103,10 @@ public class ThemeEntity {
 
     public Date getUpdated() {
         return updated;
+    }
+
+    public Date setUpdated(Date updated) {
+        return this.updated = updated;
     }
 
     public Date getCreated() {

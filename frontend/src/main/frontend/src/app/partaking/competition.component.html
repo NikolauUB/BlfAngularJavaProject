@@ -1,23 +1,20 @@
 <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
-<h3 *ngIf="isBaroque()">Обязательная классическая программа</h3>
-<h3 *ngIf="isJazz()">Обязательная джазовая программа</h3>
-<h3 *ngIf="isFree()">Обязательная свободная программа</h3>
-<h3 *ngIf="isComposition()">Конкурс композиторов</h3>
+<h3 style="margin-left:15px;">{{competitionData.name}}</h3>
 
-<p>Срок сдачи записей и начало голосования: {{competitionData.start | date: 'dd-MM-yyyy'}}</p>
-<p>Окончание голосования: {{competitionData.end |  date: 'dd-MM-yyyy'}}</p>
-<h4>Задание</h4>
-
-
-<div style="display: inline-block" >
-  <iframe #embeddedVideo width="420" height="315" src allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+<div style="display: inline-block; margin:15px;" *ngIf="competitionData.sampleUrl">
+  <iframe #embeddedVideo  [src] = "competitionData.sampleUrl | safe" width="420" height="315" src allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
 </div>
-<div [innerHTML]="competitionData.description" style="width:40%;display: inline-block" ></div>
+
+<div style="width:40%; display: inline-block; margin:15px; vertical-align: top">
+  <div><h4><strong>Срок сдачи записей:</strong> {{competitionData.start | date: 'fullDate'}}</h4></div>
+  <div><small><strong>Окончание голосования:</strong> {{competitionData.end |  date: 'fullDate'}}</small></div>
+  <div><h4><strong>Задание</strong></h4></div>
+  <div [innerHTML]="competitionData.description"></div>
+</div>
 <div>Участники:
-  <div style="display: inline-block" *ngFor="let member of membersForShow">
+  <div style="display: inline-block" *ngFor="let member of competitionShortInfo.membersForShow">
     {{member.mUsername}}&nbsp;
   </div>
-  <span><button (click)="reloadMembers(); $event.stopPropagation()">Reload</button></span>
 </div>
 
 

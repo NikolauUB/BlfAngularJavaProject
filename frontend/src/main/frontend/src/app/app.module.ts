@@ -13,9 +13,9 @@ import { EditModalComponent} from "./modal/editmodal.component";
 import {RegisterComponent} from "./auth/register/reqister.component";
 import {ProfileComponent} from "./auth/profile/profile.component";
 import {AuthService} from "./auth/auth.service";
-import {PartakingComponent} from "./partaking/partaking.component";
 import {PartakingService} from "./partaking/partaking.service";
 import {AboutComponent} from "./about/about.component";
+import {RulesComponent} from "./rules/rules.component";
 import {HistoryComponent} from "./history/history.component";
 import {LoginComponent} from "./auth/login/login.component";
 import {PasswordConfirmValidator} from "./auth/PasswordConfirmValidator";
@@ -31,8 +31,11 @@ import {CompositionComponent} from "./partaking/composition/composition.componen
 import {ChangesService} from "./changescontrol/changes.service";
 import {ChangesController} from "./changescontrol/changes.controller";
 import {DiscussionComponent} from "./discussion/discussion.component";
+import {WelcomeComponent} from "./welcome/welcome.component";
 import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-
+import {SafePipe} from "./safe.pipe";
+import {DetailsController} from "./auth/userdetails/details.controller";
+import {ThemeController} from "./theme/theme.controller";
 
 /**
  * This service checks database for changes of seldom changed data and if it is changed cleans localStorage
@@ -45,10 +48,12 @@ export function runChangesController(service: ChangesController) {
 
 @NgModule({
   declarations: [
+    SafePipe,
     AboutComponent,
     HistoryComponent,
     AppComponent,
     VoteComponent,
+    RulesComponent,
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
@@ -58,13 +63,13 @@ export function runChangesController(service: ChangesController) {
     ChangePasswordComponentComponent,
     ChangeEmailComponent,
     DiscussionComponent,
-    PartakingComponent,
     BaroqueComponent,
     JazzComponent,
     FreeComponent,
     CompositionComponent,
     ModalComponent,
     EditModalComponent,
+    WelcomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,8 +84,10 @@ export function runChangesController(service: ChangesController) {
     AuthService,
     PartakingService,
     CompetitionShortInfo,
+    DetailsController,
     ChangesService,
     ChangesController,
+    ThemeController,
     {
       provide: APP_INITIALIZER,
       useFactory: runChangesController,

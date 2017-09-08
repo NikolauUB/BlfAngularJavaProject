@@ -1,10 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import {ChangesKeywords} from "./ChangesKeywords";
+import {ThreadChanges} from "./ThreadChanges";
 
 @Injectable()
 export class ChangesService {
   private keywordsUrl = 'api/getChangedKeywords';
+  private threadUpdatesUrl = 'api/getThreadUpdates';
 
   constructor(private http: Http) {
   }
@@ -14,6 +16,16 @@ export class ChangesService {
       .toPromise()
       .then(response => response.json() as ChangesKeywords)
       .catch(this.handleError);
+  }
+
+  public getThreadUpdates(uTime:Date, thTime:Date, threadId: number): Promise<ThreadChanges> {
+    return this.http.get(this.threadUpdatesUrl +
+                          "?thid=" + threadId +
+                          ((uTime != null)? "&uld=" + uTime:"") +
+                          ((thTime != null) ? "&tld=" + thTime:""))
+        .toPromise()
+        .then(response => response.json() as ThreadChanges)
+        .catch(this.handleError);
   }
 
 

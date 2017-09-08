@@ -11,13 +11,10 @@ declare var $ :any;
 
 })
 export class EditModalComponent {
-
-
   @ViewChild(ModalComponent)
-  public modal: ModalComponent = new ModalComponent();
+  modal: ModalComponent = new ModalComponent();
   modalName: string;
   model: DiscussionItem = new DiscussionItem();
-  itemList: Array<DiscussionItem>;
   saver: EditInterface;
   whatToDo: string = "";
   errorMsg:string;
@@ -28,6 +25,7 @@ export class EditModalComponent {
 
   public froalaOptions: Object = {
     charCounterCount: true,
+    heightMin: 300,
     toolbarButtons: 	['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily',
       'fontSize', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent',
       'quote', '-', 'insertLink', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting',
@@ -50,13 +48,11 @@ export class EditModalComponent {
 
   public showModal(name: string,
                    modelForChange: DiscussionItem,
-                   itemList: Array<DiscussionItem>,
                    saver: EditInterface,
                    actionDesc: string): void {
     this.model = new DiscussionItem();
     this.modalName = name;
     this.model = modelForChange;
-    this.itemList = itemList;
     this.saver = saver;
     this.whatToDo = actionDesc;
     this.modal.show();
@@ -64,27 +60,20 @@ export class EditModalComponent {
 
 
   protected saveItem() {
-    this.saver
-      .saveItem(this.model)
-      .then(reply => this.handleSaveReply(reply))
-      .catch(e => this.handleError(e));
-
+      this.saver.saveItem(this.model);
   }
 
-  private handleSaveReply(reply: DiscussionItem) {
-    this.model = reply;
-    if (this.itemList != null) {
-      this.itemList.push(this.model);
-    }
+  public hide() {
     this.modal.hide();
+    this.model = new DiscussionItem();
   }
 
-  private handleError(e:any): void {
+  public handleError(e:any): void {
     if(e.status === 403) {
       alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт снова!");
       this.router.navigateByUrl("login");
     } else {
-      this.errorMsg = e.json().message || e.toString();
+      this.errorMsg =  (e.json() && e.json().message) || e.toString();
     }
   }
 

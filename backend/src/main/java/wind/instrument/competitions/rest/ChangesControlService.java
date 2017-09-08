@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import wind.instrument.competitions.data.CompetitionEntity;
+import wind.instrument.competitions.data.MessageEntity;
+import wind.instrument.competitions.data.ThemeEntity;
+import wind.instrument.competitions.data.UserEntity;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.changes.ChangesKeywords;
+import wind.instrument.competitions.rest.model.changes.ThreadChanges;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -46,8 +50,12 @@ public class ChangesControlService {
      * @return
      */
     @RequestMapping(value = "/api/getChangedKeywords", method = RequestMethod.GET)
-    public ChangesKeywords getChangedKeywords(@RequestParam("ld") Long previousTime) {
+    public ChangesKeywords getChangedKeywords(@RequestParam("ld") Long previousTime,  HttpServletResponse response) {
         ChangesKeywords result = new ChangesKeywords();
+        if(previousTime == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "previousTime is not set", response);
+            return result;
+        }
         result.setKeywords(new ArrayList<String>());
 
         long currentTime = System.currentTimeMillis();
@@ -85,6 +93,72 @@ public class ChangesControlService {
         }
         result.setTime(currentTime);
         return result;
+    }
+
+    @RequestMapping(value = "/api/getThreadUpdates", method = RequestMethod.GET)
+    public ThreadChanges getThreadUpdates(@RequestParam(value ="uld", required = false) Long userControlTime,
+                                            @RequestParam(value ="tld", required = false) Long threadControlTime,
+                                            @RequestParam("thid") Long threadId,  HttpServletResponse response) {
+        ThreadChanges result = new ThreadChanges();
+        result.setThChanged(false);
+        ArrayList<Long> msgIds = new ArrayList<Long>();
+        ArrayList<Long> userIds = new ArrayList<Long>();
+        result.setMsgIds(msgIds);
+        result.setUserIds(userIds);
+        if(threadId == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "threadId is not set", response);
+            return result;
+        }
+        TypedQuery<MessageEntity> msgQuery =
+                em.createQuery("select m from MessageEntity m where m.themeId = :thId and m.updated > :ctlTime",
+                        MessageEntity.class);
+        TypedQuery<UserEntity> usersQuery =
+                em.createQuery("select u from UserEntity u where u.updated > :ctlTime and exists " +
+                                "(select m from MessageEntity m where m.userId = u.userId and m.themeId = :thId)",
+                        UserEntity.class);
+        TypedQuery<ThemeEntity> themeQuery =
+                        em.createQuery("select t from ThemeEntity t where t.updated > :ctlTime and t.id = :thId",
+                                ThemeEntity.class);
+        try {
+
+            if (threadControlTime != null)  {
+                Date threadControlDate = new Date(threadControlTime.longValue());
+                msgQuery.setParameter("thId", threadId)
+                    .setParameter("ctlTime", threadControlDate)
+                    .getResultList()
+                    .forEach((msg) -> {
+                        msgIds.add(msg.getMsgId());
+                    });
+                result.setThChanged(themeQuery.setParameter("thId", threadId)
+                    .setParameter("ctlTime", threadControlDate)
+                    .getResultList().size() > 0);
+
+            }
+            if (userControlTime != null)  {
+                Date userControlDate = new Date(userControlTime.longValue());
+                usersQuery.setParameter("thId", threadId)
+                    .setParameter("ctlTime", userControlDate)
+                    .getResultList()
+                    .forEach((usr) -> {
+                        userIds.add(usr.getUserId());
+                    });
+            }
+        } catch(NoResultException ex) {
+            LOG.error("Can not get result for thread: ", ex);
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage(), response);
+            return result;
+        }
+
+        return result;
+
+    }
+
+    private void sendResponseError(int code, String text,  HttpServletResponse response) {
+        try {
+            response.sendError(code, text);
+        } catch (Exception ex) {
+            LOG.error("Something wrong sending error responses", ex);
+        }
     }
 
 }

@@ -1,6 +1,9 @@
 <competition-list-app></competition-list-app>
 <competition-app></competition-app>
 <br>
---------------------------------------------
-<h4>Заявка на участие в обязательной джазовой программе</h4>
+<br>
+
+<div *ngIf="isUserChooseBaroqueProgramm()"><h4>Вы записались на участие в <a routerLink="/baroque" routerLinkActive="active">обязательной классической программе</a>! Спасибо!</h4></div>
+<div *ngIf="!isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Если Ваша запись для обязательной джазовой программы готова, оформите участие!</h4></div>
+<div *ngIf="isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Спасибо за Вашу заявку на участие в джазовой классической программе!</h4></div>
 <discussion-thread-app></discussion-thread-app>

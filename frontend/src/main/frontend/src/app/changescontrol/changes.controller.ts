@@ -1,6 +1,8 @@
 import {Injectable} from "@angular/core";
 import {ChangesService} from "./changes.service";
 import {ChangesKeywords} from "./ChangesKeywords";
+import {DetailsController} from "./../auth/userdetails/details.controller";
+import {ThreadChanges} from "./ThreadChanges";
 
 @Injectable()
 export class ChangesController {
@@ -17,10 +19,27 @@ export class ChangesController {
   public static COMPETITION_MEMBERS_FREE: string = "MBRS_2";
   public static COMPETITION_MEMBERS_COMPOSITION: string = "MBRS_3";
   public static COMPETITION_MEMBERS_PREFIX: string = "MBRS_";
+  public static HIDE_PARTAKE_DISCUSS_PREFIX: string = "HD_";
 
   changesKeywords: ChangesKeywords;
 
-  constructor(private changesService: ChangesService) {
+  constructor(private changesService: ChangesService,
+              private userDetailsController: DetailsController) {
+    this.userDetailsController.createStore();
+  }
+
+  public checkChangesInThread(uTime: Date, thDate: Date, threadId: number): Promise<ThreadChanges> {
+   return this.changesService
+        .getThreadUpdates(uTime, thDate, threadId)
+        .then(reply => this.cleanIndexedDBForUsers(reply))
+        .catch(e => this.handleError(e));
+  }
+
+  private cleanIndexedDBForUsers(reply: ThreadChanges): ThreadChanges {
+    reply.userIds.forEach((userId)=>{
+      this.userDetailsController.cleanUserDetails(userId);
+    });
+    return reply;
   }
 
   public init(): boolean {
@@ -56,4 +75,5 @@ export class ChangesController {
     console.error(e.json().message || e.toString());
     alert(e.json().message || e.toString());
   }
+
 }

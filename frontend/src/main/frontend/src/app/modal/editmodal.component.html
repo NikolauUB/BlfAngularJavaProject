@@ -1,9 +1,9 @@
 <app-modal>
   <div class="app-modal-header">
+    <div style="display: inline-block"><h4>{{modalName}}</h4></div>
   </div>
   <div class="app-modal-body">
     <div class="form-group">
-      <h4>{{modalName}}</h4>
       <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
       <label>{{whatToDo}}</label>
       <div [froalaEditor]="froalaOptions"  [(froalaModel)]="model.msgText"></div>

@@ -24,7 +24,6 @@ public class UserEntity implements Serializable {
     private String passwordSalt;
     @Transient
     private String typedPassword;
-
     @Lob
     @Column(name = "image", length = 100000)
     private byte[] image;
@@ -36,11 +35,12 @@ public class UserEntity implements Serializable {
     @PrePersist
     protected void onCreate() {
         this.created = new Date();
+        this.setUpdated(this.created);
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updated = new Date();
+        this.setUpdated(new Date());
     }
 
     public Long getUserId() {
@@ -108,5 +108,13 @@ public class UserEntity implements Serializable {
 
     public void setLastVisit(Date lastVisit) {
         this.lastVisit = lastVisit;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 }

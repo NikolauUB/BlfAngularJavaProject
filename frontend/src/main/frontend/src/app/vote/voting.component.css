@@ -65,3 +65,6 @@ button.delete {
   background-color: gray !important;
   color:white;
 }
+.mediumWidth {
+  width: 400px;
+}

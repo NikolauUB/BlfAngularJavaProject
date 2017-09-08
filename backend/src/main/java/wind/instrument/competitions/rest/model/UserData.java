@@ -1,9 +1,13 @@
 package wind.instrument.competitions.rest.model;
 
+import java.util.Date;
+
 public class UserData {
     private String username;
     private String saveImage;
     private String previewImage;
+    private Date updated;
+    private Date created;
 
     public String getUsername() {
         return username;
@@ -29,4 +33,19 @@ public class UserData {
         this.previewImage = previewImage;
     }
 
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
 }

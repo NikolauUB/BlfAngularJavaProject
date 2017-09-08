@@ -4,6 +4,7 @@ import {UserData} from "../../model/auth/UserData";
 import {AuthService} from "../auth.service";
 import {ProfileChangedReply} from "../../model/auth/ProfileChangedReply";
 import {NgForm} from "@angular/forms";
+import {DetailsController} from "../userdetails/details.controller";
 
 
 @Component({
@@ -18,7 +19,8 @@ export class ProfileComponent implements OnInit {
   errorMsg:string;
 
   constructor(private authService:AuthService,
-              private router:Router) {
+              private router:Router,
+              private userDetailsController: DetailsController) {
   }
 
   ngOnInit():void {
@@ -35,6 +37,7 @@ export class ProfileComponent implements OnInit {
         this.reset(form);
       }
   }
+
 
   private reset(form: NgForm): void {
     form.resetForm();
@@ -68,6 +71,8 @@ export class ProfileComponent implements OnInit {
       if(saveImage != null && saveImage.length > 0) {
         this.userData.saveImage = saveImage;
       }
+    } else {
+      this.userDetailsController.cleanUserDetails(this.authService.getAuth().userId);
     }
   }
 

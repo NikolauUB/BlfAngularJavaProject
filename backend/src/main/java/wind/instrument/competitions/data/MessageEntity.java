@@ -30,7 +30,7 @@ public class MessageEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", referencedColumnName = "theme_id", insertable = false, updatable = false)
     private ThemeEntity theme;
 

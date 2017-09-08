@@ -1,30 +1,59 @@
-<div id="header-inner" class="clear-block">
-  <div id="logo-title">
-    <div id="logo"><a href="/" title="Home" rel="home"><img src="../assets/images/logo.jpg" alt="Home" id="logo-image"></a></div>
-  </div> <!-- /#logo-title -->
-</div>
-<div id="main">
-
-  <div id="navbar"><div id="navbar-inner" class="clear-block region region-navbar">
-    <a name="navigation" id="navigation"></a>
-
-
-    <div id="primary" class="clear-block">
-
-      <nav>
-        <a routerLink="/about" routerLinkActive="active">О сайте</a>
-        <a routerLink="/history" routerLinkActive="active">История создания</a>
-        <a *ngIf="!isUsersAuthentificated()" routerLink="/login" routerLinkActive="active">Вход</a>
-        <a *ngIf="isUsersAuthentificated()" routerLink="/profile" routerLinkActive="active">Личный кабинет</a>
-        <a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a>
-      </nav>
-
-
-    </div> <!-- /#primary -->
-
-  </div></div>
-  <div *ngIf="isUsersAuthentificated()" style="float: right;">Добро пожаловать, {{getUserName()}}
-    <button (click)="doLogout(); $event.stopPropagation()">Выйти</button>
+<div class="wrapper">
+  <div id="header-inner" class="top">
+    <div id="logo-title">
+      <div id="logo"><!--<a href="/" title="Home" rel="home"><img src="../assets/images/logo.jpg" alt="Home" id="logo-image"></a>--></div>
+    </div> <!-- /#logo-title -->
   </div>
-  <router-outlet></router-outlet>
+ <!-- <div id="main">-->
+
+    <!--<div id="navbar"><div id="navbar-inner" class="clear-block region region-navbar">
+      <a name="navigation" id="navigation"></a>
+
+
+     <div id="primary" class="clear-block">-->
+
+        <ul class="navigation">
+          <li><a routerLink="/voting" routerLinkActive="active">Конкурсы</a></li>
+          <li><a *ngIf="!isUsersAuthentificated()" routerLink="/login" routerLinkActive="active">Вход</a>
+            <ul>
+              <li><a routerLink="/login" routerLinkActive="active">Войти в личный кабинет</a></li>
+              <li><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
+            </ul>
+          </li>
+          <li><a *ngIf="isUsersAuthentificated()" routerLink="/profile" routerLinkActive="active">Личный кабинет</a>
+            <ul>
+              <li><a routerLink="/profile" routerLinkActive="active">Сменить имя и фотографию</a></li>
+              <li><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a></li>
+              <li><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></li>
+              <li><a (click)="doLogout(); $event.stopPropagation()">Выход</a></li>
+            </ul>
+          </li>
+          <li><a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a></li>
+          <li><a routerLink="/about" routerLinkActive="active">О сайте</a>
+            <ul>
+              <li><a routerLink="/about" routerLinkActive="active">Назначение сайта</a></li>
+              <li><a routerLink="/history" routerLinkActive="active">История создания</a></li>
+              <li><a routerLink="/blfRuStatistic" routerLinkActive="active">Статистика blf.ru</a></li>
+              <li><a routerLink="/blfRuRecords" routerLinkActive="active">Записи участников конкурсов blf.ru</a></li>
+            </ul>
+          </li>
+          <li><a routerLink="/rules" routerLinkActive="active">Правила</a></li>
+
+          <div  class ="welcome" *ngIf="isUsersAuthentificated()">
+            <li><a>Добро пожаловать, {{getUserName()}}</a>
+              <ul><li><a (click)="doLogout(); $event.stopPropagation()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Выход&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li></ul>
+            </li></div>
+          <div class="clear"></div>
+
+        </ul>
+
+
+    <!-- </div> <!-- /#primary -->
+
+    <!--</div> </div> -->
+
+    <div class="footer">
+    <router-outlet></router-outlet>
+    </div>
+<!-- </div>-->
 </div>
