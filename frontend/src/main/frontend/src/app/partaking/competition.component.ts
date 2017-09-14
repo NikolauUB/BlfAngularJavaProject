@@ -63,16 +63,22 @@ export class CompetitionComponent  implements  OnInit {
       this.competitionShortInfo.userThread = (member.length > 0)? member[0].threadId : -1;
       if (this.competitionShortInfo.userThread === -1 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE) {
         var membersJazz: string = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ);
-        var jazzMember = JSON.parse(membersJazz).filter( (item) => {
-          return item.mId === this.authService.getAuth().userId;
-        });
-        this.competitionShortInfo.userChoosePrescribeProgramm = (jazzMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ: -1;
+	var jazzMember = null;
+	if (membersJazz != null) {
+          jazzMember = JSON.parse(membersJazz).filter( (item) => {
+            return item.mId === this.authService.getAuth().userId;
+          });
+	}
+        this.competitionShortInfo.userChoosePrescribeProgramm = (jazzMember!= null && jazzMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ: -1;
       } else if (this.competitionShortInfo.userThread === -1 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ) {
         var membersBar: string = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE);
-        var barMember = JSON.parse(membersBar).filter( (item) => {
-          return item.mId === this.authService.getAuth().userId;
-        });
-        this.competitionShortInfo.userChoosePrescribeProgramm = (barMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE: -1;
+	var barMember = null;
+	if (barMember != null) {
+          barMember = JSON.parse(membersBar).filter( (item) => {
+            return item.mId === this.authService.getAuth().userId;
+          });
+	}
+        this.competitionShortInfo.userChoosePrescribeProgramm = (barMember != null && barMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE: -1;
       } else {
         this.competitionShortInfo.userChoosePrescribeProgramm =  this.competitionShortInfo.compType;
       }

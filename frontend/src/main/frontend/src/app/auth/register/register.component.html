@@ -2,7 +2,7 @@
 <div>
 <h2>Регистрация</h2>
 <div class="alert alert-danger" *ngIf="commonErrorMsg">{{commonErrorMsg}}</div>
-<div class="regItems">
+
   <form #regForm="ngForm">
   <div class="form-group">
     <label for="emailRD">Адрес электронной почты:</label>
@@ -53,17 +53,16 @@
            [(ngModel)]="passwordRD1"
            />
   </div>
-  <div>
-  <h3>Выберите только духовые музыкальные инструменты!</h3>
+  <div id="questionSection" class="regItems">
+    <div class="form-group">
+      <button class="btn btn-primary" [disabled]="!regForm.valid" (click)="doReqistration(); $event.stopPropagation();">Зарегистрироваться</button>
+    </div>
+    <h3>Выберите только духовые музыкальные инструменты!</h3>
   <span  *ngFor="let answer of questionData.questionAnswers " (click)="onSelect(answer)"
       [class.selected]="selectedAnswers.has(answer)">
-    <input type="image" name="pict" src="../assets/images/first/{{answer}}.jpg"  alt="" vspace="5" hspace="5" width="200" height="200"/>
+    <input type="image" name="pict" src="../assets/images/first/{{answer}}.jpg"  alt="" vspace="20" hspace="20" width="160" height="160"/>
   </span>
   </div>
-  <div class="form-group">
-    <button [disabled]="!regForm.valid" (click)="doReqistration(); $event.stopPropagation();">Зарегистрироваться</button>
-  </div>
   </form>
-</div>
 </div>
 

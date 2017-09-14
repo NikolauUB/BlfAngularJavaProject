@@ -1,9 +1,12 @@
 <div id="primary" class="clear-block">
   <nav>
-    <a *ngIf="competitionList.hasBaroque" routerLink="/baroque" routerLinkActive="active">Классическое</a>
-    <a *ngIf="competitionList.hasJazz" routerLink="/jazz" routerLinkActive="active">Джазовая</a>
-    <a *ngIf="competitionList.hasFree" routerLink="/free" routerLinkActive="active">Свободное</a>
-    <a *ngIf="competitionList.hasComposition" routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 0}"
+       *ngIf="competitionList.hasBaroque" routerLink="/baroque" routerLinkActive="active">Классическая программа</a>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 1}"
+       *ngIf="competitionList.hasJazz" routerLink="/jazz" routerLinkActive="active">Джазовая программа</a>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 2}"
+       *ngIf="competitionList.hasFree" routerLink="/free" routerLinkActive="active">Свободная программа</a>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 3}"
+       *ngIf="competitionList.hasComposition" routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
   </nav>
 </div>
-<div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>

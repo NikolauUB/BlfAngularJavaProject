@@ -1,0 +1,15 @@
+<app-modal>
+  <div class="app-modal-header">
+    <div style="display: inline-block; float: right">
+      <button type="button" class="btn btn-primary btn-s" aria-label="Закрыть" (click)="modal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <div class="app-modal-body">
+    <img src="{{pictureUrl}}" width="564"/>
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-primary btn-s" (click)="modal.hide()">Закрыть</button>
+  </div>
+</app-modal>

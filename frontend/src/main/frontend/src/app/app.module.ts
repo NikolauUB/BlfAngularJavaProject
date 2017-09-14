@@ -10,6 +10,7 @@ import { VoteComponent }      from './vote/vote.component';
 import { VoteService }          from './vote/vote.service';
 import { ModalComponent } from "./modal/modal.component";
 import { EditModalComponent} from "./modal/editmodal.component";
+import { ShowpictureComponent} from "./modal/showpicture.component";
 import {RegisterComponent} from "./auth/register/reqister.component";
 import {ProfileComponent} from "./auth/profile/profile.component";
 import {AuthService} from "./auth/auth.service";
@@ -32,7 +33,7 @@ import {ChangesService} from "./changescontrol/changes.service";
 import {ChangesController} from "./changescontrol/changes.controller";
 import {DiscussionComponent} from "./discussion/discussion.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import {StatisticComponent} from "./statistic/statistic.component";
 import {SafePipe} from "./safe.pipe";
 import {DetailsController} from "./auth/userdetails/details.controller";
 import {ThemeController} from "./theme/theme.controller";
@@ -69,15 +70,15 @@ export function runChangesController(service: ChangesController) {
     CompositionComponent,
     ModalComponent,
     EditModalComponent,
+    ShowpictureComponent,
     WelcomeComponent,
+    StatisticComponent,
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpModule,
-    FroalaEditorModule.forRoot(),
-    FroalaViewModule.forRoot()
+    HttpModule
   ],
   providers: [
     VoteService,

@@ -1,6 +1,11 @@
-<div *ngIf="!isAutheticated()">Для участия необходимо зайти на сайт <button (click)="goToLogin(); $event.stopPropagation()">Вход на сайт</button></div>
-<div *ngIf="isAutheticated() && !isTakenPart() && !hasOtherRestrictions()"><button (click)="addNewItem(); $event.stopPropagation()">Принять участие</button></div>
-<div *ngIf="isTakenPart() && !isAdmin()"><button (click)="showThread(); $event.stopPropagation()">Показать заявку</button><button (click)="hideThread(); $event.stopPropagation()">Скрыть заявку</button></div>
+<div *ngIf="!isAutheticated()"><button class="btn btn-primary btn-sm active" (click)="goToLogin(); $event.stopPropagation()">Для участия необходимо зайти на сайт</button></div>
+<div *ngIf="isAutheticated() && !isTakenPart() && !hasOtherRestrictions()"><button class="btn btn-primary btn-sm active" (click)="addNewItem(); $event.stopPropagation()">Принять участие</button></div>
+<div *ngIf="isTakenPart() && !isAdmin()">
+<button class="btn btn-primary btn-sm active" [ngClass]="{'disabled': discussionItems.length > 0}"
+        (click)="showThread(); $event.stopPropagation()">Показать заявку</button>
+<button class="btn btn-primary btn-sm active" [ngClass]="{'disabled': discussionItems.length == 0}"
+        (click)="hideThread(); $event.stopPropagation()">Скрыть заявку</button>
+</div>
 <div *ngIf="isAdmin()"><button (click)="showAdminThread(); $event.stopPropagation()">Скрыть или показать заявки</button><button (click)="showMaxUpdated(); $event.stopPropagation()">Show maxUpdated</button></div>
 
 <edit-modal-component></edit-modal-component>
@@ -11,8 +16,14 @@
         <b>{{item.authorUsername}}</b>&nbsp;&nbsp;&nbsp;{{item.creationDate | date : 'fullDate'}}&nbsp;{{item.creationDate | date : 'shortTime'}}
       </div>
       <div class="body">
-        <div style="display: inline-block; vertical-align: top; height:200px; width:200px"><img  src="{{item.authorAvatar}}"/></div>
+        <table>
+          <tr><td style="text-align:center; vertical-align:top">
+        <div style="display: inline-block; vertical-align: top; height:200px; width:200px; margin-right: 10px"><img  src="{{item.authorAvatar}}"/></div>
+          </td>
+          <td style="vertical-align:top">
         <div style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>
+          </td></tr>
+        </table>
       </div>
       <div class="footer">
         <div *ngIf="isUpdated(item)" style="float: left">

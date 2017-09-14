@@ -11,9 +11,9 @@
   <div><h4><strong>Задание</strong></h4></div>
   <div [innerHTML]="competitionData.description"></div>
 </div>
-<div>Участники:
+<div><div style="display: inline-block"><h4><b>Участники:</b></h4></div>
   <div style="display: inline-block" *ngFor="let member of competitionShortInfo.membersForShow">
-    {{member.mUsername}}&nbsp;
+    <span style="background-color: white;">&nbsp;<b><i>{{member.mUsername}}</i></b>&nbsp;</span>&nbsp;&nbsp;
   </div>
 </div>
 

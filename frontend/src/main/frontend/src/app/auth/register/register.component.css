@@ -1,16 +1,17 @@
 .selected {
   background-color: #dc6b1a !important;
-  padding: 0;
-  height: 210px;
+  padding: 2px;
+  height: 170px;
   color: white;
 }
 .regItems {
   margin: 0 0 2em 0;
   list-style-type: none;
   padding: 0;
-  max-width: 1000px;
-  height: 210px;
+  height: 170px;
+  display:inline-block;
 }
+
 
 .regItems span {
   cursor: pointer;
@@ -26,7 +27,7 @@
   color: #607D8B;
   background-color: #DDD;
   display:inline-block;
-  left: .1em;
+  left: .2em;
 }
 .ng-invalid:not(form)  {
   border: 1px solid #a94442;

@@ -5,20 +5,16 @@ import {CompetitionList} from "../../model/CompetitionList";
 import {CompetitionShortInfo} from "../CompetitionShortInfo";
 import {ChangesController} from "../../changescontrol/changes.controller";
 import {ActiveCompetitions} from "../../model/ActiveCompetitions";
+import {CompetitionComponent} from "../competition.component";
 
 @Component({
   selector: 'competition-list-app',
   templateUrl: './list.component.html',
   styleUrls: [ '../../vote/voting.component.css' ]
 })
-export class ListComponent implements OnInit {
+export class ListComponent extends CompetitionComponent implements OnInit {
   competitionList: CompetitionList = new CompetitionList();
-  errorMsg: string;
 
-  constructor(protected partakingService: PartakingService,
-              protected router: Router) {
-
-  }
 
   ngOnInit(): void {
     let savedList = localStorage.getItem(ChangesController.COMPETITION_LIST);
@@ -27,6 +23,7 @@ export class ListComponent implements OnInit {
     } else {
       this.loadActiveCompetitions();
     }
+
 
   }
 
@@ -64,9 +61,4 @@ export class ListComponent implements OnInit {
       //save in local storage
       localStorage.setItem(ChangesController.COMPETITION_LIST, JSON.stringify(this.competitionList));
   }
-
-  private handleError(e: any) : void {
-      this.errorMsg = e.toString();
-  }
-
 }

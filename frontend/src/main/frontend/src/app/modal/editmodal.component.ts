@@ -1,16 +1,16 @@
-import {Component, OnInit, ViewChild} from "@angular/core";
+import {Component, AfterViewInit, ViewChild} from "@angular/core";
 import { ModalComponent } from "./modal.component";
 import {DiscussionItem} from "../model/DiscussionItem";
 import {EditInterface} from "./edit.interface";
 import {Router} from "@angular/router";
 declare var $ :any;
+declare var nicEditor: any;
 
 @Component({
   selector: 'edit-modal-component',
-  templateUrl: './editmodal.component.html'
-
+  templateUrl: './nicedit.component.html'
 })
-export class EditModalComponent {
+export class EditModalComponent implements AfterViewInit{
   @ViewChild(ModalComponent)
   modal: ModalComponent = new ModalComponent();
   modalName: string;
@@ -18,49 +18,48 @@ export class EditModalComponent {
   saver: EditInterface;
   whatToDo: string = "";
   errorMsg:string;
+  nicEdit:any;
 
   constructor(private router: Router) {
 
   }
 
-  public froalaOptions: Object = {
-    charCounterCount: true,
-    heightMin: 300,
-    toolbarButtons: 	['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily',
-      'fontSize', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent',
-      'quote', '-', 'insertLink', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting',
-      '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
-    toolbarButtonsXS: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily',
-      'fontSize', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent',
-      'quote', '-', 'insertLink', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting',
-      '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
-    toolbarButtonsSM: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily',
-      'fontSize', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent',
-      'quote', '-', 'insertLink', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting',
-      '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
-    toolbarButtonsMD: ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', '|', 'fontFamily',
-      'fontSize', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent',
-      'quote', '-', 'insertLink', '|', 'emoticons', 'specialCharacters', 'insertHR', 'selectAll', 'clearFormatting',
-      '|', 'print', 'spellChecker', 'help', 'html', '|', 'undo', 'redo'],
-  };
-
-
+  ngAfterViewInit() {
+    this.nicEdit = new nicEditor({
+      buttonList: ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify',
+        'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat',
+        'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
+        'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
+    }).panelInstance('nickEdit');
+  }
 
   public showModal(name: string,
                    modelForChange: DiscussionItem,
                    saver: EditInterface,
                    actionDesc: string): void {
+    this.errorMsg = "";
     this.model = new DiscussionItem();
     this.modalName = name;
     this.model = modelForChange;
+    if (this.model.msgText) {
+      this.nicEdit.instanceById('nickEdit').setContent(this.model.msgText);
+    }
     this.saver = saver;
     this.whatToDo = actionDesc;
+    window.scrollTo(0,0);
     this.modal.show();
   }
 
 
   protected saveItem() {
+    var text = this.nicEdit.instanceById('nickEdit').getContent();
+    if (text.length > 8192) {
+      this.errorMsg="Размер текста заявки ограничен размером 8 килобайт. Если Вы добавили картинку, убедитесь, что Вы добавили ссылку, а не картинку в формате base64, нажав кнопку 'Edit HTML'.";
+    } else {
+      this.model.msgText = text;
       this.saver.saveItem(this.model);
+    }
+
   }
 
   public hide() {

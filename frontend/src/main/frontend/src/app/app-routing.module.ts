@@ -15,6 +15,7 @@ import {FreeComponent} from "./partaking/free/free.component";
 import {CompositionComponent} from "./partaking/composition/composition.component";
 import {RulesComponent} from "./rules/rules.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
+import {StatisticComponent} from "./statistic/statistic.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -32,7 +33,8 @@ const routes: Routes = [
   { path: 'changePassword', component: ChangePasswordComponentComponent},
   { path: 'changeEmail', component: ChangeEmailComponent},
   { path: 'rules', component: RulesComponent},
-  { path: 'welcome', component: WelcomeComponent}
+  { path: 'welcome', component: WelcomeComponent},
+  { path: 'blfRuStatistic', component: StatisticComponent},
 
 ];
 

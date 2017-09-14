@@ -2,10 +2,10 @@ import {Component} from "@angular/core";
 @Component({
   selector: 'app-modal',
   template: `
-  <div (click)="onContainerClicked($event)" class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
+  <div class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
        [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">
-    <div class="modal-dialog" [ngStyle]="{'width': '70%', 'height':'60%'}">
-      <div class="modal-content" [ngStyle]="{'height':'100%'}">
+    <div class="modal-dialog">
+      <div class="modal-content">
         <div class="modal-header">
           <ng-content select=".app-modal-header"></ng-content>
         </div>
@@ -37,9 +37,10 @@ export class ModalComponent {
     setTimeout(() => this.visible = false, 300);
   }
 
-  public onContainerClicked(event: MouseEvent): void {
-    if ((<HTMLElement>event.target).classList.contains('modal')) {
-      this.hide();
-    }
-  }
+//  public onContainerClicked(event: MouseEvent): void {
+//    if ((<HTMLElement>event.target).classList.contains('modal')) {
+//      this.hide();
+//    }
+//  }
+ 
 }

@@ -1,0 +1,24 @@
+<app-modal>
+  <div class="app-modal-header">
+    <div style="display: inline-block; color:#337ab7"><h4><b>{{modalName}}</b></h4></div>
+    <div style="display: inline-block; float: right">
+      <button type="button" class="btn btn-primary btn-sm" (click)="saveItem(); $event.stopPropagation()">
+        Сохранить
+      </button>
+      <button type="button" class="btn btn-primary btn-s" aria-label="Закрыть" (click)="modal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <div class="app-modal-body" >
+      <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+      <label style="color:#337ab7">{{whatToDo}}</label>
+      <div style="overflow-y: scroll; height: 500px;">
+        <textarea id="nickEdit" style="width:540px; height: 400px" cols="80"></textarea>
+      </div>
+  </div>
+  <div class="app-modal-footer">
+    <button class="btn btn-primary btn-sm" (click)="saveItem(); $event.stopPropagation()">Сохранить</button>
+    <button class="btn btn-primary btn-sm" (click)="modal.hide()">Закрыть</button>
+  </div>
+</app-modal>
