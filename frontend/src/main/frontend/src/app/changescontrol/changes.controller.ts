@@ -20,6 +20,7 @@ export class ChangesController {
   public static COMPETITION_MEMBERS_COMPOSITION: string = "MBRS_3";
   public static COMPETITION_MEMBERS_PREFIX: string = "MBRS_";
   public static HIDE_PARTAKE_DISCUSS_PREFIX: string = "HD_";
+  public static COMPETITION_MEMBERS_COUNT: string = "MBCNT_";
 
   changesKeywords: ChangesKeywords;
 
@@ -68,7 +69,24 @@ export class ChangesController {
   private treatReply(reply: any): void {
     this.changesKeywords = reply;
     localStorage.setItem(ChangesController.PREVIOUS_TIME, this.changesKeywords.time.toString());
-    this.changesKeywords.keywords.forEach(keyword => localStorage.removeItem(keyword));
+    this.changesKeywords.keywords.forEach(keyword => {
+      if(keyword.startsWith(ChangesController.COMPETITION_MEMBERS_COUNT)) {
+        var counter = 0;
+        for (let i = 0; i < 4; i++) {
+          let ls = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + i);
+          let acm: Array<any> = (ls)?JSON.parse(ls):new Array<any>();
+          counter+= acm.length;
+        }
+        if (counter !== +keyword.split(ChangesController.COMPETITION_MEMBERS_COUNT)[1]) {
+          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CLASSIC);
+          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
+          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);
+          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_COMPOSITION);
+        }
+      } else {
+        localStorage.removeItem(keyword);
+      }
+    });
   }
 
   private handleError(e: any) : void {

@@ -21,10 +21,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @RestController
 @Transactional
@@ -41,9 +38,11 @@ public class ChangesControlService {
     public static String COMPETITION_LIST = "COMP_LIST";
     public static String DESCRIPTION_FOR_TYPE = "DESC_";
     public static String COMPETITION_MEMBERS_PREFIX = "MBRS_";
+    public static String COMPETITION_MEMBERS_COUNT = "MBCNT_";
 
     private boolean compDescChanged = false;
     private boolean memberListChanged = false;
+    private int themeCounter = 0;
 
     /**
      * @param previousTime - set it -1 so that just to init time point
@@ -67,12 +66,15 @@ public class ChangesControlService {
                 List<CompetitionEntity> competitionList = activeCompetitionQuery.getResultList();
                 this.compDescChanged = false;
                 this.memberListChanged = false;
+                this.themeCounter = 0;
                 competitionList.forEach((item) -> {
                     if (item.getUpdated().getTime() > previousTime.longValue()) {
                         result.getKeywords().add(DESCRIPTION_FOR_TYPE + item.getCompetitionType().getValue());
                         this.compDescChanged = true;
                     }
-                    item.getThemesByMembers().forEach((theme) -> {
+                    Collection<ThemeEntity> themeEntities = item.getThemesByMembers();
+                    this.themeCounter+=(themeEntities != null)?themeEntities.size():0;
+                    themeEntities.forEach((theme) -> {
                         if (theme.getCreated().getTime() > previousTime.longValue()) {
                             this.memberListChanged = true;
                         }
@@ -86,6 +88,7 @@ public class ChangesControlService {
                 if (this.compDescChanged) {
                     result.getKeywords().add(COMPETITION_LIST);
                 }
+                result.getKeywords().add(COMPETITION_MEMBERS_COUNT + this.themeCounter);
 
             } catch (NoResultException ex) {
                 //do nothing
