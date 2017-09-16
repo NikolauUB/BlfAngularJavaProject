@@ -138,9 +138,6 @@ public class DiscussService {
             return result;
         }
         UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
-        if (AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
-            return getAllPartakesForAdmin(competitionId, result);
-        }
 
         //simple user see own requests and admins replies
         //find theme first
@@ -177,19 +174,24 @@ public class DiscussService {
      * @param result
      * @return
      */
-    private PartakeThread getAllPartakesForAdmin(Long competitionId, PartakeThread result) {
+    @RequestMapping(value = "/api/getPartakeDiscussForAdmin", method = RequestMethod.GET)
+    public PartakeThread getPartakeForAdmin(@RequestParam("cId") Long competitionId, @RequestParam("tId") Long themeId) {
+        PartakeThread result = new PartakeThread();
+        result.setThreadId(themeId);
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        if (!AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
+            return result;
+        }
         TypedQuery<MessageEntity> msgQuery =
-                em.createQuery("select m from MessageEntity m," +
-                                " ThemeEntity t where  m.themeId = t.id and t.themeType = :type and t.competitionId = :cId",
+                em.createQuery("select m from MessageEntity m where  m.themeId = :threadId order by m.created",
                         MessageEntity.class);
-        List<MessageEntity> allPartakeTheme = null;
+        List<MessageEntity> partakeTheme = null;
         try {
-            allPartakeTheme = msgQuery
-                    .setParameter("type", ThemeType.COMPETITION_REQUEST.getValue())
-                    .setParameter("cId", competitionId)
+            partakeTheme = msgQuery
+                    .setParameter("threadId", themeId)
                     .getResultList();
         } catch (NoResultException ex) { }
-        this.fillInDiscussionItems(allPartakeTheme, competitionId, result);
+        this.fillInDiscussionItems(partakeTheme, competitionId, result);
         return result;
     }
 

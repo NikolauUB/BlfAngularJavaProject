@@ -30,9 +30,10 @@ export class CompetitionComponent  implements  OnInit {
 
 
   ngOnInit(): void {
-    this.init();
     if (!this.authService.getAuth()) {
       this.authService.init().then(e=>this.init());
+    } else {
+      this.init();
     }
   }
 
@@ -63,22 +64,24 @@ export class CompetitionComponent  implements  OnInit {
       this.competitionShortInfo.userThread = (member.length > 0)? member[0].threadId : -1;
       if (this.competitionShortInfo.userThread === -1 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE) {
         var membersJazz: string = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ);
-	var jazzMember = null;
-	if (membersJazz != null) {
+	    var jazzMember = null;
+	    if (membersJazz != null) {
           jazzMember = JSON.parse(membersJazz).filter( (item) => {
             return item.mId === this.authService.getAuth().userId;
           });
-	}
+	    }
         this.competitionShortInfo.userChoosePrescribeProgramm = (jazzMember!= null && jazzMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ: -1;
+
       } else if (this.competitionShortInfo.userThread === -1 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ) {
         var membersBar: string = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE);
-	var barMember = null;
-	if (barMember != null) {
+	    var barMember = null;
+	    if (membersBar != null) {
           barMember = JSON.parse(membersBar).filter( (item) => {
             return item.mId === this.authService.getAuth().userId;
           });
-	}
+	    }
         this.competitionShortInfo.userChoosePrescribeProgramm = (barMember != null && barMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE: -1;
+
       } else {
         this.competitionShortInfo.userChoosePrescribeProgramm =  this.competitionShortInfo.compType;
       }
@@ -119,17 +122,6 @@ export class CompetitionComponent  implements  OnInit {
         membersForShowMap.set(member.compType, new Array<CompetitionMember>());
       }
       membersForShowMap.get(member.compType).push(member);
-
-      /*if (this.authService != null
-          && this.authService.getAuth() != null
-          && member.mId === this.authService.getAuth().userId) {
-        if (member.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE || member.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ) {
-          this.competitionShortInfo.userChoosePrescribeProgramm = member.compType;
-        }
-        if  (member.compType === this.competitionShortInfo.compType) {
-          this.competitionShortInfo.userThread = member.threadId;
-        }
-      }*/
 
     });
     var possibleVariants = [CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE,

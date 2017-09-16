@@ -1,0 +1,48 @@
+<div>
+  <h4>Создание номера на конкурс</h4>
+  <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+  <div  class="form-group mediumWidth">
+    <label for="userId">Item id: {{item.id}} - Competition id: {{item.compId}}</label>
+    <span><input type="text"  class="form-control" required [(ngModel)]="item.userId" id="userId"/> User id</span>
+  </div>
+  <div class="form-group">
+    <label for="author">Композитор</label>
+    <input type="text"  class="form-control"  [(ngModel)]="item.author" id="author"/>
+  </div>
+  <div class="form-group">
+    <label for="instrmnts">Инструменты</label>
+    <input type="instrmnts"  class="form-control" [(ngModel)]="item.instrmnts" id="instrmnts"/>
+  </div>
+  <div class="form-group">
+    <label for="desc">Описание</label>
+    <textarea cols="80" rows="5"  class="form-control"  [(ngModel)]="item.desc" id="desc"></textarea>
+  </div>
+  <div class="form-group">
+    <label for="composition">Произведение</label>
+    <input type="composition"  class="form-control"  [(ngModel)]="item.composition" id="composition"/>
+  </div>
+
+  <div class="form-group">
+    <label for="audio">Аудио</label>
+    <input type="audio"  class="form-control"  [(ngModel)]="item.audio" id="audio"/>
+  </div>
+  <div class="form-group">
+    <label for="video">Видео</label>
+    <input type="video"  class="form-control"  [(ngModel)]="item.video" id="video"/>
+  </div>
+  <button (click)="saveCompItem(); $event.stopPropagation();">Сохранить</button>
+
+  <p>Select user from the list</p>
+  <ul class="voteItems">
+    <li *ngFor="let member of this.competitionShortInfo.membersForShow" (click)="onSelect(member)"
+        [class.selected]="isMemberSelected(member)">
+      <span class="badge">{{member.mId}}</span>
+      <span>{{member.compType}}</span>
+      <span>{{member.mUsername}}</span>
+      <span>{{member.threadId}}</span>
+    </li>
+  </ul>
+
+
+
+  </div>

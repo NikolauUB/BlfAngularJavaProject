@@ -23,6 +23,7 @@ export class PartakingService {
     private deleteItemUrl = 'api/deletePartake';
     private deleteThemeUrl = 'api/deleteTheme';
     private partakeDiscussUrl = 'api/getPartakeDiscuss';
+    private adminDiscussUrl = 'api/getPartakeDiscussForAdmin';
     private activeCompetitionsUrl = 'api/getActiveCompetitions';
     private competitionDataUrl = 'api/getActiveCompetitionData';
     private competitionsMembersUrl = 'api/getCompetitionMembers';
@@ -59,6 +60,13 @@ export class PartakingService {
 
     public getPartakeDiscuss(competitionId: number): Promise<PartakeThread> {
         return this.http.get(this.partakeDiscussUrl + "?cId=" + competitionId)
+            .toPromise()
+            .then(response => response.json() as PartakeThread)
+            .catch(this.handleError);
+    }
+
+    public getAdminPartakeDiscuss(competitionId: number, themeId: number): Promise<PartakeThread> {
+        return this.http.get(this.adminDiscussUrl + "?cId=" + competitionId + "&tId=" + themeId)
             .toPromise()
             .then(response => response.json() as PartakeThread)
             .catch(this.handleError);

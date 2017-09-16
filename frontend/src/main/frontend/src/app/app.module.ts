@@ -37,6 +37,13 @@ import {StatisticComponent} from "./statistic/statistic.component";
 import {SafePipe} from "./safe.pipe";
 import {DetailsController} from "./auth/userdetails/details.controller";
 import {ThemeController} from "./theme/theme.controller";
+import {AdminComponent} from "./admin/admin.component";
+import {AdminBaroqueComponent} from "./admin/baroque/admin.baroque.component";
+import {AdminCompositionComponent} from "./admin/composition/admin.composition.component";
+import {AdminJazzComponent} from "./admin/jazz/admin.jazz.component";
+import {AdminFreeComponent} from "./admin/free/admin.free.component";
+import {AdminService} from "./admin/admin.service";
+import {Error403Component} from "./errorpages/error403.component";
 
 /**
  * This service checks database for changes of seldom changed data and if it is changed cleans localStorage
@@ -51,6 +58,11 @@ export function runChangesController(service: ChangesController) {
   declarations: [
     SafePipe,
     AboutComponent,
+    AdminComponent,
+    AdminBaroqueComponent,
+    AdminCompositionComponent,
+    AdminJazzComponent,
+    AdminFreeComponent,
     HistoryComponent,
     AppComponent,
     VoteComponent,
@@ -73,6 +85,7 @@ export function runChangesController(service: ChangesController) {
     ShowpictureComponent,
     WelcomeComponent,
     StatisticComponent,
+    Error403Component
   ],
   imports: [
     BrowserModule,
@@ -83,6 +96,7 @@ export function runChangesController(service: ChangesController) {
   providers: [
     VoteService,
     AuthService,
+    AdminService,
     PartakingService,
     CompetitionShortInfo,
     DetailsController,

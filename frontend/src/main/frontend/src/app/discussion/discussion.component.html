@@ -1,12 +1,15 @@
 <div *ngIf="!isAutheticated()"><button class="btn btn-primary btn-sm active" (click)="goToLogin(); $event.stopPropagation()">Для участия необходимо зайти на сайт</button></div>
 <div *ngIf="isAutheticated() && !isTakenPart() && !hasOtherRestrictions()"><button class="btn btn-primary btn-sm active" (click)="addNewItem(); $event.stopPropagation()">Принять участие</button></div>
-<div *ngIf="isTakenPart() && !isAdmin()">
+<div *ngIf="isTakenPart() && !this.competitionShortInfo.adminMode">
 <button class="btn btn-primary btn-sm active" [ngClass]="{'disabled': discussionItems.length > 0}"
         (click)="showThread(); $event.stopPropagation()">Показать заявку</button>
 <button class="btn btn-primary btn-sm active" [ngClass]="{'disabled': discussionItems.length == 0}"
         (click)="hideThread(); $event.stopPropagation()">Скрыть заявку</button>
 </div>
-<div *ngIf="isAdmin()"><button (click)="showAdminThread(); $event.stopPropagation()">Скрыть или показать заявки</button><button (click)="showMaxUpdated(); $event.stopPropagation()">Show maxUpdated</button></div>
+<div *ngIf="this.competitionShortInfo.adminMode">
+  <button class="btn btn-primary btn-sm active"
+          (click)="showAdminThread(); $event.stopPropagation()">Показать заявку {{this.competitionShortInfo.adminModeUserThread}}</button>
+</div>
 
 <edit-modal-component></edit-modal-component>
     <div *ngFor="let item of discussionItems">

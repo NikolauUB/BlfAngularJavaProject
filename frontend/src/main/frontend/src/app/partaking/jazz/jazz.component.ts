@@ -13,6 +13,7 @@ export class JazzComponent extends DiscussionComponent implements OnInit, AfterV
 
   ngOnInit(): void {
     this.competitionShortInfo.compType = CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ;
+    this.competitionShortInfo.adminMode = false;
   }
 
   ngAfterViewInit(): void {

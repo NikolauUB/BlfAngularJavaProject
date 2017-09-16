@@ -35,7 +35,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   }
 
   private showDiscuss(): void {
-    if (this.isTakenPart() && !this.isAdmin()) {
+    if (this.isTakenPart()) {
       if (this.competitionShortInfo.userThread > 0) {
         this.userDetailsController
             .getMaxUpdatedDate()
@@ -77,11 +77,6 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
         });
   }
 
-  //debug method
-  public showMaxUpdated() {
-      this.userDetailsController.getMaxUpdatedDate().then(result => alert(result));
-  }
-
   public goToLogin(): void {
     this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
   }
@@ -91,7 +86,6 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     item.authorUsername = "Пользователь " + item.authorId;
     item.authorAvatar = DetailsController.defaultAvatar;
     this.userDetailsController.loadUserDetails(item);
-    //item.isChangedLatest = (this.changedMsgIds.length > 0 && this.changedMsgIds.indexOf(item.msgId) !== -1);
   }
 
 
@@ -268,10 +262,17 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     localStorage.setItem(ChangesController.HIDE_PARTAKE_DISCUSS_PREFIX + this.competitionShortInfo.compType, "0");
   }
 
-
-
   public showAdminThread(): void {
-    this.loadDiscussion();
+      if(this.competitionShortInfo.adminModeUserThread !== -1) {
+          this.loadDiscussionForAdmin();
+      }
+  }
+
+  private loadDiscussionForAdmin(): void {
+    this.partakingService
+        .getAdminPartakeDiscuss(this.competitionShortInfo.compId, this.competitionShortInfo.adminModeUserThread)
+        .then(reply => this.handleLoadDiscussionReply(reply))
+        .catch(e => this.handleError(e));
   }
 
   private loadDiscussion(): void {
@@ -283,7 +284,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
   private handleLoadDiscussionReply(reply: PartakeThread): void {
     this.discussionItems = reply.discussionItems;
-    if (!this.isAdmin()) {
+    if (!this.isAdmin()) { //no cache for admin
       this.themeController.cleanTheme(reply.threadId);
       this.themeController.saveThemeInDBbyId(this.discussionItems, reply.threadId, reply.thUpdated);
     }

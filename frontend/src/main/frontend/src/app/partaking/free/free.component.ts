@@ -12,6 +12,7 @@ export class FreeComponent extends DiscussionComponent implements OnInit, AfterV
 
   ngOnInit(): void {
     this.competitionShortInfo.compType = CompetitionShortInfo.TYPE_FREE;
+    this.competitionShortInfo.adminMode = false;
   }
 
   ngAfterViewInit(): void {

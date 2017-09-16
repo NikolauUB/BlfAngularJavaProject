@@ -11,6 +11,7 @@ export class BaroqueComponent extends DiscussionComponent implements OnInit, Aft
 
   ngOnInit(): void {
     this.competitionShortInfo.compType = CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE;
+    this.competitionShortInfo.adminMode = false;
   }
 
   ngAfterViewInit(): void {

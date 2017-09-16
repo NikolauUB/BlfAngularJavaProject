@@ -16,6 +16,11 @@ import {CompositionComponent} from "./partaking/composition/composition.componen
 import {RulesComponent} from "./rules/rules.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
 import {StatisticComponent} from "./statistic/statistic.component";
+import {AdminBaroqueComponent} from "./admin/baroque/admin.baroque.component";
+import {AdminCompositionComponent} from "./admin/composition/admin.composition.component";
+import {AdminJazzComponent} from "./admin/jazz/admin.jazz.component";
+import {AdminFreeComponent} from "./admin/free/admin.free.component";
+import {Error403Component} from "./errorpages/error403.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -35,6 +40,11 @@ const routes: Routes = [
   { path: 'rules', component: RulesComponent},
   { path: 'welcome', component: WelcomeComponent},
   { path: 'blfRuStatistic', component: StatisticComponent},
+  { path: 'adminBaroque', component: AdminBaroqueComponent},
+  { path: 'adminComposition', component: AdminCompositionComponent},
+  { path: 'adminJazz', component: AdminJazzComponent},
+  { path: 'adminFree', component: AdminFreeComponent},
+  { path: 'error403', component: Error403Component},
 
 ];
 

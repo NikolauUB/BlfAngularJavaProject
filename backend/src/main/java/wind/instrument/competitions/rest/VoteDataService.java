@@ -1,10 +1,13 @@
 package wind.instrument.competitions.rest;
 
+import wind.instrument.competitions.configuration.SessionParameters;
 import wind.instrument.competitions.data.CompetitionEntity;
 import wind.instrument.competitions.data.CompetitionItemEntity;
 import wind.instrument.competitions.data.CompetitionType;
+import wind.instrument.competitions.data.UserEntity;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionInfo;
+import wind.instrument.competitions.rest.model.CompetitionItem;
 import wind.instrument.competitions.rest.model.VoteData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +31,68 @@ public class VoteDataService {
 
     @Autowired
     private HttpSession httpSession;
+
+
+
+    private boolean isAdmin(HttpServletResponse response) {
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute(SessionParameters.USER_ID.name()));
+        if (!AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
+            try {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not administrator");
+            } catch (Exception ex) { }
+            return false;
+        }
+        return true;
+    }
+    @RequestMapping(value = "/api/loadCompetitionItem", method = RequestMethod.POST)
+    public CompetitionItem loadCompetitionItem(@RequestBody CompetitionItem competitionItem, HttpServletResponse response) {
+        if (this.isAdmin(response)) {
+            TypedQuery<CompetitionItemEntity> competitionItemQuery =
+                    em.createQuery("select c from CompetitionItemEntity c where c.userId = :userId and c.competitionId = :compId",
+                            CompetitionItemEntity.class);
+            CompetitionItemEntity competitionItemEntity = competitionItemQuery
+                    .setParameter("userId", competitionItem.getUserId())
+                    .setParameter("compId", competitionItem.getCompId())
+                    .getSingleResult();
+
+            competitionItem.setId(competitionItemEntity.getCompetitionItemId());
+            competitionItem.setAudio(competitionItemEntity.getCnItemAudio());
+            competitionItem.setVideo(competitionItemEntity.getCnItemVideo());
+            competitionItem.setAuthor(competitionItemEntity.getCnItemAuthor());
+            competitionItem.setComposition(competitionItemEntity.getCnItemComposition());
+            competitionItem.setDesc(competitionItemEntity.getCnItemDescription());
+            competitionItem.setInstrmnts(competitionItemEntity.getCnItemInstruments());
+            competitionItem.setUserId(competitionItemEntity.getUserId());
+            competitionItem.setCompId(competitionItemEntity.getCompetitionId());
+        }
+        return competitionItem;
+    }
+
+
+
+    @RequestMapping(value = "/api/saveCompetitionItem", method = RequestMethod.POST)
+    public CompetitionItem saveCompetitionItem(@RequestBody CompetitionItem competitionItem, HttpServletResponse response) {
+        if (this.isAdmin(response)) {
+            CompetitionItemEntity competitionItemEntity = null;
+            if (competitionItem.getId() != null) {
+                competitionItemEntity = em.find(CompetitionItemEntity.class, competitionItem.getId());
+            } else {
+                competitionItemEntity = new CompetitionItemEntity();
+            }
+            competitionItemEntity.setCnItemAudio(competitionItem.getAudio());
+            competitionItemEntity.setCnItemVideo(competitionItem.getVideo());
+            competitionItemEntity.setCnItemAuthor(competitionItem.getAuthor());
+            competitionItemEntity.setCnItemComposition(competitionItem.getComposition());
+            competitionItemEntity.setCnItemDescription(competitionItem.getDesc());
+            competitionItemEntity.setCnItemInstruments(competitionItem.getInstrmnts());
+            competitionItemEntity.setUserId(competitionItem.getUserId());
+            competitionItemEntity.setCompetitionId(competitionItem.getCompId());
+            em.persist(competitionItemEntity);
+            competitionItem.setId(competitionItemEntity.getCompetitionItemId());
+        }
+        return competitionItem;
+    }
+
 
     @RequestMapping("/api/votedata")
     public CompetitionInfo getActiveVoteData(@RequestParam("type") Integer type) {

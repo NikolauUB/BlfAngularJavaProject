@@ -12,6 +12,7 @@ export class CompositionComponent extends DiscussionComponent implements OnInit,
 
   ngOnInit(): void {
     this.competitionShortInfo.compType = CompetitionShortInfo.TYPE_COMPOSITION;
+    this.competitionShortInfo.adminMode = false;
   }
 
   ngAfterViewInit(): void {

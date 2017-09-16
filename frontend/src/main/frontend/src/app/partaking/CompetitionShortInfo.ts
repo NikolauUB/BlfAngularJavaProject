@@ -12,6 +12,8 @@ export class CompetitionShortInfo {
   membersForShow: Array<CompetitionMember> = new Array<CompetitionMember>();
   userChoosePrescribeProgramm: number = -1;
   userThread: number = -1;
+  adminMode: boolean = false;
+  adminModeUserThread: number = -1;
 
   public isUserChooseAlternativeProgramm(): boolean {
     if (this.userChoosePrescribeProgramm !== -1) {
