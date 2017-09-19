@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity(name="CompetitionVotingEntity")
 @Table(name = "competition_voting", schema = "forumdata",   uniqueConstraints=
-@UniqueConstraint(columnNames={"user_id", "competition_id"}))
+@UniqueConstraint(columnNames={"user_id", "competition_item_id"}))
 public class CompetitionVotingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,13 +20,13 @@ public class CompetitionVotingEntity implements Serializable {
     private Integer votingOrder;
     @Column(name =  "user_id")
     private Long userId;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity user;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
     private CompetitionEntity competition;
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_item_id", referencedColumnName = "competition_item_id", insertable = false, updatable = false)
     private CompetitionItemEntity competitionItem;
 

@@ -44,6 +44,14 @@ import {AdminJazzComponent} from "./admin/jazz/admin.jazz.component";
 import {AdminFreeComponent} from "./admin/free/admin.free.component";
 import {AdminService} from "./admin/admin.service";
 import {Error403Component} from "./errorpages/error403.component";
+import {VoteMenuComponent} from "./vote/menu/vote.menu.component";
+import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
+import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
+import {VoteFreeComponent} from "./vote/free/vote.free.component";
+import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
+
+
+
 
 /**
  * This service checks database for changes of seldom changed data and if it is changed cleans localStorage
@@ -66,6 +74,11 @@ export function runChangesController(service: ChangesController) {
     HistoryComponent,
     AppComponent,
     VoteComponent,
+    VoteMenuComponent,
+    VoteBaroqueComponent,
+    VoteJazzComponent,
+    VoteFreeComponent,
+    VoteCompositionComponent,
     RulesComponent,
     LoginComponent,
     RegisterComponent,

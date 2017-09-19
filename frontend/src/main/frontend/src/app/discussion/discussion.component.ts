@@ -93,11 +93,11 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   //check permission section
   //************************************
   public isAdmin(): boolean {
-    return this.isAutheticated() && this.authService.getAuth().username === "NikolayUB";
+    return this.isAutheticated() && this.authService.getAuth().uName === "NikolayUB";
   }
 
   public isAutheticated(): boolean {
-    return (this.authService && this.authService.getAuth()) ? this.authService.getAuth().autheticated : false;
+    return (this.authService && this.authService.getAuth()) ? this.authService.getAuth().auth : false;
   }
 
   public hasOtherRestrictions(): boolean {
@@ -124,7 +124,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   // check state of item
   //*****************************
   private isAmItemOwner(item: DiscussionItem): boolean {
-    return item.authorId === this.authService.getAuth().userId;
+    return item.authorId === this.authService.getAuth().uId;
   }
 
   public isUpdated(item: DiscussionItem): boolean {
@@ -184,7 +184,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
  saveItem(discussionItem: DiscussionItem): void {
     var isNew =  (discussionItem.msgId == null);
     if (isNew) {
-      discussionItem.authorId = this.authService.getAuth().userId;
+      discussionItem.authorId = this.authService.getAuth().uId;
     }
     this.partakingService
       .saveItem(discussionItem)

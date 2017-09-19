@@ -21,6 +21,10 @@ import {AdminCompositionComponent} from "./admin/composition/admin.composition.c
 import {AdminJazzComponent} from "./admin/jazz/admin.jazz.component";
 import {AdminFreeComponent} from "./admin/free/admin.free.component";
 import {Error403Component} from "./errorpages/error403.component";
+import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
+import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
+import {VoteFreeComponent} from "./vote/free/vote.free.component";
+import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -44,6 +48,10 @@ const routes: Routes = [
   { path: 'adminComposition', component: AdminCompositionComponent},
   { path: 'adminJazz', component: AdminJazzComponent},
   { path: 'adminFree', component: AdminFreeComponent},
+  { path: 'voteBaroque', component: VoteBaroqueComponent},
+  { path: 'voteJazz', component: VoteJazzComponent},
+  { path: 'voteFree', component: VoteFreeComponent},
+  { path: 'voteComposition', component: VoteCompositionComponent},
   { path: 'error403', component: Error403Component},
 
 ];

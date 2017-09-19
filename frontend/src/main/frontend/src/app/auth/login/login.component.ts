@@ -38,13 +38,19 @@ export class LoginComponent implements OnInit {
       .then(authInfo => this.redirectToProfile(authInfo));
   }
 
+  public onEnter(event: any): void {
+    if(event.keyCode == 13) {
+      this.doLogin();
+    }
+  }
+
   private redirectToProfile(authInfo: AuthData) {
-    if (authInfo.code === 200 && authInfo.autheticated) {
+    if (authInfo.cd === 200 && authInfo.auth) {
       this.router.navigateByUrl(this.returnUrl);
-    } else if (authInfo.code === 400) {
+    } else if (authInfo.cd === 400) {
       this.errorMsg = "Неправильный адрес электронной почты или пароль";
-    } else if (authInfo.code === 500) {
-      this.errorMsg = authInfo.errorMsg;
+    } else if (authInfo.cd === 500) {
+      this.errorMsg = authInfo.eMsg;
     }
   }
 

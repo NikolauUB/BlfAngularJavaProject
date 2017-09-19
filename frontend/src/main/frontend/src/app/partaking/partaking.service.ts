@@ -73,7 +73,7 @@ export class PartakingService {
     }
 
     public saveItem(discussionItem: DiscussionItem): Promise<DiscussionItem>  {
-        this.setCSRFHeaders(this.authService.getAuth().token);
+        this.setCSRFHeaders(this.authService.getAuth().tkn);
         return this.http
             .post(this.saveItemUrl,
             JSON.stringify(discussionItem),
@@ -84,7 +84,7 @@ export class PartakingService {
     }
 
     public deleteItem(discussionItem: DiscussionItem): Promise<any>  {
-      this.setCSRFHeaders(this.authService.getAuth().token);
+      this.setCSRFHeaders(this.authService.getAuth().tkn);
       return this.http
         .delete(this.deleteItemUrl + "?iid=" + discussionItem.msgId,
           {headers: this.postHeaders})
@@ -93,7 +93,7 @@ export class PartakingService {
     }
 
     public deleteTheme(themeId: number): Promise<any>  {
-      this.setCSRFHeaders(this.authService.getAuth().token);
+      this.setCSRFHeaders(this.authService.getAuth().tkn);
       return this.http
         .delete(this.deleteThemeUrl + "?thid=" + themeId,
           {headers: this.postHeaders})

@@ -70,24 +70,23 @@ public class AuthService {
     public AuthStatus checkAuth(HttpServletRequest request, HttpServletResponse response) {
         AuthStatus result = new AuthStatus();
         HttpSessionCsrfTokenRepository httpTokenRepository =  new HttpSessionCsrfTokenRepository();
-        result.setAutheticated(false);
+        result.setAuth(false);
         if (SecurityContextHolder.getContext().getAuthentication() != null &&
                 SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 !(SecurityContextHolder.getContext().getAuthentication()
                         instanceof AnonymousAuthenticationToken)) {
-            result.setAutheticated(true);
+            result.setAuth(true);
             //return current token if user is authenticated
             CsrfToken token = httpTokenRepository.loadToken(request);
-            result.setToken(token.getToken());
-            result.setCreated((Date) httpSession.getAttribute(SessionParameters.USER_CREATED.name()));
-            result.setUsername("" + httpSession.getAttribute(SessionParameters.USERNAME.name()));
-            result.setUserId((Long)httpSession.getAttribute(SessionParameters.USER_ID.name()));
+            result.setTkn(token.getToken());
+            result.setuName("" + httpSession.getAttribute(SessionParameters.USERNAME.name()));
+            result.setuId((Long)httpSession.getAttribute(SessionParameters.USER_ID.name()));
         } else {
             //generate new token every time if user is not authenticated
             CsrfToken token = httpTokenRepository.generateToken(request);
-            result.setToken(token.getToken());
-            result.setUsername("");
-            result.setUserId(null);
+            result.setTkn(token.getToken());
+            result.setuName("");
+            result.setuId(null);
             httpTokenRepository.saveToken(token, request, response);
         }
         return result;
@@ -103,21 +102,37 @@ public class AuthService {
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     public AuthStatus restLogin(@RequestBody LoginData loginData, HttpServletRequest request, HttpServletResponse response) {
         int code = HttpServletResponse.SC_OK;
-        String message = null;
-        final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword());
+        TypedQuery<UserEntity> userQuery =
+                em.createQuery("select c from UserEntity c where LOWER(c.email) = :email or LOWER(c.username) = :username",
+                        UserEntity.class);
+        UserEntity userEntity = null;
         try {
-            final Authentication authentication = authenticationManager.authenticate(authRequest);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch(BadCredentialsException ex) {
+            String inputEmail = loginData.getEmail().trim().toLowerCase();
+            userEntity = userQuery
+                    .setParameter("email", inputEmail)
+                    .setParameter("username", inputEmail)
+                    .getSingleResult();
+        } catch (Exception ex) {}
+
+        String message = "";
+        if (userEntity == null) {
             code = HttpServletResponse.SC_BAD_REQUEST;
-        } catch(Exception e) {
-            LOG.error("Server error during login", e);
-            code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-            message = e.getMessage();
+        } else {
+            final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(userEntity.getEmail(), loginData.getPassword());
+            try {
+                final Authentication authentication = authenticationManager.authenticate(authRequest);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (BadCredentialsException ex) {
+                code = HttpServletResponse.SC_BAD_REQUEST;
+            } catch (Exception e) {
+                LOG.error("Server error during login", e);
+                code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                message = e.getMessage();
+            }
         }
         AuthStatus result = this.checkAuth(request, response);
-        result.setCode(code);
-        result.setErrorMsg(message);
+        result.setCd(code);
+        result.seteMsg(message);
         return result;
     }
 
@@ -256,6 +271,12 @@ public class AuthService {
                     bundle.getString("SESSION_ISSUE"),
                     response);
         }
+        if(emailData.getNewEmail() != null && emailData.getNewEmail().indexOf("@") == -1) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST,
+                    "Email must contain @",
+                    response);
+            return HttpServletResponse.SC_BAD_REQUEST;
+        }
         //change email
         if (emailData.getNewEmail() != null && emailData.getNewEmail().trim().length() > 0) {
             if (emailData.getOldEmail() != null && emailData.getOldEmail().trim().length() > 0) {
@@ -334,6 +355,12 @@ public class AuthService {
             this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     bundle.getString("SESSION_ISSUE"),
                     response);
+        }
+        if (userData.getUsername().indexOf("@") != -1) {
+            return this.prepareProfileReplyWithError(result,
+                    userData,
+                    new Exception("Username can not contain @"),
+                    HttpServletResponse.SC_BAD_REQUEST);
         }
 
         if (ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(userData.getUsername().trim().toLowerCase())
@@ -438,12 +465,18 @@ public class AuthService {
             Question.checkUserReply( regData.getGivenAnswers(),
                     (ArrayList<String>)httpSession.getAttribute(SessionParameters.QUESTION_ANSWERS.name()));
         } catch (BotCheckException e) {
-            return this.prepareUnsuccessfulReplyWithError(result, regData, e, 403);
+            return this.prepareUnsuccessfulReplyWithError(result, regData, e, HttpServletResponse.SC_FORBIDDEN);
         }
 
         //email
         if (regData.getEmail().trim().length() == 0) {
-            return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_NO_EMAIL")), 403);
+            return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_NO_EMAIL")), HttpServletResponse.SC_FORBIDDEN);
+        } else if ( regData.getEmail().indexOf("@") == -1) {
+            return this.prepareUnsuccessfulReplyWithError(
+                    result,
+                    regData,
+                    new Exception("Email must contain @"),
+                    HttpServletResponse.SC_BAD_REQUEST);
         }
         UserEntity newUser = new UserEntity();
         newUser.setEmail(regData.getEmail().trim().toLowerCase());
@@ -462,10 +495,18 @@ public class AuthService {
             newUser.generatePasswordHashes();
         } catch (NoSuchAlgorithmException e) {
             LOG.error("Error when generating password hash", e);
-            return this.prepareUnsuccessfulReplyWithError(result, regData, e, 500);
+            return this.prepareUnsuccessfulReplyWithError(result, regData, e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
         //username
+        if (regData.getUsername().indexOf("@") != -1) {
+            return this.prepareUnsuccessfulReplyWithError(
+                    result,
+                    regData,
+                    new Exception("Username can not contain @"),
+                    HttpServletResponse.SC_BAD_REQUEST);
+        }
+
         ArrayList<String> checkUniqueUsername = null;
         if(regData.getUsername().trim().length() > 0) {
             checkUniqueUsername=this.checkUsernameUniqueNess(regData.getUsername().trim());
@@ -490,7 +531,7 @@ public class AuthService {
             em.persist(newUser);
         } catch (Exception e) {
             LOG.error("Error when saving new user", e);
-            return this.prepareUnsuccessfulReplyWithError(result, regData, e, 500);
+            return this.prepareUnsuccessfulReplyWithError(result, regData, e, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
 
         return result;

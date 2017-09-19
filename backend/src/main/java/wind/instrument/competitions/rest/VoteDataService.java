@@ -1,10 +1,7 @@
 package wind.instrument.competitions.rest;
 
 import wind.instrument.competitions.configuration.SessionParameters;
-import wind.instrument.competitions.data.CompetitionEntity;
-import wind.instrument.competitions.data.CompetitionItemEntity;
-import wind.instrument.competitions.data.CompetitionType;
-import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.data.*;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionInfo;
 import wind.instrument.competitions.rest.model.CompetitionItem;
@@ -95,15 +92,21 @@ public class VoteDataService {
 
 
     @RequestMapping("/api/votedata")
-    public CompetitionInfo getActiveVoteData(@RequestParam("type") Integer type) {
+    public CompetitionInfo getActiveVoteData(@RequestParam("type") Integer type, HttpServletResponse response) {
         CompetitionInfo result = new CompetitionInfo();
+
+        UserEntity currentUser = null;
+        if(httpSession.getAttribute(SessionParameters.USER_ID.name()) != null) {
+            currentUser = em.find(UserEntity.class, httpSession.getAttribute(SessionParameters.USER_ID.name()));
+        }
+
         if(!CompetitionType.hasType(type)) {
-            result.setCode(400);
-            result.setErrorMsg("Type not found in request");
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Type not found in request", response);
             return result;
         }
 
         CompetitionType competitionType =  CompetitionType.valueOf(type);
+        //todo select in period of activity
         TypedQuery<CompetitionEntity> competitionQuery =
                 em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType = :type",
                         CompetitionEntity.class);
@@ -113,46 +116,121 @@ public class VoteDataService {
                     competitionQuery.setParameter("type", competitionType.getValue()).getSingleResult();
         } catch (NoResultException ex) {
             LOG.debug("Error getting competition: ",ex);
+            this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error getting competition", response);
         }
         if (competition == null) {
-            result.setCode(404);
-            result.setErrorMsg("Active competition is not found for selected type");
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Active competition is not found for selected type", response);
             return result;
         }
         result.setCompetitionData(new CompetitionData(competition.getCompetitionId(),
-                competition.getCompetitionName(),
+                "",
                 competition.getCompetitionType().getValue(),
-                competition.getCompetitionDesc(),
-                competition.getCompetitionSampleVideo(),
+                "",
+                "",
                 competition.getCompetitionStart(),
                 competition.getCompetitionEnd()
                 ));
         Collection<CompetitionItemEntity> competitionItemList = competition.getCompetitionItems();
+
+        final Map<Long, Integer> votingOrderMap = new HashMap<Long, Integer>();
+        if (currentUser != null) {
+            List<CompetitionVotingEntity> votingList = this.getUserVotings(competition.getCompetitionId(), currentUser.getUserId(), response);
+            votingList.forEach(votingItem -> {
+                votingOrderMap.put(votingItem.getCompetitionItemId(), votingItem.getVotingOrder());
+            });
+        }
         ArrayList<VoteData> voteDataList = new ArrayList<VoteData>();
         competitionItemList.forEach(item->{
+            ArrayList<Long> userIds = new ArrayList<Long>();
+            userIds.add(item.getUserId());
+            item.getCompetitionItemUsers().forEach(itemUsers -> {
+                userIds.add(itemUsers.getUserId());
+            });
+
             VoteData voteData = new VoteData(item.getCompetitionItemId(),
-                    item.getOwner().getUsername(),
+                    userIds,
                     item.getCnItemDescription(),
+                    item.getCnItemInstruments(),
                     item.getCnItemAuthor(),
                     item.getCnItemComposition(),
                     item.getCnItemVideo(),
                     item.getCnItemAudio());
+            if (votingOrderMap.containsKey(item.getCompetitionItemId())) {
+                voteData.setOrder(votingOrderMap.get(item.getCompetitionItemId()));
+            }
             voteDataList.add(voteData);
         });
+        if (votingOrderMap.size() > 0) {
+            result.setVoted(true);
+        }
         result.setVoteData(voteDataList);
         return result;
     }
 
-    @RequestMapping(value = "/api/vote", method = RequestMethod.POST)
-    public void vote(@RequestBody List<VoteData> votingResult) {
-        System.out.println("Result: " + votingResult);
+    private List<CompetitionVotingEntity> getUserVotings(Long compId, Long userId, HttpServletResponse response) {
+        TypedQuery<CompetitionVotingEntity> voteQuery =
+                em.createQuery("select c from CompetitionVotingEntity c where c.competitionId = :compId and c.userId = :uid",
+                        CompetitionVotingEntity.class);
+        try {
+            return voteQuery.setParameter("compId", compId)
+                    .setParameter("uid", userId)
+                    .getResultList();
+        } catch (Exception ex) {
+            LOG.error("Something wrong in vote when check previous votes", ex);
+            this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in vote when check previous votes", response);
+            return new ArrayList<CompetitionVotingEntity>();
+        }
     }
+
+    @RequestMapping(value = "/api/vote", method = RequestMethod.POST)
+    public void vote(@RequestBody List<VoteData> votingResult, HttpServletResponse response) {
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute(SessionParameters.USER_ID.name()));
+        boolean isChecked = false;
+        Long firstCompId = null;
+        for(VoteData vote : votingResult){
+            CompetitionItemEntity cItem = em.find(CompetitionItemEntity.class, vote.getId());
+            if (cItem == null) {
+                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition Item is not found", response);
+                return;
+            } else if (firstCompId != null && !cItem.getCompetitionId().equals(firstCompId)) {
+                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition Items should belong to one competition", response);
+                return;
+            }
+
+            if (!isChecked) {
+                if (this.getUserVotings(cItem.getCompetitionId(), currentUser.getUserId(), response).size() > 0) {
+                    this.sendResponseError(HttpServletResponse.SC_CONFLICT, "You already voted!", response);
+                    return;
+                }
+                isChecked = true;
+                firstCompId = cItem.getCompetitionId();
+            }
+            CompetitionVotingEntity votingEntity = new CompetitionVotingEntity();
+            votingEntity.setCompetitionId(cItem.getCompetitionId());
+            votingEntity.setCompetitionItemId(vote.getId());
+            votingEntity.setUserId(currentUser.getUserId());
+            votingEntity.setVotingOrder(vote.getOrder());
+            em.persist(votingEntity);
+        }
+    }
+
+    @RequestMapping(value = "/api/deleteVote", method = RequestMethod.DELETE)
+    public void deleteVote(@RequestParam("cid") Long compId, HttpServletResponse response) {
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute(SessionParameters.USER_ID.name()));
+        if (compId != null ) {
+            Query deleteVoteQuery =
+                    em.createQuery("delete from CompetitionVotingEntity c where c.competitionId = :compId and c.userId = :uid");
+            deleteVoteQuery.setParameter("compId", compId).setParameter("uid", currentUser.getUserId()).executeUpdate();
+        }
+    }
+
+
 
     private void  sendResponseError(int code, String text,  HttpServletResponse response) {
         try {
             response.sendError(code, text);
         } catch (Exception ex) {
-            //do nothing
+            LOG.error("Something wrong sending error responses", ex);
         }
     }
 

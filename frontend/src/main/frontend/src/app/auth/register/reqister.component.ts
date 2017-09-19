@@ -83,4 +83,6 @@ export class RegisterComponent implements OnInit {
       this.selectedAnswers.add(answerSelected);
     }
   }
+
+
 }

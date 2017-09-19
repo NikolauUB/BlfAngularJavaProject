@@ -1,9 +1,8 @@
 export class AuthData {
-  code: number;
-  errorMsg: string;
-  userId: number;
-  username: string;
-  autheticated: boolean;
-  created: Date;
-  token: string;
+  cd: number;
+  eMsg: string;
+  uId: number;
+  uName: string;
+  auth: boolean;
+  tkn: string;
 }

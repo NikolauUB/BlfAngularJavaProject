@@ -101,7 +101,7 @@ export class AuthService {
    * @returns {Promise<ProfileChangedReply>}
    */
   public saveProfile(userData: UserData): Promise<ProfileChangedReply> {
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
         .put(this.saveProfileUrl,
         JSON.stringify(userData),
@@ -118,7 +118,7 @@ export class AuthService {
    * @returns {Promise<string>}
    */
   public changePassword(passwordData: PasswordData): Promise<string> {
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .put((passwordData.token) ? this.changePasswordByTidUrl : this.changePasswordUrl,
         JSON.stringify(passwordData),
@@ -134,7 +134,7 @@ export class AuthService {
    * @returns {Promise<string>}
    */
   public changeEmail(emailData: EmailData): Promise<string> {
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .put(this.changeemailUrl,
         JSON.stringify(emailData),
@@ -148,7 +148,7 @@ export class AuthService {
    * @returns {Promise<ProfileChangedReply>}
    */
   public deleteProfileImage(): Promise<ProfileChangedReply> {
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .delete(this.deleteProfileImageUrl,
         {headers: this.postHeaders})
@@ -172,7 +172,7 @@ export class AuthService {
   public logout(): Promise<AuthData> {
     return this.checkAuth()
       .then(authInfo =>
-        (authInfo.autheticated) ?
+        (authInfo.auth) ?
           this.safeLogout(authInfo) : this.refreshAuth(authInfo))
       .catch(this.handleError);
   }
@@ -185,7 +185,7 @@ export class AuthService {
    */
   private doSafeRegistration(regData: RegistrationData,  authInfo: AuthData ): Promise<RegistrationReply> {
     this.auth = authInfo;
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .post(this.registrationUrl,
         JSON.stringify(regData),
@@ -204,7 +204,7 @@ export class AuthService {
    */
   private safeLogin(loginData: LoginData, authInfo: AuthData): Promise<AuthData> {
     this.auth = authInfo;
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .post(this.loginUrl,
         JSON.stringify(loginData),
@@ -221,7 +221,7 @@ export class AuthService {
    */
   private safeLogout(authInfo: AuthData): Promise<AuthData> {
     this.auth = authInfo;
-    this.setCSRFHeaders(this.auth.token);
+    this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .post(this.logoutUrl, null, {headers: this.postHeaders})
       .toPromise()

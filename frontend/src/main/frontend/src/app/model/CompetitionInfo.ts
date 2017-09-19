@@ -1,9 +1,8 @@
 import {VoteData} from "./VoteData";
 import {CompetitionData} from "./CompetitionData";
 export class CompetitionInfo {
-  code: number;
-  errorMsg: string;
-  competitionData: CompetitionData;
-  voteData: Array<VoteData>;
+  competitionData: CompetitionData = new CompetitionData();
+  voted: boolean = false;
+  voteData: Array<VoteData> = new Array<VoteData>();
 
 }

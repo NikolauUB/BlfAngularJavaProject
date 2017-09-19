@@ -1,22 +1,26 @@
-<h2>Голосование по конкурсам начнется с 16 октября 2017 года</h2>
+<vote-menu-app></vote-menu-app>
+<div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+<h2>Голосование по конкурсу начнется с {{this.voteInfo.competitionData.start | date: 'shortDate'}} и продлится до {{this.voteInfo.competitionData.end | date: 'shortDate'}}</h2>
 
 <ul>
   <li>Узнать о сайте: <a routerLink="/about" routerLinkActive="active">О сайте</a></li>
   <li>Узнать о программе и оставить заявку на участие: <a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a></li>
 </ul>
 
-<!--<ul class="voteItems">
+<ul class="voteItems">
   <li *ngFor="let voteItem of voteInfo.voteData" (click)="onSelect(voteItem)"
       [class.selected]="selectedItem.has(voteItem)">
     <span class="badge">{{voteItem.id}}</span>
-    <span>{{voteItem.username}}</span>
+    <span>{{voteItem.userIds}}</span>
     <span>{{voteItem.description}}</span>
     <span>{{voteItem.videoUrl}}</span>
-    <span>{{voteItem.audioUrl}}</span>
+    <!--<span>{{voteItem.audioUrl}}</span>-->
+    <span>{{voteItem.order}}</span>
   </li>
-  <button (click)="sendResult(); $event.stopPropagation()" *ngIf="authInfo.autheticated">Send result</button>
+  <button (click)="sendResult(); $event.stopPropagation()" *ngIf="isAuthentificated()">Проголосовать</button>
+  <button (click)="deleteVoting(); $event.stopPropagation()" *ngIf="isAuthentificated()">Отозвать голосование</button>
   <button #elseBlock>Login first to Vote</button>
-</ul>
 
-<p>Thanks for viewing</p>-->
+</ul>
+<p>Thanks for viewing</p>
 

@@ -10,76 +10,68 @@ public class AuthStatus {
      * 400 - bad credentials
      * 500 - server error
      */
-    private int code = HttpServletResponse.SC_OK;
+    private int cd = HttpServletResponse.SC_OK;
     /**
      * error msg if it is server error (code = 500).
      */
-    private String errorMsg;
-    private Long userId;
-    private String username;
-    private Boolean autheticated;
+    private String eMsg;
+    private Long uId;
+    private String uName;
+    private Boolean auth;
+    private String tkn;
+
+
+
+    public int getCd() {
+        return cd;
+    }
+
+    public void setCd(int cd) {
+        this.cd = cd;
+    }
+
+
+    public String geteMsg() {
+        return eMsg;
+    }
+
+    public void seteMsg(String eMsg) {
+        this.eMsg = eMsg;
+    }
+
+    public Long getuId() {
+        return uId;
+    }
+
+    public void setuId(Long uId) {
+        this.uId = uId;
+    }
+
+    public String getuName() {
+        return uName;
+    }
+
+    public void setuName(String uName) {
+        this.uName = uName;
+    }
+
+    public Boolean getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Boolean auth) {
+        this.auth = auth;
+    }
+
     /**
-     * user registration time
-     */
-    private Date created;
     /**
      * current csrf token
      */
-    private String token;
-
-    public Boolean getAutheticated() {
-        return autheticated;
+    public String getTkn() {
+        return tkn;
     }
 
-    public void setAutheticated(Boolean autheticated) {
-        this.autheticated = autheticated;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
+    public void setTkn(String tkn) {
+        this.tkn = tkn;
     }
 }

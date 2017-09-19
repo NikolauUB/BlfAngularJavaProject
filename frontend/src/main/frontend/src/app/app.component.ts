@@ -23,11 +23,11 @@ export class AppComponent{
   }
 
   public isUsersAuthentificated(): boolean {
-    return (this.auth.getAuth()) ? this.auth.getAuth().autheticated : false;
+    return (this.auth.getAuth()) ? this.auth.getAuth().auth : false;
   }
 
   public getUserName(): string {
-    return (this.auth.getAuth()) ? this.auth.getAuth().username : "";
+    return (this.auth.getAuth()) ? this.auth.getAuth().uName : "";
   }
 
   public doLogout(): void {
@@ -37,8 +37,8 @@ export class AppComponent{
   }
 
   private checkLogoutErrors(authData: AuthData) {
-    if (authData.code !== 200) {
-      alert("Ошибка при попытке выйти! " + authData.errorMsg);
+    if (authData.cd !== 200) {
+      alert("Ошибка при попытке выйти! " + authData.eMsg);
     } else {
       this.router.navigateByUrl('login');
     }

@@ -5,26 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 
 public class CompetitionInfo {
-    private int code = HttpServletResponse.SC_OK;
-    private String errorMsg;
     private CompetitionData competitionData;
+    private boolean voted = false;
     private Collection<VoteData> voteData;
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
 
     public CompetitionData getCompetitionData() {
         return competitionData;
@@ -40,5 +23,13 @@ public class CompetitionInfo {
 
     public void setVoteData(Collection<VoteData> voteData) {
         this.voteData = voteData;
+    }
+
+    public boolean isVoted() {
+        return voted;
+    }
+
+    public void setVoted(boolean voted) {
+        this.voted = voted;
     }
 }

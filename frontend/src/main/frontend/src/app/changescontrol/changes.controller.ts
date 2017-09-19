@@ -22,6 +22,12 @@ export class ChangesController {
   public static HIDE_PARTAKE_DISCUSS_PREFIX: string = "HD_";
   public static COMPETITION_MEMBERS_COUNT: string = "MBCNT_";
 
+  public static VOTING_CLASSIC: string = "V_0";
+  public static VOTING_JAZZ: string = "V_1";
+  public static VOTING_FREE: string = "V_2";
+  public static VOTING_COMPOSITION: string = "V_3";
+  public static VOTING_PREFIX: string = "V_";
+
   changesKeywords: ChangesKeywords;
 
   constructor(private changesService: ChangesService,
@@ -58,6 +64,10 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_COMPOSITION);
+      localStorage.removeItem(ChangesController.VOTING_CLASSIC);
+      localStorage.removeItem(ChangesController.VOTING_JAZZ);
+      localStorage.removeItem(ChangesController.VOTING_FREE);
+      localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
     }
     this.changesService
         .checkChanges(time)
@@ -77,7 +87,7 @@ export class ChangesController {
           let acm: Array<any> = (ls)?JSON.parse(ls):new Array<any>();
           counter+= acm.length;
         }
-        if (counter !== +keyword.split(ChangesController.COMPETITION_MEMBERS_COUNT)[1]) {
+        if (counter > +keyword.split(ChangesController.COMPETITION_MEMBERS_COUNT)[1]) {
           localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CLASSIC);
           localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
           localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);

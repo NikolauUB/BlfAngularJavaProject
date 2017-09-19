@@ -59,7 +59,7 @@ export class CompetitionComponent  implements  OnInit {
     this.competitionShortInfo.membersForShow = JSON.parse(members);
     if (this.authService.getAuth() != null){
       var member = this.competitionShortInfo.membersForShow.filter( (item) => {
-        return item.mId === this.authService.getAuth().userId;
+        return item.mId === this.authService.getAuth().uId;
       });
       this.competitionShortInfo.userThread = (member.length > 0)? member[0].threadId : -1;
       if (this.competitionShortInfo.userThread === -1 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE) {
@@ -67,7 +67,7 @@ export class CompetitionComponent  implements  OnInit {
 	    var jazzMember = null;
 	    if (membersJazz != null) {
           jazzMember = JSON.parse(membersJazz).filter( (item) => {
-            return item.mId === this.authService.getAuth().userId;
+            return item.mId === this.authService.getAuth().uId;
           });
 	    }
         this.competitionShortInfo.userChoosePrescribeProgramm = (jazzMember!= null && jazzMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ: -1;
@@ -77,7 +77,7 @@ export class CompetitionComponent  implements  OnInit {
 	    var barMember = null;
 	    if (membersBar != null) {
           barMember = JSON.parse(membersBar).filter( (item) => {
-            return item.mId === this.authService.getAuth().userId;
+            return item.mId === this.authService.getAuth().uId;
           });
 	    }
         this.competitionShortInfo.userChoosePrescribeProgramm = (barMember != null && barMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE: -1;

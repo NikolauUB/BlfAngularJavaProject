@@ -12,6 +12,7 @@ export class VoteService {
   private postHeaders: Headers;
   private voteDataUrl = 'api/votedata?type=';
   private voteUrl = 'api/vote';
+  private deleteVoteUrl = 'api/deleteVote?cid=';
 
   constructor(private http: Http) { }
 
@@ -26,19 +27,27 @@ export class VoteService {
       .catch(this.handleError);
   }
 
-  vote(voteData: VoteData[], authData: AuthData): Promise<string>  {
-    this.setCSRFHeaders(authData.token);
+  vote(voteData: VoteData[], authData: AuthData): Promise<any>  {
+    this.setCSRFHeaders(authData.tkn);
     return this.http
       .post(this.voteUrl,
         JSON.stringify(voteData),
         {headers: this.postHeaders})
       .toPromise()
-      .then(response => response.url as string)
       .catch(this.handleError);
   }
 
+  deleteVote(compId: number, authData: AuthData): Promise<any>  {
+    this.setCSRFHeaders(authData.tkn);
+    return this.http
+        .delete(this.deleteVoteUrl + compId,
+        {headers: this.postHeaders})
+        .toPromise()
+        .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
-    console.error('An error occurred in Vote service', error); // for demo purposes only
+    console.error('An error occurred in Vote service', error);
     return Promise.reject(error.message || error);
   }
 }

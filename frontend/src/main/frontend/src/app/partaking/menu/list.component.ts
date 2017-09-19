@@ -23,8 +23,6 @@ export class ListComponent extends CompetitionComponent implements OnInit {
     } else {
       this.loadActiveCompetitions();
     }
-
-
   }
 
   private loadActiveCompetitions(): void {

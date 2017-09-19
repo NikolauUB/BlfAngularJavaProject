@@ -2,6 +2,7 @@ package wind.instrument.competitions.data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity(name="CompetitionItemEntity")
@@ -35,6 +36,9 @@ public class CompetitionItemEntity implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
+
+    @OneToMany(mappedBy = "competitionItem", targetEntity=CompetitionItemUsers.class, fetch = FetchType.LAZY)
+    private Collection<CompetitionItemUsers> competitionItemUsers;
 
     private Date created;
     private Date updated;
@@ -127,5 +131,9 @@ public class CompetitionItemEntity implements Serializable {
 
     public void setOwner(UserEntity owner) {
         this.owner = owner;
+    }
+
+    public Collection<CompetitionItemUsers> getCompetitionItemUsers() {
+        return competitionItemUsers;
     }
 }

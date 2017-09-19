@@ -19,7 +19,7 @@ export class AdminService {
     }
 
     public saveItem(competitionItem: CompetitionItem): Promise<CompetitionItem>  {
-        this.setCSRFHeaders(this.authService.getAuth().token);
+        this.setCSRFHeaders(this.authService.getAuth().tkn);
         return this.http
             .post(this.saveCompetitionItemUrl,
             JSON.stringify(competitionItem),
@@ -30,7 +30,7 @@ export class AdminService {
     }
 
     public loadItem(competitionItem: CompetitionItem): Promise<CompetitionItem>  {
-        this.setCSRFHeaders(this.authService.getAuth().token);
+        this.setCSRFHeaders(this.authService.getAuth().tkn);
         return this.http
             .post(this.loadCompetitionItemUrl,
             JSON.stringify(competitionItem),

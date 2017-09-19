@@ -7,7 +7,7 @@
   </div>
   <div class="form-group mediumWidth">
     <label for="userPassword">Пароль:</label>
-    <input  type="password" id="userPassword" class="form-control mediumWidth" required [(ngModel)]="loginData.password" name="userPassword"/>
+    <input  type="password" id="userPassword" class="form-control mediumWidth" required [(ngModel)]="loginData.password" name="userPassword" (keydown)="onEnter($event)"/>
   </div>
   <button (click)="doLogin(); $event.stopPropagation()">Войти</button>
 

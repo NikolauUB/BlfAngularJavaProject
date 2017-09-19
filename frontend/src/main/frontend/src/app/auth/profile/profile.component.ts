@@ -10,7 +10,7 @@ import {DetailsController} from "../userdetails/details.controller";
 @Component({
   selector: 'profile-app',
   templateUrl: './profile.component.html',
-  styleUrls: [ '../../vote/voting.component.css' ]
+  styleUrls: [ '../register/register.component.css' ]
 })
 export class ProfileComponent implements OnInit {
   @ViewChild('imagePath')
@@ -72,7 +72,7 @@ export class ProfileComponent implements OnInit {
         this.userData.saveImage = saveImage;
       }
     } else {
-      this.userDetailsController.cleanUserDetails(this.authService.getAuth().userId);
+      this.userDetailsController.cleanUserDetails(this.authService.getAuth().uId);
     }
   }
 

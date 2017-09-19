@@ -4,7 +4,7 @@
   <form #profileForm="ngForm">
     <div class="form-group">
       <label for="usernameRD">Ваше имя:</label>
-      <input type="text" id="usernameRD" class="form-control" required [(ngModel)]="userData.username" name="usernameRD"/>
+      <input type="text" id="usernameRD" class="form-control"  [(ngModel)]="userData.username" name="usernameRD" pattern="[^@]*" required/>
     </div>
     <div class="form-group">
         <label for="imagePath">Загрузить новую фотографию:</label>
@@ -13,18 +13,19 @@
     <div class="form-group">
      &nbsp;&nbsp;<img  #imagePreview src="{{userData.previewImage}}"/>
     </div>
-      &nbsp;&nbsp;<button *ngIf="userData.previewImage"(click)="deleteProfileImage(profileForm)">Удалить фотографию</button>
+      &nbsp;&nbsp;<button class="btn btn-primary" *ngIf="userData.previewImage"(click)="deleteProfileImage(profileForm)">Удалить фотографию</button>
     <br/>
     <br/>
-    <button (click)="saveProfile(profileForm); $event.stopPropagation()">Сохранить профайл</button>
-    <button (click)="loadProfile(profileForm); $event.stopPropagation()">Сбросить изменения</button>
+    <button class="btn btn-primary" [disabled]="!profileForm.valid" (click)="saveProfile(profileForm); $event.stopPropagation()">Сохранить профайл</button>
+    <button class="btn btn-primary" (click)="loadProfile(profileForm); $event.stopPropagation()">Сбросить изменения</button>
   </form>
+  <div>
+    <span><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a>&nbsp;&nbsp;</span>
+    <span><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a>&nbsp;&nbsp;</span>
+    <span><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></span>
+  </div>
 </div>
-<div>
-  <span><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a>&nbsp;&nbsp;</span>
-  <span><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a>&nbsp;&nbsp;</span>
-  <span><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></span>
-</div>
+
 
 
 

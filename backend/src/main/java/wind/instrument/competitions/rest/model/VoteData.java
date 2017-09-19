@@ -1,9 +1,12 @@
 package wind.instrument.competitions.rest.model;
 
+import java.util.ArrayList;
+
 public class VoteData {
     private long id;
-    private String username; //username
+    private ArrayList<Long> userIds; //username
     private String description;
+    private String instrmnts;
     private String author;
     private String composition;
     private String videoUrl;
@@ -15,15 +18,17 @@ public class VoteData {
     }
 
     public VoteData(long id,
-                    String username,
+                    ArrayList<Long> userIds,
                     String description,
+                    String instrmnts,
                     String author,
                     String composition,
                     String videoUrl,
                     String audioUrl) {
         this.setId(id);
-        this.setUserName(username);
+        this.setUserIds(userIds);
         this.setDescription(description);
+        this.setInstrmnts(instrmnts);
         this.setAuthor(author);
         this.setComposition(composition);
         this.setVideoUrl(videoUrl);
@@ -31,8 +36,9 @@ public class VoteData {
     }
 
     public VoteData(long id,
-                    String username,
+                    ArrayList<Long> userIds,
                     String description,
+                    String instrmnts,
                     String author,
                     String composition,
                     String videoUrl,
@@ -40,8 +46,9 @@ public class VoteData {
                     Integer order
                     ) {
         this.setId(id);
-        this.setUserName(username);
+        this.setUserIds(userIds);
         this.setDescription(description);
+        this.setInstrmnts(instrmnts);
         this.setAuthor(author);
         this.setComposition(composition);
         this.setVideoUrl(videoUrl);
@@ -53,9 +60,6 @@ public class VoteData {
         return id;
     }
 
-    public String getUserName() {
-        return username;
-    }
 
     public String getDescription() {
         return description;
@@ -73,9 +77,6 @@ public class VoteData {
         this.id = id;
     }
 
-    public void setUserName(String username) {
-        this.username = username;
-    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -111,5 +112,21 @@ public class VoteData {
 
     public void setComposition(String composition) {
         this.composition = composition;
+    }
+
+    public ArrayList<Long> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(ArrayList<Long> userIds) {
+        this.userIds = userIds;
+    }
+
+    public String getInstrmnts() {
+        return instrmnts;
+    }
+
+    public void setInstrmnts(String instrmnts) {
+        this.instrmnts = instrmnts;
     }
 }
