@@ -142,13 +142,17 @@ public class VoteDataService {
         ArrayList<VoteData> voteDataList = new ArrayList<VoteData>();
         competitionItemList.forEach(item->{
             ArrayList<Long> userIds = new ArrayList<Long>();
+            ArrayList<String> usernames = new ArrayList<String>();
             userIds.add(item.getUserId());
+            usernames.add(item.getOwner().getUsername());
             item.getCompetitionItemUsers().forEach(itemUsers -> {
                 userIds.add(itemUsers.getUserId());
+                usernames.add(itemUsers.getUser().getUsername());
             });
 
             VoteData voteData = new VoteData(item.getCompetitionItemId(),
                     userIds,
+                    usernames,
                     item.getCnItemDescription(),
                     item.getCnItemInstruments(),
                     item.getCnItemAuthor(),

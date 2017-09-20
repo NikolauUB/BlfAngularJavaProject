@@ -1,26 +1,51 @@
 <vote-menu-app></vote-menu-app>
 <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
+<div class="alert alert-info" *ngIf="infoMsg">{{infoMsg}}</div>
 <h2>Голосование по конкурсу начнется с {{this.voteInfo.competitionData.start | date: 'shortDate'}} и продлится до {{this.voteInfo.competitionData.end | date: 'shortDate'}}</h2>
+<h3>Проводится тестовое голосование (после окончания тестирования тестовые пользователи и результаты голосования будут удалены)</h3>
+<p>Необходимо выбрать от одного до всех  исполнений. Наиболее понравившееся исполнение выбирается первым, следующиее вторым и так далее.
+  Порядок выбора имеет значение при подсчете результатов за исключением случая выбора всех имеющихся исполнений.
+  В этом случае всем участники зачисляются одинаковые баллы.
+</p>
+<small *ngIf="!isAuthentificated()"><button class="btn btn-warning btn-sm active" (click)="goToLogin(); $event.stopPropagation()">Для сохранения результатов голосования необходимо зайти на сайт</button></small>
+<div style="margin-bottom: 20px;">
+<button class="[ btn btn-success active ]" [class.disabled]="!anySelected()" (click)="sendResult(); $event.stopPropagation()" *ngIf="isAuthentificated() && !voteInfo.voted">Сохранить результаты голосования</button>
+<button class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()" *ngIf="isAuthentificated() && voteInfo.voted">Отозвать результаты голосования</button>
+</div>
+<span  *ngFor="let voteItem of voteInfo.voteData">
+  <div style="display: inline-block;" [class.selected]="selectedItem.has(voteItem)">
+    <div class="[ form-group ]">
+      <div class="[ btn-group ]">
+        <label *ngIf="voteItem.order && !isAllSelected"  class="[ btn btn-default ]">
+          <span *ngIf="selectedItem.has(voteItem)"><b>{{voteItem.order}}</b>
+          </span>
+          <span> </span>
+        </label>
+        <label *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[ btn btn-default active ]" (click)="onSelect(voteItem); $event.stopPropagation();">
+          Выбрать
+        </label>
+        <label class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
+          <b>{{voteItem.usernames.join(', ')}}</b>
+        </label>
+        <label *ngIf="voteItem.order && !voteInfo.voted" class="[ btn ]" style="float: right;" (click)="onSelect(voteItem); $event.stopPropagation();">
+          <span aria-hidden="true">&#10006;</span>
+        </label>
+      </div>
+    </div>
+    <div  *ngIf="voteItem.videoUrl">
+      <iframe width="420" height="315"
+          [src]="voteItem.videoUrl | safe"
+          allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+      </iframe>
+    </div>
+    <div *ngIf="voteItem.videoUrl">
+      <iframe width="420" height="100"
+              [src]="voteItem.audioUrl | safe"
+              frameborder="0">
+      </iframe>
+    </div>
+  </div>
+</span>
 
-<ul>
-  <li>Узнать о сайте: <a routerLink="/about" routerLinkActive="active">О сайте</a></li>
-  <li>Узнать о программе и оставить заявку на участие: <a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a></li>
-</ul>
 
-<ul class="voteItems">
-  <li *ngFor="let voteItem of voteInfo.voteData" (click)="onSelect(voteItem)"
-      [class.selected]="selectedItem.has(voteItem)">
-    <span class="badge">{{voteItem.id}}</span>
-    <span>{{voteItem.userIds}}</span>
-    <span>{{voteItem.description}}</span>
-    <span>{{voteItem.videoUrl}}</span>
-    <!--<span>{{voteItem.audioUrl}}</span>-->
-    <span>{{voteItem.order}}</span>
-  </li>
-  <button (click)="sendResult(); $event.stopPropagation()" *ngIf="isAuthentificated()">Проголосовать</button>
-  <button (click)="deleteVoting(); $event.stopPropagation()" *ngIf="isAuthentificated()">Отозвать голосование</button>
-  <button #elseBlock>Login first to Vote</button>
-
-</ul>
-<p>Thanks for viewing</p>
 

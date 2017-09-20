@@ -17,6 +17,8 @@ import {PartakingService} from "../partaking/partaking.service";
 export class VoteComponent implements OnInit {
   voteInfo: CompetitionInfo = new CompetitionInfo;
   selectedItem: Set<VoteData> = new Set<VoteData>();
+  isAllSelected: boolean = false;
+  userItemId: number;
   startDate: Date;
   endDate: Date;
   errorMsg: string;
@@ -39,10 +41,13 @@ export class VoteComponent implements OnInit {
 
   prepareView(voteInfo: CompetitionInfo): void {
     this.voteInfo = voteInfo;
+    this.userItemId = null;
+    this.findUserItemId();
     if (this.voteInfo.voted) {
       this.voteInfo.voteData.forEach(item => {
         if (item.order) this.selectedItem.add(item);
       });
+      this.isAllSelected = this.checkIsAllSelected();
       this.sortItems();
     }
   }
@@ -88,6 +93,10 @@ export class VoteComponent implements OnInit {
     }
   }
 
+  anySelected(): boolean {
+    return this.selectedItem.size > 0;
+  }
+
   protected deleteVoting(): void {
     this.voteService
       .deleteVote(this.voteInfo.competitionData.id, this.authService.getAuth())
@@ -95,16 +104,52 @@ export class VoteComponent implements OnInit {
       .catch(e=>this.handleError(e));
   }
 
-  showReply(reply: string): void {
-    alert(reply);
-  }
 
   onSelect(voteSelected: VoteData): void {
+    if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
+      return;
+    }
     if (this.selectedItem.has(voteSelected)) {
       this.deselectItem(voteSelected);
     } else {
       this.selectItem(voteSelected);
     }
+    this.isAllSelected = this.checkIsAllSelected();
+  }
+
+  showDetails(voteItem: VoteData): void {
+    alert("details");
+  }
+
+  public isUserPartake(vote: VoteData): boolean {
+    return (this.userItemId && vote.id === this.userItemId);
+  }
+
+  private findUserItemId(): void {
+    this.voteInfo.voteData.forEach(item => {
+      item.userIds.forEach(id => {
+        if (this.authService.getAuth().uId === id) {
+          this.userItemId = item.id;
+        }
+      });
+    });
+
+
+  }
+
+  public goToLogin(): void {
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
+  }
+
+  private checkIsAllSelected(): boolean {
+    var result = true;
+    this.voteInfo.voteData.forEach( item => {
+      if (!item.order) {
+        result = false;
+        return false; //exit from forEach
+      }
+    });
+    return result;
   }
 
   private deselectItem(voteSelected: VoteData): void {

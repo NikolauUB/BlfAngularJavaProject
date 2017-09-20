@@ -39,4 +39,12 @@ public class CompetitionItemUsers implements Serializable {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 }

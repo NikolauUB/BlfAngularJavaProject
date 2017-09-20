@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class VoteData {
     private long id;
-    private ArrayList<Long> userIds; //username
+    private ArrayList<Long> userIds; //userIds
+    private ArrayList<String> usernames; //userIds
     private String description;
     private String instrmnts;
     private String author;
@@ -19,6 +20,7 @@ public class VoteData {
 
     public VoteData(long id,
                     ArrayList<Long> userIds,
+                    ArrayList<String> usernames,
                     String description,
                     String instrmnts,
                     String author,
@@ -27,33 +29,13 @@ public class VoteData {
                     String audioUrl) {
         this.setId(id);
         this.setUserIds(userIds);
+        this.setUsernames(usernames);
         this.setDescription(description);
         this.setInstrmnts(instrmnts);
         this.setAuthor(author);
         this.setComposition(composition);
         this.setVideoUrl(videoUrl);
         this.setAudioUrl(audioUrl);
-    }
-
-    public VoteData(long id,
-                    ArrayList<Long> userIds,
-                    String description,
-                    String instrmnts,
-                    String author,
-                    String composition,
-                    String videoUrl,
-                    String audioUrl,
-                    Integer order
-                    ) {
-        this.setId(id);
-        this.setUserIds(userIds);
-        this.setDescription(description);
-        this.setInstrmnts(instrmnts);
-        this.setAuthor(author);
-        this.setComposition(composition);
-        this.setVideoUrl(videoUrl);
-        this.setAudioUrl(audioUrl);
-        this.setOrder(order);
     }
 
     public long getId() {
@@ -128,5 +110,13 @@ public class VoteData {
 
     public void setInstrmnts(String instrmnts) {
         this.instrmnts = instrmnts;
+    }
+
+    public ArrayList<String> getUsernames() {
+        return usernames;
+    }
+
+    public void setUsernames(ArrayList<String> usernames) {
+        this.usernames = usernames;
     }
 }

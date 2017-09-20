@@ -91,3 +91,9 @@ button.delete {
 .mediumWidth {
   width: 400px;
 }
+
+.selected {
+  background-color: #1c7323 !important;
+  padding: 2px;
+  color: white;
+}
