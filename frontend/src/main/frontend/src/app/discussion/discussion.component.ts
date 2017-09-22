@@ -173,9 +173,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
    */
  saveItem(discussionItem: DiscussionItem): void {
     var isNew =  (discussionItem.msgId == null);
-    if (isNew) {
-      discussionItem.authorId = this.authService.getAuth().uId;
-    }
+    discussionItem.authorId = this.authService.getAuth().uId;
     this.partakingService
       .saveItem(discussionItem)
       .then(reply => this.handleSaveReply(reply, isNew))

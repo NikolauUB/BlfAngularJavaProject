@@ -92,7 +92,7 @@ export class VoteComponent implements OnInit {
         .then(reply=>this.getVoteInfo())
         .catch(e=>this.handleError(e));
     } else {
-      alert("Please select");
+      this.errorMsg = "Пожалуйста, выберите хотя бы одно исполнение!"
     }
   }
 
@@ -109,6 +109,7 @@ export class VoteComponent implements OnInit {
 
 
   onSelect(voteSelected: VoteData): void {
+    this.errorMsg = "";
     if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
       return;
     }

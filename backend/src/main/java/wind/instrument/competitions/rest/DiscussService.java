@@ -353,7 +353,7 @@ public class DiscussService {
                 this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + usersPartakeTheme.getId()", response);
                 return discussionItem;
             }
-            if(message.getUserId() != currentUser.getUserId()) {
+            if(!message.getUserId().equals(currentUser.getUserId())) {
                 LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to user " + currentUser.getUserId());
                 this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request! Message doesn't belongs to you", response);
                 return discussionItem;

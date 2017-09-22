@@ -43,6 +43,8 @@ export class EditModalComponent implements AfterViewInit{
     this.model = modelForChange;
     if (this.model.msgText) {
       this.nicEdit.instanceById('nickEdit').setContent(this.model.msgText);
+    } else {
+      this.nicEdit.instanceById('nickEdit').setContent("");
     }
     this.saver = saver;
     this.whatToDo = actionDesc;
@@ -54,7 +56,7 @@ export class EditModalComponent implements AfterViewInit{
   protected saveItem() {
     var text = this.nicEdit.instanceById('nickEdit').getContent();
     if (text.length > 8192) {
-      this.errorMsg="Размер текста заявки ограничен размером 8 килобайт. Если Вы добавили картинку, убедитесь, что Вы добавили ссылку, а не картинку в формате base64, нажав кнопку 'Edit HTML'.";
+      this.errorMsg="Размер текста заявки ограничен размером 8 килобайт. Посмотреть текст в формате HTML можно по кнопке 'Edit HTML'.";
     } else {
       this.model.msgText = text;
       this.saver.saveItem(this.model);
