@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
     if (authInfo.cd === 200 && authInfo.auth) {
       this.router.navigateByUrl(this.returnUrl);
     } else if (authInfo.cd === 400) {
-      this.errorMsg = "Неправильный адрес электронной почты или пароль";
+      this.errorMsg = "Неправильный адрес электронной почты / имя или пароль";
     } else if (authInfo.cd === 500) {
       this.errorMsg = authInfo.eMsg;
     }

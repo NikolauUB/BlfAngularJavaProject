@@ -363,7 +363,8 @@ public class AuthService {
                     HttpServletResponse.SC_BAD_REQUEST);
         }
 
-        if (ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(userData.getUsername().trim().toLowerCase())
+        if (!currentUser.getUsername().trim().toLowerCase().equals(userData.getUsername().trim().toLowerCase())
+                && ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(userData.getUsername().trim().toLowerCase())
                 && !ReservedUsernames.RESERVED_USERNAMES.checkEmail(userData.getUsername().trim().toLowerCase(), currentUser.getEmail())) {
             return this.prepareProfileReplyWithError(result,
                     userData,

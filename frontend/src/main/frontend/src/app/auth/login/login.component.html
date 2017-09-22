@@ -2,7 +2,7 @@
   <h2>{{loginTitle}}</h2>
   <div class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
   <div class="form-group mediumWidth">
-    <label for="userEmail">Адрес электронной почты:</label>
+    <label for="userEmail">Адрес электронной почты или имя:</label>
     <input type="text" id="userEmail" class="form-control mediumWidth" required [(ngModel)]="loginData.email" name="userEmail"/>
   </div>
   <div class="form-group mediumWidth">

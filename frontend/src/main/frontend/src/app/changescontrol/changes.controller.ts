@@ -3,6 +3,7 @@ import {ChangesService} from "./changes.service";
 import {ChangesKeywords} from "./ChangesKeywords";
 import {DetailsController} from "./../auth/userdetails/details.controller";
 import {ThreadChanges} from "./ThreadChanges";
+import {UsersChanges} from "./UsersChanges";
 
 @Injectable()
 export class ChangesController {
@@ -32,25 +33,35 @@ export class ChangesController {
 
   constructor(private changesService: ChangesService,
               private userDetailsController: DetailsController) {
-    this.userDetailsController.createStore();
+
   }
 
-  public checkChangesInThread(uTime: Date, thDate: Date, threadId: number): Promise<ThreadChanges> {
-   return this.changesService
-        .getThreadUpdates(uTime, thDate, threadId)
+  public checkChangesInThread( thDate: Date, threadId: number): Promise<ThreadChanges> {
+    return this.changesService
+        .getThreadUpdates(thDate, threadId)
+        .then(reply => {return reply;})
+        .catch(e => this.handleError(e));
+  }
+
+  public checkUsersChanges(usrTime: Date): void {
+    if(usrTime == null) return;
+    this.changesService
+        .getUsersUpdates(usrTime)
         .then(reply => this.cleanIndexedDBForUsers(reply))
         .catch(e => this.handleError(e));
   }
 
-  private cleanIndexedDBForUsers(reply: ThreadChanges): ThreadChanges {
+  private cleanIndexedDBForUsers(reply: UsersChanges): void {
     reply.userIds.forEach((userId)=>{
       this.userDetailsController.cleanUserDetails(userId);
     });
-    return reply;
   }
+
+
 
   public init(): boolean {
     //clean previous
+    //check updates forcompetition information
     this.changesKeywords = null;
     var prevTime  = localStorage.getItem(ChangesController.PREVIOUS_TIME);
     var time: number = (prevTime == null) ? -1: parseInt(prevTime, 10);
@@ -73,6 +84,13 @@ export class ChangesController {
         .checkChanges(time)
         .then( reply => this.treatReply(reply))
         .catch(e => this.handleError(e));
+
+    //check updates for users
+    this.userDetailsController
+        .createStoreAndGetMaxDate()
+        .then(usrTime => { this.checkUsersChanges(usrTime);});
+
+
     return true;
   }
 

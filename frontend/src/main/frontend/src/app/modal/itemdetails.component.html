@@ -1,0 +1,24 @@
+<app-modal>
+  <div class="app-modal-header">
+    <div><span class="detailsspan">Участник{{oneOrMany()}}:</span> <b>{{getUsernameList()}}</b></div>
+  </div>
+  <div class="app-modal-body">
+      <div style="margin-left: 20px"><span *ngFor="let userId of voteItem.userIds">
+        <figure *ngIf="getAvatar(userId)" class="detailsavatar">
+          <img [src]="getAvatar(userId)"/>
+          <figcaption><small><b>{{getUsername(userId)}}</b></small></figcaption>
+        </figure>
+      </span></div>
+      <div><span class="detailsspan">Композитор:</span> {{voteItem.author}}</div>
+      <div><span class="detailsspan">Произведение:</span> {{voteItem.composition}}</div>
+      <div><span class="detailsspan">Описание:</span> {{voteItem.description}}</div>
+      <div><span class="detailsspan">Инструменты:</span> {{voteItem.instrmnts}}</div>
+      <div><span class="detailsspan">Видео:</span><a href="{{voteItem.videoUrl}}" target="_blank">Открыть в новом окне</a></div>
+      <div><span class="detailsspan">Audio:</span><a href="{{voteItem.audioUrl}}" target="_blank">Открыть в новом окне</a></div>
+
+
+  </div>
+  <div class="app-modal-footer">
+    <button type="button" class="btn btn-primary btn-s" (click)="modal.hide()">Закрыть</button>
+  </div>
+</app-modal>

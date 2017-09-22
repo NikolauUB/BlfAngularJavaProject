@@ -8,6 +8,8 @@ import {AuthData} from "../model/auth/AuthData";
 import {AuthService} from "../auth/auth.service";
 import { CompetitionShortInfo} from "../partaking/CompetitionShortInfo";
 import {PartakingService} from "../partaking/partaking.service";
+import {ItemdetailsComponent} from "../modal/itemdetails.component";
+import { DetailsController } from '../auth/userdetails/details.controller';
 
 @Component({
   selector: 'vote-app',
@@ -15,12 +17,12 @@ import {PartakingService} from "../partaking/partaking.service";
   styleUrls: [ './voting.component.css' ]
 })
 export class VoteComponent implements OnInit {
+  @ViewChild(ItemdetailsComponent)
+  detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
   selectedItem: Set<VoteData> = new Set<VoteData>();
   isAllSelected: boolean = false;
   userItemId: number;
-  startDate: Date;
-  endDate: Date;
   errorMsg: string;
 
   constructor(
@@ -28,7 +30,8 @@ export class VoteComponent implements OnInit {
     private authService: AuthService,
     protected partakingService: PartakingService,
     protected competitionShortInfo: CompetitionShortInfo,
-    private router: Router) {
+    private router: Router,
+    private detailsController: DetailsController) {
 
   }
 
@@ -118,7 +121,7 @@ export class VoteComponent implements OnInit {
   }
 
   showDetails(voteItem: VoteData): void {
-    alert("details");
+    this.detailsmodal.showDetails(voteItem);
   }
 
   public isUserPartake(vote: VoteData): boolean {

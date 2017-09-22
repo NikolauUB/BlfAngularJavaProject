@@ -10,6 +10,7 @@ import { VoteComponent }      from './vote/vote.component';
 import { VoteService }          from './vote/vote.service';
 import { ModalComponent } from "./modal/modal.component";
 import { EditModalComponent} from "./modal/editmodal.component";
+import {ItemdetailsComponent} from "./modal/itemdetails.component";
 import { ShowpictureComponent} from "./modal/showpicture.component";
 import {RegisterComponent} from "./auth/register/reqister.component";
 import {ProfileComponent} from "./auth/profile/profile.component";
@@ -95,6 +96,7 @@ export function runChangesController(service: ChangesController) {
     CompositionComponent,
     ModalComponent,
     EditModalComponent,
+    ItemdetailsComponent,
     ShowpictureComponent,
     WelcomeComponent,
     StatisticComponent,

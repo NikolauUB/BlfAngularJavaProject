@@ -37,32 +37,22 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   private showDiscuss(): void {
     if (this.isTakenPart()) {
       if (this.competitionShortInfo.userThread > 0) {
-        this.userDetailsController
-            .getMaxUpdatedDate()
-            .then(uTime => this.loadThemedUpdateduTime(uTime));
+          this.themeController
+              .createStoreAndLoadMaxUpdated(this.competitionShortInfo.userThread)
+              .then(thTime => this.checkChangesInThread(thTime));
       }
-
     }
-
   }
 
-  private loadThemedUpdateduTime(uTime: Date) {
-      this.themeController
-          .loadUpdatedByThemeId(this.competitionShortInfo.userThread)
-          .then(thTime => this.checkChangesInThread(uTime, thTime))
-  }
-
-  private checkChangesInThread(uTime: Date, thTime: Date) {
+  private checkChangesInThread(thTime: Date) {
+      alert(thTime);
       this.changesController
-          .checkChangesInThread(uTime, thTime, this.competitionShortInfo.userThread)
+          .checkChangesInThread(thTime, this.competitionShortInfo.userThread)
           .then(reply => this.updateThemeDetails(reply));
   }
 
 
   private updateThemeDetails(threadChanges: ThreadChanges) {
-    threadChanges.userIds.forEach((userId)=>{
-      this.userDetailsController.updateUserDetails(userId);
-    });
     this.themeController
         .loadThemeById(this.competitionShortInfo.userThread)
         .then(res => {

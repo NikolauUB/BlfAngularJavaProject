@@ -7,11 +7,12 @@ export class ThemeController {
     private db: AngularIndexedDB = new AngularIndexedDB('ThemeStatus', 1);
 
     constructor() {
-        this.createStore();
+        //this.createStore();
     }
 
 
     public createStore(): void {
+        alert("ThemeController createStore");
         this.db.createStore(1, (evt) => {
             let objectStore = evt.currentTarget.result.createObjectStore(
                 'themestatus', {keyPath: "id", autoIncrement: false});
@@ -21,17 +22,27 @@ export class ThemeController {
         });
     }
 
+    public createStoreAndLoadMaxUpdated(threadId: number): Promise<Date> {
+        alert("ThemeController createStore for thread");
+        return this.db.createStore(1, (evt) => {
+            let objectStore = evt.currentTarget.result.createObjectStore(
+                'themestatus', {keyPath: "id", autoIncrement: false});
+
+            objectStore.createIndex("updated", "updated", {unique: false});
+            objectStore.createIndex("msgs", "msgs", {unique: false});
+        }).then(e=>this.loadUpdatedByThemeId(threadId));
+    }
 
     public saveThemeInDBbyId(discussionItems: Array<DiscussionItem>, threadId: number, thUpdated: Date) {
         this.db.add('themestatus',
             { id: threadId,
                 updated: thUpdated,
                 msgs: JSON.stringify(discussionItems)})
-            .catch(e => alert(e));
+            .catch(e => console.log(e));
     }
 
     public cleanTheme(threadId: number): void {
-        this.db.delete('themestatus', threadId).catch(e=> alert(e));
+        this.db.delete('themestatus', threadId).catch(e=> console.log(e));
     }
 
     public loadThemeById(threadId: number): Promise<Array<DiscussionItem>> {
@@ -46,7 +57,7 @@ export class ThemeController {
     public loadUpdatedByThemeId(threadId: number): Promise<Date> {
         return this.db.getByKey('themestatus', threadId)
             .then((details) => {
-                return (details != null) ? details.updated : null;
+                return (details != null) ? details.updated : 0;
             }, (error) => {
                 console.log(error);
             });

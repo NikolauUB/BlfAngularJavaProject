@@ -24,7 +24,7 @@
         <label *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[ btn btn-default active ]" (click)="onSelect(voteItem); $event.stopPropagation();">
           Выбрать
         </label>
-        <label class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
+        <label alt="Подробности и ссылки" class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
           <b>{{voteItem.usernames.join(', ')}}</b>
         </label>
         <label *ngIf="voteItem.order && !voteInfo.voted" class="[ btn ]" style="float: right;" (click)="onSelect(voteItem); $event.stopPropagation();">
@@ -46,6 +46,8 @@
     </div>
   </div>
 </span>
+<itemdetails-modal-component></itemdetails-modal-component>
+
 
 
 

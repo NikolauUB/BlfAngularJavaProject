@@ -3,6 +3,7 @@ package wind.instrument.competitions.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,12 +16,14 @@ import wind.instrument.competitions.data.UserEntity;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.changes.ChangesKeywords;
 import wind.instrument.competitions.rest.model.changes.ThreadChanges;
+import wind.instrument.competitions.rest.model.changes.UsersChanges;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
@@ -34,6 +37,9 @@ public class ChangesControlService {
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private HttpSession httpSession;
 
     public static String COMPETITION_LIST = "COMP_LIST";
     public static String DESCRIPTION_FOR_TYPE = "DESC_";
@@ -99,53 +105,32 @@ public class ChangesControlService {
     }
 
     @RequestMapping(value = "/api/getThreadUpdates", method = RequestMethod.GET)
-    public ThreadChanges getThreadUpdates(@RequestParam(value ="uld", required = false) Long userControlTime,
-                                            @RequestParam(value ="tld", required = false) Long threadControlTime,
+    public ThreadChanges getThreadUpdates(@RequestParam(value ="tld") Long threadControlTime,
                                             @RequestParam("thid") Long threadId,  HttpServletResponse response) {
         ThreadChanges result = new ThreadChanges();
         result.setThChanged(false);
-        ArrayList<Long> msgIds = new ArrayList<Long>();
-        ArrayList<Long> userIds = new ArrayList<Long>();
-        result.setMsgIds(msgIds);
-        result.setUserIds(userIds);
-        if(threadId == null) {
+        if (threadId == null) {
             this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "threadId is not set", response);
             return result;
         }
+
         TypedQuery<MessageEntity> msgQuery =
-                em.createQuery("select m from MessageEntity m where m.themeId = :thId and m.updated > :ctlTime",
+                em.createQuery("select m from MessageEntity m " +
+                                "where m.themeId = :thId and m.userId != :userId and m.updated > :ctlTime",
                         MessageEntity.class);
-        TypedQuery<UserEntity> usersQuery =
-                em.createQuery("select u from UserEntity u where u.updated > :ctlTime and exists " +
-                                "(select m from MessageEntity m where m.userId = u.userId and m.themeId = :thId)",
-                        UserEntity.class);
         TypedQuery<ThemeEntity> themeQuery =
                         em.createQuery("select t from ThemeEntity t where t.updated > :ctlTime and t.id = :thId",
                                 ThemeEntity.class);
         try {
-
-            if (threadControlTime != null)  {
-                Date threadControlDate = new Date(threadControlTime.longValue());
-                msgQuery.setParameter("thId", threadId)
+            Date threadControlDate = new Date(threadControlTime.longValue());
+            boolean changed = (msgQuery.setParameter("thId", threadId)
+                    .setParameter("userId", httpSession.getAttribute("USER_ID"))
                     .setParameter("ctlTime", threadControlDate)
-                    .getResultList()
-                    .forEach((msg) -> {
-                        msgIds.add(msg.getMsgId());
-                    });
-                result.setThChanged(themeQuery.setParameter("thId", threadId)
+                    .getResultList().size() > 0) ;
+            result.setThChanged( changed || (themeQuery.setParameter("thId", threadId)
                     .setParameter("ctlTime", threadControlDate)
-                    .getResultList().size() > 0);
+                    .getResultList().size() > 0));
 
-            }
-            if (userControlTime != null)  {
-                Date userControlDate = new Date(userControlTime.longValue());
-                usersQuery.setParameter("thId", threadId)
-                    .setParameter("ctlTime", userControlDate)
-                    .getResultList()
-                    .forEach((usr) -> {
-                        userIds.add(usr.getUserId());
-                    });
-            }
         } catch(NoResultException ex) {
             LOG.error("Can not get result for thread: ", ex);
             this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage(), response);
@@ -154,6 +139,45 @@ public class ChangesControlService {
 
         return result;
 
+    }
+
+    @RequestMapping(value = "/api/getUsersUpdates", method = RequestMethod.GET)
+    public UsersChanges getUsersUpdates(@RequestParam(value ="uld", required = true) Long userControlTime,
+                                            HttpServletResponse response) {
+        UsersChanges result = new UsersChanges();
+        ArrayList<Long> userIds = new ArrayList<Long>();
+        result.setUserIds(userIds);
+        if (userControlTime == null) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "userControlTime is not set", response);
+            return result;
+        }
+        TypedQuery<UserEntity> usersQuery =
+                em.createQuery("select u from UserEntity u where (u.updated > :ctlTime and exists " +
+                                "(select t from ThemeEntity t, CompetitionEntity c " +
+                                        "where t.competitionId = c.competitionId " +
+                                        "and t.userId = u.userId " +
+                                        "and c.active = true)) " +
+                                "or (u.updated > :ctlTime  and exists " +
+                                "(select ciu from CompetitionItemUsers ciu, CompetitionItemEntity cis, " +
+                                        "CompetitionEntity cs " +
+                                        "where ciu.competitionItemId = cis.competitionItemId " +
+                                        "and cis.competitionId = cs.competitionId " +
+                                        "and ciu.userId = u.userId " +
+                                        "and cs.active = true))"
+                                , UserEntity.class);
+        try {
+            Date userControlDate = new Date(userControlTime.longValue());
+            usersQuery.setParameter("ctlTime", userControlDate)
+                    .getResultList()
+                    .forEach((usr) -> {
+                        userIds.add(usr.getUserId());
+                    });
+        } catch(NoResultException ex) {
+            LOG.error("Can not get result for users updates: ", ex);
+            this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage(), response);
+            return result;
+        }
+        return result;
     }
 
     private void sendResponseError(int code, String text,  HttpServletResponse response) {

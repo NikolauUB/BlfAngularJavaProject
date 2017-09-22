@@ -1,3 +1,18 @@
 .modal {
   background: rgba(0,0,0,0.6);
 }
+
+.detailsspan {
+  display: inline-block;
+  width:110px;
+  font-weight: bold;
+}
+
+.detailsavatar {
+  display: inline-block;
+  vertical-align: top;
+  height:200px;
+  width:200px;
+  margin-left: 10px;
+  margin-bottom: 30px;
+}
