@@ -21,13 +21,16 @@ export class ChangesController {
   public static COMPETITION_MEMBERS_COMPOSITION: string = "MBRS_3";
   public static COMPETITION_MEMBERS_PREFIX: string = "MBRS_";
   public static HIDE_PARTAKE_DISCUSS_PREFIX: string = "HD_";
-  public static COMPETITION_MEMBERS_COUNT: string = "MBCNT_";
 
   public static VOTING_CLASSIC: string = "V_0";
   public static VOTING_JAZZ: string = "V_1";
   public static VOTING_FREE: string = "V_2";
   public static VOTING_COMPOSITION: string = "V_3";
   public static VOTING_PREFIX: string = "V_";
+
+  //keywords which are not stored in client storage
+  public static COMPETITION_MEMBERS_COUNT: string = "MBCNT_";
+  public static VOTING_ITEMS_COUNT: string = "VCNT_";
 
   changesKeywords: ChangesKeywords;
 
@@ -99,22 +102,31 @@ export class ChangesController {
     localStorage.setItem(ChangesController.PREVIOUS_TIME, this.changesKeywords.time.toString());
     this.changesKeywords.keywords.forEach(keyword => {
       if(keyword.startsWith(ChangesController.COMPETITION_MEMBERS_COUNT)) {
-        var counter = 0;
-        for (let i = 0; i < 4; i++) {
-          let ls = localStorage.getItem(ChangesController.COMPETITION_MEMBERS_PREFIX + i);
-          let acm: Array<any> = (ls)?JSON.parse(ls):new Array<any>();
-          counter+= acm.length;
-        }
-        if (counter > +keyword.split(ChangesController.COMPETITION_MEMBERS_COUNT)[1]) {
-          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CLASSIC);
-          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
-          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);
-          localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_COMPOSITION);
-        }
+        this.checkCountAndClean(ChangesController.COMPETITION_MEMBERS_PREFIX,
+            ChangesController.COMPETITION_MEMBERS_COUNT,
+            keyword);
+      } else if (keyword.startsWith(ChangesController.VOTING_ITEMS_COUNT)) {
+        this.checkCountAndClean(ChangesController.VOTING_PREFIX,
+            ChangesController.VOTING_ITEMS_COUNT,
+            keyword);
       } else {
         localStorage.removeItem(keyword);
       }
     });
+  }
+
+  private checkCountAndClean(objectTypePrefix: string, objectCountConst: string, keyword: string): void {
+    var counter = 0;
+    for (let i = 0; i < 4; i++) {
+      let ls = localStorage.getItem(objectTypePrefix + i);
+      let acm:Array<any> = (ls) ? JSON.parse(ls) : new Array<any>();
+      counter += acm.length;
+    }
+    if (counter > +keyword.split(objectCountConst)[1]) {
+      for (let n = 0; n < 4; n++) {
+        localStorage.removeItem(objectTypePrefix + n);
+      }
+    }
   }
 
   private handleError(e: any) : void {

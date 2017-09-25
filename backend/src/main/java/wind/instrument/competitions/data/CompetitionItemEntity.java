@@ -24,8 +24,12 @@ public class CompetitionItemEntity implements Serializable {
     private String cnItemDescription;
     @Column(name =  "cn_item_audio")
     private String cnItemAudio;
+    @Column(name =  "cn_item_embed_audio")
+    private String cnItemEmbedAudio;
     @Column(name =  "cn_item_video")
     private String cnItemVideo;
+    @Column(name =  "cn_item_embed_video")
+    private String cnItemEmbedVideo;
     @Column(name =  "user_id")
     private Long userId;
 
@@ -45,12 +49,13 @@ public class CompetitionItemEntity implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        this.created = new Date();
+        this.setCreated(new Date());
+        this.setUpdated(this.getCreated());
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updated = new Date();
+        this.setUpdated(new Date());
     }
 
     public Long getCompetitionItemId() {
@@ -135,5 +140,37 @@ public class CompetitionItemEntity implements Serializable {
 
     public Collection<CompetitionItemUsers> getCompetitionItemUsers() {
         return competitionItemUsers;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
+    public String getCnItemEmbedAudio() {
+        return cnItemEmbedAudio;
+    }
+
+    public void setCnItemEmbedAudio(String cnItemEmbedAudio) {
+        this.cnItemEmbedAudio = cnItemEmbedAudio;
+    }
+
+    public String getCnItemEmbedVideo() {
+        return cnItemEmbedVideo;
+    }
+
+    public void setCnItemEmbedVideo(String cnItemEmbedVideo) {
+        this.cnItemEmbedVideo = cnItemEmbedVideo;
     }
 }

@@ -54,7 +54,9 @@ public class VoteDataService {
 
             competitionItem.setId(competitionItemEntity.getCompetitionItemId());
             competitionItem.setAudio(competitionItemEntity.getCnItemAudio());
+            competitionItem.setEmbedAudio(competitionItemEntity.getCnItemEmbedAudio());
             competitionItem.setVideo(competitionItemEntity.getCnItemVideo());
+            competitionItem.setEmbedVideo(competitionItemEntity.getCnItemEmbedVideo());
             competitionItem.setAuthor(competitionItemEntity.getCnItemAuthor());
             competitionItem.setComposition(competitionItemEntity.getCnItemComposition());
             competitionItem.setDesc(competitionItemEntity.getCnItemDescription());
@@ -77,7 +79,9 @@ public class VoteDataService {
                 competitionItemEntity = new CompetitionItemEntity();
             }
             competitionItemEntity.setCnItemAudio(competitionItem.getAudio());
+            competitionItemEntity.setCnItemEmbedAudio(competitionItem.getEmbedAudio());
             competitionItemEntity.setCnItemVideo(competitionItem.getVideo());
+            competitionItemEntity.setCnItemEmbedVideo(competitionItem.getEmbedVideo());
             competitionItemEntity.setCnItemAuthor(competitionItem.getAuthor());
             competitionItemEntity.setCnItemComposition(competitionItem.getComposition());
             competitionItemEntity.setCnItemDescription(competitionItem.getDesc());
@@ -158,7 +162,9 @@ public class VoteDataService {
                     item.getCnItemAuthor(),
                     item.getCnItemComposition(),
                     item.getCnItemVideo(),
-                    item.getCnItemAudio());
+                    item.getCnItemEmbedVideo(),
+                    item.getCnItemAudio(),
+                    item.getCnItemEmbedAudio());
             if (votingOrderMap.containsKey(item.getCompetitionItemId())) {
                 voteData.setOrder(votingOrderMap.get(item.getCompetitionItemId()));
             }

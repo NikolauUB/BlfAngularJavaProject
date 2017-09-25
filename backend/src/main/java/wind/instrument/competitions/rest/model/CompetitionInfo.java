@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 
 public class CompetitionInfo {
+
     private CompetitionData competitionData;
     private boolean voted = false;
     private Collection<VoteData> voteData;

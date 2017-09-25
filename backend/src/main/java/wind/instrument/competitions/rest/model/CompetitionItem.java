@@ -9,7 +9,9 @@ public class CompetitionItem {
     private String author;
     private String composition;
     private String video;
+    private String embedVideo;
     private String audio;
+    private String embedAudio;
 
     public Long getId() {
         return id;
@@ -81,5 +83,21 @@ public class CompetitionItem {
 
     public void setAudio(String audio) {
         this.audio = audio;
+    }
+
+    public String getEmbedVideo() {
+        return embedVideo;
+    }
+
+    public void setEmbedVideo(String embedVideo) {
+        this.embedVideo = embedVideo;
+    }
+
+    public String getEmbedAudio() {
+        return embedAudio;
+    }
+
+    public void setEmbedAudio(String embedAudio) {
+        this.embedAudio = embedAudio;
     }
 }

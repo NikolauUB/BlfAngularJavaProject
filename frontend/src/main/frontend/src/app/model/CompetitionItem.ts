@@ -7,5 +7,7 @@ export class CompetitionItem {
     author: string;
     composition: string;
     video: string;
-    audio:string;
+    embedVideo: string;
+    audio: string;
+    embedAudio: string;
 }

@@ -32,10 +32,10 @@ public class CompetitionEntity implements Serializable {
     private Boolean active;
 
 
-    @OneToMany(mappedBy = "competition", targetEntity=CompetitionItemEntity.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "competition", targetEntity=CompetitionItemEntity.class, fetch = FetchType.LAZY)
     private Collection<CompetitionItemEntity> competitionItems;
 
-    @OneToMany(mappedBy = "competition", targetEntity=ThemeEntity.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "competition", targetEntity=ThemeEntity.class, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
     private Collection<ThemeEntity> themesByMembers;
 

@@ -11,7 +11,9 @@ public class VoteData {
     private String author;
     private String composition;
     private String videoUrl;
+    private String videoEmbedUrl;
     private String audioUrl;
+    private String audioEmbedUrl;
     private Integer order;
 
     public VoteData() {
@@ -26,7 +28,9 @@ public class VoteData {
                     String author,
                     String composition,
                     String videoUrl,
-                    String audioUrl) {
+                    String videoEmbedUrl,
+                    String audioUrl,
+                    String audioEmbedUrl) {
         this.setId(id);
         this.setUserIds(userIds);
         this.setUsernames(usernames);
@@ -35,7 +39,9 @@ public class VoteData {
         this.setAuthor(author);
         this.setComposition(composition);
         this.setVideoUrl(videoUrl);
+        this.setVideoEmbedUrl(videoEmbedUrl);
         this.setAudioUrl(audioUrl);
+        this.setAudioEmbedUrl(audioEmbedUrl);
     }
 
     public long getId() {
@@ -118,5 +124,21 @@ public class VoteData {
 
     public void setUsernames(ArrayList<String> usernames) {
         this.usernames = usernames;
+    }
+
+    public String getVideoEmbedUrl() {
+        return videoEmbedUrl;
+    }
+
+    public void setVideoEmbedUrl(String videoEmbedUrl) {
+        this.videoEmbedUrl = videoEmbedUrl;
+    }
+
+    public String getAudioEmbedUrl() {
+        return audioEmbedUrl;
+    }
+
+    public void setAudioEmbedUrl(String audioEmbedUrl) {
+        this.audioEmbedUrl = audioEmbedUrl;
     }
 }

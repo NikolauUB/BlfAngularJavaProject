@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import wind.instrument.competitions.data.CompetitionEntity;
-import wind.instrument.competitions.data.MessageEntity;
-import wind.instrument.competitions.data.ThemeEntity;
-import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.data.*;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.changes.ChangesKeywords;
 import wind.instrument.competitions.rest.model.changes.ThreadChanges;
@@ -45,10 +42,12 @@ public class ChangesControlService {
     public static String DESCRIPTION_FOR_TYPE = "DESC_";
     public static String COMPETITION_MEMBERS_PREFIX = "MBRS_";
     public static String COMPETITION_MEMBERS_COUNT = "MBCNT_";
+    public static String VOTING_ITEMS_COUNT = "VCNT_";
+    public static String VOTING_PREFIX = "V_";
 
     private boolean compDescChanged = false;
-    private boolean memberListChanged = false;
     private int themeCounter = 0;
+    private int votingItemCounter = 0;
 
     /**
      * @param previousTime - set it -1 so that just to init time point
@@ -71,31 +70,39 @@ public class ChangesControlService {
             try {
                 List<CompetitionEntity> competitionList = activeCompetitionQuery.getResultList();
                 this.compDescChanged = false;
-                this.memberListChanged = false;
                 this.themeCounter = 0;
+                this.votingItemCounter = 0;
                 competitionList.forEach((item) -> {
                     if (item.getUpdated().getTime() > previousTime.longValue()) {
                         result.getKeywords().add(DESCRIPTION_FOR_TYPE + item.getCompetitionType().getValue());
                         this.compDescChanged = true;
                     }
+                    //check partake themes
                     Collection<ThemeEntity> themeEntities = item.getThemesByMembers();
-                    this.themeCounter+=(themeEntities != null)?themeEntities.size():0;
-                    themeEntities.forEach((theme) -> {
-                        if (theme.getCreated().getTime() > previousTime.longValue()) {
-                            this.memberListChanged = true;
-                        }
-                    });
-                    if (this.memberListChanged ) {
+                    this.themeCounter+= (themeEntities != null) ? themeEntities.size() : 0;
+                    if ( themeEntities != null && themeEntities.stream().anyMatch(
+                            (theme) -> theme.getCreated().getTime() > previousTime.longValue()) ) {
                         result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + item.getCompetitionType().getValue());
 
                     }
+
+                    //check competition items
+                    Collection<CompetitionItemEntity> competitionItems = item.getCompetitionItems();
+                    this.votingItemCounter+= (competitionItems != null) ? competitionItems.size() : 0;
+                    if( competitionItems != null && competitionItems.stream().anyMatch(
+                            (compItem) -> compItem.getUpdated().getTime() > previousTime.longValue()) ) {
+                        result.getKeywords().add(VOTING_PREFIX + item.getCompetitionType().getValue());
+                    }
+
                 });
 
                 if (this.compDescChanged) {
                     result.getKeywords().add(COMPETITION_LIST);
                 }
+                //control common member's count
                 result.getKeywords().add(COMPETITION_MEMBERS_COUNT + this.themeCounter);
-
+                //control common voting items count
+                result.getKeywords().add(VOTING_ITEMS_COUNT + this.votingItemCounter);
             } catch (NoResultException ex) {
                 //do nothing
             }

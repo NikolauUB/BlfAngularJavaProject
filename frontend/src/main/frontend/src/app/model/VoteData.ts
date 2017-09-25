@@ -7,6 +7,8 @@ export class VoteData {
   author: string;
   composition: string;
   videoUrl: string;
+  videoEmbedUrl: string;
   audioUrl: string;
+  audioEmbedUrl: string;
   order: number;
 }

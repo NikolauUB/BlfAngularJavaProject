@@ -24,11 +24,19 @@
 
   <div class="form-group">
     <label for="audio">Аудио</label>
-    <input type="audio"  class="form-control"  [(ngModel)]="item.audio" id="audio"/>
+    <input type="text"  class="form-control"  [(ngModel)]="item.audio" id="audio"/>
+  </div>
+  <div class="form-group">
+    <label for="embedAudio">Embed Аудио</label>
+    <input type="test"  class="form-control"  [(ngModel)]="item.embedAudio" id="embedAudio"/>
   </div>
   <div class="form-group">
     <label for="video">Видео</label>
-    <input type="video"  class="form-control"  [(ngModel)]="item.video" id="video"/>
+    <input type="text"  class="form-control"  [(ngModel)]="item.video" id="video"/>
+  </div>
+  <div class="form-group">
+    <label for="embedVideo">Embed Видео</label>
+    <input type="text"  class="form-control"  [(ngModel)]="item.embedVideo" id="embedVideo"/>
   </div>
   <button (click)="saveCompItem(); $event.stopPropagation();">Сохранить</button>
 

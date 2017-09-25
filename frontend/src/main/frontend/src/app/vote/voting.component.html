@@ -31,15 +31,15 @@
         </label>
       </div>
     </div>
-    <div  *ngIf="voteItem.videoUrl">
+    <div  *ngIf="voteItem.videoEmbedUrl">
       <iframe width="370" height="300"
-          [src]="voteItem.videoUrl | safe"
+          [src]="voteItem.videoEmbedUrl | safe"
           allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
       </iframe>
     </div>
-    <div *ngIf="voteItem.videoUrl">
+    <div *ngIf="voteItem.videoEmbedUrl">
       <iframe width="370" height="160"
-              [src]="voteItem.audioUrl | safe"
+              [src]="voteItem.audioEmbedUrl | safe"
               frameborder="0">
       </iframe>
     </div>
