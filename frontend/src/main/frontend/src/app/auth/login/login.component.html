@@ -9,7 +9,8 @@
     <label for="userPassword">Пароль:</label>
     <input  type="password" id="userPassword" class="form-control mediumWidth" required [(ngModel)]="loginData.password" name="userPassword" (keydown)="onEnter($event)"/>
   </div>
-  <button (click)="doLogin(); $event.stopPropagation()">Войти</button>
-
+  <button class="btn btn-primary active" (click)="doLogin(); $event.stopPropagation()">Войти</button>
+  <br/>
+  <br/>
   <p><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></p>
 </div>

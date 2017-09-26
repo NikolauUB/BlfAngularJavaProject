@@ -12,7 +12,6 @@ export class ThemeController {
 
 
     public createStore(): void {
-        alert("ThemeController createStore");
         this.db.createStore(1, (evt) => {
             let objectStore = evt.currentTarget.result.createObjectStore(
                 'themestatus', {keyPath: "id", autoIncrement: false});
@@ -23,7 +22,6 @@ export class ThemeController {
     }
 
     public createStoreAndLoadMaxUpdated(threadId: number): Promise<Date> {
-        alert("ThemeController createStore for thread");
         return this.db.createStore(1, (evt) => {
             let objectStore = evt.currentTarget.result.createObjectStore(
                 'themestatus', {keyPath: "id", autoIncrement: false});

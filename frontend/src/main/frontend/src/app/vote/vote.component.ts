@@ -10,6 +10,7 @@ import { CompetitionShortInfo} from "../partaking/CompetitionShortInfo";
 import {PartakingService} from "../partaking/partaking.service";
 import {ItemdetailsComponent} from "../modal/itemdetails.component";
 import { DetailsController } from '../auth/userdetails/details.controller';
+import {ChangesController} from "../changescontrol/changes.controller";
 
 @Component({
   selector: 'vote-app',
@@ -37,12 +38,26 @@ export class VoteComponent implements OnInit {
 
   getVoteInfo(): void {
     this.selectedItem = new Set<VoteData>();
-    this.voteService
-      .getVoteItems(this.competitionShortInfo.compType)
-      .then(voteInfo => this.prepareView(voteInfo));
+    var voteInfoJson: string = localStorage.getItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+    if (voteInfoJson != null) {
+      this.prepareView(JSON.parse(voteInfoJson));
+    } else {
+      this.voteService
+          .getVoteItems(this.competitionShortInfo.compType)
+          .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
+    }
+
   }
 
-  prepareView(voteInfo: CompetitionInfo): void {
+  private saveInLocalStorageAndPrepare(voteInfo: CompetitionInfo): void {
+    localStorage.setItem(
+        ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType,
+        JSON.stringify(voteInfo));
+    this.prepareView(voteInfo);
+  }
+
+
+  private prepareView(voteInfo: CompetitionInfo): void {
     this.voteInfo = voteInfo;
     this.userItemId = null;
     this.findUserItemId();
@@ -89,7 +104,10 @@ export class VoteComponent implements OnInit {
       });
       this.voteService
         .vote(selected, this.authService.getAuth())
-        .then(reply=>this.getVoteInfo())
+        .then(reply=>{
+            localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+            this.getVoteInfo();
+          })
         .catch(e=>this.handleError(e));
     } else {
       this.errorMsg = "Пожалуйста, выберите хотя бы одно исполнение!"
@@ -103,8 +121,12 @@ export class VoteComponent implements OnInit {
   protected deleteVoting(): void {
     this.voteService
       .deleteVote(this.voteInfo.competitionData.id, this.authService.getAuth())
-      .then(reply=>this.getVoteInfo())
+      .then(reply=>{
+          localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+          this.getVoteInfo();
+        })
       .catch(e=>this.handleError(e));
+
   }
 
 

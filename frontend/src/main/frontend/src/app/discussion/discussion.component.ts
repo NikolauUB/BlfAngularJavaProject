@@ -45,7 +45,6 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   }
 
   private checkChangesInThread(thTime: Date) {
-      alert(thTime);
       this.changesController
           .checkChangesInThread(thTime, this.competitionShortInfo.userThread)
           .then(reply => this.updateThemeDetails(reply));

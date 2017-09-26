@@ -28,7 +28,6 @@ export class ChangesService {
   }
 
   public getUsersUpdates(usrTime:Date): Promise<UsersChanges> {
-      alert (this.usersUpdatesUrl + usrTime);
       return this.http.get(this.usersUpdatesUrl + usrTime)
           .toPromise()
           .then(response => response.json() as UsersChanges)

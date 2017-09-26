@@ -84,7 +84,6 @@ export class DetailsController {
   }
 
   public createStore(): void {
-    alert("create store userdetails");
     this.db.createStore(1, (evt) => {
       let objectStore = evt.currentTarget.result.createObjectStore(
         'userdetails', {keyPath: "id", autoIncrement: false});
@@ -104,11 +103,9 @@ export class DetailsController {
            maxUpdated = user.updated;
          }
        });
-       alert("max in:" + maxUpdated);
        return maxUpdated;
      }, (error) => {
        console.log(error);
-       alert("max in error:" + error);
        return null;
      });
   }
