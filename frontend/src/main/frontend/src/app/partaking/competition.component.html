@@ -6,8 +6,8 @@
 </div>
 
 <div style="width:40%; display: inline-block; margin:15px; vertical-align: top">
-  <div><h4><strong>Срок сдачи записей:</strong> {{competitionData.start | date: 'fullDate'}}</h4></div>
-  <div><small><strong>Окончание голосования:</strong> {{competitionData.end |  date: 'fullDate'}}</small></div>
+  <div><h4><strong>Срок сдачи записей:</strong> {{this.convertTimeToDate(competitionData.start)}}</h4></div>
+  <div><small><strong>Окончание голосования:</strong> {{this.convertTimeToDate(competitionData.end)}}</small></div>
   <div><h4><strong>Задание</strong></h4></div>
   <div [innerHTML]="competitionData.description"></div>
 </div>

@@ -6,7 +6,7 @@ import {AuthData} from "./model/auth/AuthData";
 @Component({
   selector: 'app-root',
   templateUrl: './main.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: [ "./app.component.css"]
 })
 
 export class AppComponent{

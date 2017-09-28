@@ -3,6 +3,8 @@ import {AuthService} from "../auth.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {LoginData} from "../../model/auth/LoginData";
 import {AuthData} from "../../model/auth/AuthData";
+import {ChangesController} from "../../changescontrol/changes.controller";
+import {CompetitionInfo} from "../../model/CompetitionInfo";
 
 @Component({
   selector: 'login-app',
@@ -46,11 +48,29 @@ export class LoginComponent implements OnInit {
 
   private redirectToProfile(authInfo: AuthData) {
     if (authInfo.cd === 200 && authInfo.auth) {
+      this.cleanVotingCaches(authInfo);
       this.router.navigateByUrl(this.returnUrl);
     } else if (authInfo.cd === 400) {
       this.errorMsg = "Неправильный адрес электронной почты / имя или пароль";
     } else if (authInfo.cd === 500) {
       this.errorMsg = authInfo.eMsg;
+    }
+  }
+
+  private cleanVotingCaches(authInfo: AuthData): void {
+    this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_CLASSIC), authInfo);
+    this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_JAZZ), authInfo);
+    this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_COMPOSITION), authInfo);
+    this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_FREE), authInfo);
+  }
+
+  private cleanVotingCache(json: string, authInfo: AuthData): void {
+    var competitionInfo: CompetitionInfo = null;
+    if (json != null) {
+      competitionInfo = JSON.parse(json);
+    }
+    if (competitionInfo != null && authInfo.uId !== competitionInfo.userId) {
+      localStorage.removeItem(ChangesController.VOTING_PREFIX + competitionInfo.competitionData.type);
     }
   }
 

@@ -8,6 +8,7 @@ public class CompetitionInfo {
 
     private CompetitionData competitionData;
     private boolean voted = false;
+    private Long userId;
     private Collection<VoteData> voteData;
 
     public CompetitionData getCompetitionData() {
@@ -32,5 +33,13 @@ public class CompetitionInfo {
 
     public void setVoted(boolean voted) {
         this.voted = voted;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

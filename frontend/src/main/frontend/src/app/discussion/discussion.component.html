@@ -16,7 +16,7 @@
       <div style="width:60%; min-height: 200px; margin-left:5%">
       <hr  style="height: 12px;border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);"/>
       <div class="header">
-        <b>{{item.authorUsername}}</b>&nbsp;&nbsp;&nbsp;{{item.creationDate | date : 'fullDate'}}&nbsp;{{item.creationDate | date : 'shortTime'}}
+        <b>{{item.authorUsername}}</b>&nbsp;&nbsp;&nbsp;{{this.convertTimeToDate(item.creationDate)}}
       </div>
       <div class="body">
         <table>
@@ -30,7 +30,7 @@
       </div>
       <div class="footer">
         <div *ngIf="isUpdated(item)" style="float: left">
-          <small>Изменено:</small>&nbsp;{{item.updateDate | date : 'short'}}
+          <small>Изменено:</small>&nbsp;{{this.convertTimeToDate(item.updateDate) }}
         </div>
         {{item.isChangedLatest}}
         <div style="float: right">

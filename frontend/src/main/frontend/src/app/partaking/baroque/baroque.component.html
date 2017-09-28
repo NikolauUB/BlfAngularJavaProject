@@ -2,7 +2,6 @@
 <competition-app></competition-app>
 <br>
 <br>
-
 <div *ngIf="isUserChooseJazzProgramm()"><h4>Вы сделали заявку в <a routerLink="/jazz" routerLinkActive="active">обязательной джазовой программе</a>! Спасибо! </h4></div>
 <div *ngIf="!isTakenPart() && !isUserChooseJazzProgramm()"><h4>Если Ваша запись для обязательной классической программы готова, сделайте заявку!</h4></div>
 <div *ngIf="isTakenPart()&& !isUserChooseJazzProgramm()"><h4>Спасибо за Вашу готовность участвовать в обязательной классической программе!</h4></div>

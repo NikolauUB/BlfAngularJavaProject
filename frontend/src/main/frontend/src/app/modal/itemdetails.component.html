@@ -13,8 +13,8 @@
       <div><span class="detailsspan">Произведение:</span> {{voteItem.composition}}</div>
       <div><span class="detailsspan">Описание:</span> {{voteItem.description}}</div>
       <div><span class="detailsspan">Инструменты:</span> {{voteItem.instrmnts}}</div>
-      <div><span class="detailsspan">Видео:</span><a href="{{voteItem.videoUrl}}" target="_blank">Открыть в новом окне</a></div>
-      <div><span class="detailsspan">Audio:</span><a href="{{voteItem.audioUrl}}" target="_blank">Открыть в новом окне</a></div>
+      <div *ngIf="voteItem.videoUrl"><span class="detailsspan">Видео:</span><a href="{{voteItem.videoUrl}}" target="_blank">Открыть в новом окне</a></div>
+      <div *ngIf="voteItem.audioUrl"><span class="detailsspan">Audio:</span><a href="{{voteItem.audioUrl}}" target="_blank">Открыть в новом окне</a></div>
 
 
   </div>

@@ -11,6 +11,8 @@ import {PartakingService} from "../partaking/partaking.service";
 import {ItemdetailsComponent} from "../modal/itemdetails.component";
 import { DetailsController } from '../auth/userdetails/details.controller';
 import {ChangesController} from "../changescontrol/changes.controller";
+import { UserData } from '../model/auth/UserData';
+
 
 @Component({
   selector: 'vote-app',
@@ -22,6 +24,8 @@ export class VoteComponent implements OnInit {
   detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
   selectedItem: Set<VoteData> = new Set<VoteData>();
+  userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
+  currentUserData: UserData;
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
@@ -47,6 +51,17 @@ export class VoteComponent implements OnInit {
           .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
     }
 
+  }
+
+  public loadUserAvatar(userId: number): string {
+    if(this.userAvatarMap.has(userId)) {
+      return this.userAvatarMap.get(userId).previewImage;
+    } else {
+        this.currentUserData = new UserData();
+        this.detailsController.loadUserDetailsById(userId, this.currentUserData);
+        this.userAvatarMap.set(userId, this.currentUserData);
+
+    }
   }
 
   private saveInLocalStorageAndPrepare(voteInfo: CompetitionInfo): void {
@@ -154,13 +169,17 @@ export class VoteComponent implements OnInit {
   private findUserItemId(): void {
     this.voteInfo.voteData.forEach(item => {
       item.userIds.forEach(id => {
-        if (this.authService.getAuth().uId === id) {
+        if (this.authService.getAuth() && this.authService.getAuth().uId === id) {
           this.userItemId = item.id;
         }
       });
     });
+  }
 
 
+  public convertTimeToDate(time: any): string {
+    var d = new Date(time);
+    return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
   }
 
   public goToLogin(): void {

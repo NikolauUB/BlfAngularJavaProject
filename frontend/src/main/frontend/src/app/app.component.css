@@ -18,7 +18,8 @@ body {
   clear: both;
 }
 .wrapper {
-  width: 80%;
+  width: 90%;
+  min-width: 800px;
   margin: 20px auto;
   border-radius: 10px;
   border: solid 3px #fff;

@@ -7,7 +7,7 @@ import {DiscussionItem} from "app/model/DiscussionItem";
 @Injectable()
 export class DetailsController {
   private db: AngularIndexedDB = new AngularIndexedDB('UserDetails', 1);
-  public static defaultAvatar: string = "../../assets/images/defaultAvatar.jpg";
+  public static defaultAvatar: string = "assets/images/defaultAvatar.jpg";
 
   constructor(private authService: AuthService) {
   }
@@ -83,8 +83,8 @@ export class DetailsController {
         .catch(e => console.log(e));
   }
 
-  public createStore(): void {
-    this.db.createStore(1, (evt) => {
+  public createStore(): Promise<any> {
+    return this.db.createStore(1, (evt) => {
       let objectStore = evt.currentTarget.result.createObjectStore(
         'userdetails', {keyPath: "id", autoIncrement: false});
 

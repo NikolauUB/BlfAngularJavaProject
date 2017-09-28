@@ -4,6 +4,7 @@ import {ChangesKeywords} from "./ChangesKeywords";
 import {DetailsController} from "./../auth/userdetails/details.controller";
 import {ThreadChanges} from "./ThreadChanges";
 import {UsersChanges} from "./UsersChanges";
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class ChangesController {
@@ -36,7 +37,6 @@ export class ChangesController {
 
   constructor(private changesService: ChangesService,
               private userDetailsController: DetailsController) {
-
   }
 
   public checkChangesInThread( thDate: Date, threadId: number): Promise<ThreadChanges> {
@@ -62,7 +62,7 @@ export class ChangesController {
 
 
 
-  public init(): boolean {
+  public init(): Promise<void> {
     //clean previous
     //check updates forcompetition information
     this.changesKeywords = null;
@@ -83,21 +83,14 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.VOTING_FREE);
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
     }
-    this.changesService
+    return this.changesService
         .checkChanges(time)
         .then( reply => this.treatReply(reply))
         .catch(e => this.handleError(e));
 
-    //check updates for users
-    this.userDetailsController
-        .createStoreAndGetMaxDate()
-        .then(usrTime => { this.checkUsersChanges(usrTime);});
-
-
-    return true;
   }
 
-  private treatReply(reply: any): void {
+  private treatReply(reply: any): Promise<void> {
     this.changesKeywords = reply;
     localStorage.setItem(ChangesController.PREVIOUS_TIME, this.changesKeywords.time.toString());
     this.changesKeywords.keywords.forEach(keyword => {
@@ -113,6 +106,15 @@ export class ChangesController {
         localStorage.removeItem(keyword);
       }
     });
+
+
+    //check updates for users
+    return this.userDetailsController
+          .createStoreAndGetMaxDate()
+          .then(usrTime => {
+            this.checkUsersChanges(usrTime);
+          });
+
   }
 
   private checkCountAndClean(objectTypePrefix: string, objectCountConst: string, keyword: string): void {

@@ -77,6 +77,12 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     this.userDetailsController.loadUserDetails(item);
   }
 
+  public convertTimeToDate(time: any): string {
+    var d = new Date(time);
+    return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ', ' + d.getHours() + ':' + d.getMinutes();
+  }
+
+
 
   //************************************
   //check permission section

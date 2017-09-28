@@ -1,5 +1,5 @@
 <vote-menu-app></vote-menu-app>
-<h2>Голосование начнется с {{this.voteInfo.competitionData.start | date: 'shortDate'}} и продлится до {{this.voteInfo.competitionData.end | date: 'shortDate'}}</h2>
+<h2>Голосование начнется с {{this.convertTimeToDate(this.voteInfo.competitionData.start)}} и продлится до {{this.convertTimeToDate(this.voteInfo.competitionData.end)}}</h2>
 <h3>Сейчас проводится тестовое голосование. Пожалуйста, оцените, насколько оно удобно.</h3>
 <small>После окончания тестирования, тестовые пользователи и тестовые результаты голосования будут удалены</small>
 <p>Вы можете выбрать от одного до всех исполнений. Наиболее понравившееся исполнение выбирается первым, следующиее вторым и так далее.
@@ -13,36 +13,53 @@
 </div>
 <span  *ngFor="let voteItem of voteInfo.voteData">
   <div style="display: inline-block; margin-bottom: 20px" [class.selected]="selectedItem.has(voteItem)">
-    <div class="[ form-group ]">
-      <div class="[ btn-group ]" style="float:right; width:370px">
-        <label *ngIf="voteItem.order && !isAllSelected"  class="[ btn btn-default ]">
+    <!--<div class="[ form-group ]">-->
+      <div class="[ btn-group ]" style="width:370px">
+        <a *ngIf="voteItem.order && !isAllSelected"  class="[ btn btn-default ]">
           <span *ngIf="selectedItem.has(voteItem)"><b>{{voteItem.order}}</b>
           </span>
           <span> </span>
-        </label>
-        <label *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[ btn btn-default active ]" (click)="onSelect(voteItem); $event.stopPropagation();">
+        </a>
+        <a *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[ btn btn-default active ]" (click)="onSelect(voteItem); $event.stopPropagation();">
           Выбрать
-        </label>
-        <label alt="Подробности и ссылки" class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
+        </a>
+        <a title="Подробности" class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
           <b>{{voteItem.usernames.join(', ')}}</b>
-        </label>
-        <label style="float:right" class="[ btn ]"  *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
+        </a>
+        <a style="float:right" class="[ btn ]"  *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
           <span aria-hidden="true">&#10006;</span>
-        </label>
+        </a>
       </div>
-    </div>
+    <!--</div>-->
     <div  *ngIf="voteItem.videoEmbedUrl">
       <iframe width="370" height="300"
           [src]="voteItem.videoEmbedUrl | safe"
           allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
       </iframe>
     </div>
-    <div *ngIf="voteItem.videoEmbedUrl">
+    <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl" style="width:370px; height:304px; overflow-y: auto;">
+      Видео доступно только по ссылке. Пожалуйста, откройте его в <a href="{{voteItem.videoUrl}}" target="_blank">новом окне</a>
+      <span *ngFor="let userId of voteItem.userIds">
+        <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)"/>
+        <br/>
+      </span>
+    </div>
+    <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl" style="width:370px; height:304px; overflow-y: auto;">
+      <span *ngFor="let userId of voteItem.userIds">
+        <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)"/>
+        <br/>
+      </span>
+    </div>
+    <div *ngIf="voteItem.audioEmbedUrl">
       <iframe width="370" height="160"
               [src]="voteItem.audioEmbedUrl | safe"
               frameborder="0">
       </iframe>
     </div>
+    <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl" style="width:370px; height:160px">
+      Запись доступна только по ссылке. Пожалуйста, откройте её в <a href="{{voteItem.audioUrl}}" target="_blank">новом окне</a>
+    </div>
+    <hr/>
   </div>
 </span>
 <itemdetails-modal-component></itemdetails-modal-component>

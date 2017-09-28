@@ -88,6 +88,11 @@ export class CompetitionComponent  implements  OnInit {
     }
   }
 
+  public convertTimeToDate(time: any): string {
+    var d = new Date(time);
+    return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
+  }
+
   public reloadMembers(): void {
     this.loadCompetitionsMembers();
   }

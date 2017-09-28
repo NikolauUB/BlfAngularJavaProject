@@ -59,9 +59,9 @@ import {VoteCompositionComponent} from "./vote/composition/vote.composition.comp
  * @param {ChangesController} service
  * @returns {() => any}
  */
-export function runChangesController(service: ChangesController) {
-  return () => service.init();
-}
+//export function runChangesController(changesService: ChangesController) {
+//  return () => changesService.init();
+//}
 
 @NgModule({
   declarations: [
@@ -120,7 +120,7 @@ export function runChangesController(service: ChangesController) {
     ThemeController,
     {
       provide: APP_INITIALIZER,
-      useFactory: runChangesController,
+      useFactory: (changesService: ChangesController) => function() {  return changesService.init(); },
       deps: [ChangesController],
       multi: true
     },

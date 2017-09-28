@@ -34,7 +34,7 @@ export class ItemdetailsComponent {
         return result;
     }
 
-    getAvatar(userId: number): string {
+    public getAvatar(userId: number): string {
         if (this.userDataMap.has(userId)) {
             return this.userDataMap.get(userId).previewImage;
         }

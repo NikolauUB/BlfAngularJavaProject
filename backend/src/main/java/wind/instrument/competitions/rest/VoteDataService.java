@@ -172,6 +172,9 @@ public class VoteDataService {
         });
         if (votingOrderMap.size() > 0) {
             result.setVoted(true);
+            if (currentUser != null) {
+                result.setUserId(currentUser.getUserId());
+            }
         }
         result.setVoteData(voteDataList);
         return result;
