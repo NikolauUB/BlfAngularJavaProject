@@ -5,6 +5,8 @@ import {DetailsController} from "./../auth/userdetails/details.controller";
 import {ThreadChanges} from "./ThreadChanges";
 import {UsersChanges} from "./UsersChanges";
 import {Observable} from 'rxjs/Observable';
+import { Ng2DeviceService  } from 'ng2-device-detector';
+
 
 @Injectable()
 export class ChangesController {
@@ -36,7 +38,24 @@ export class ChangesController {
   changesKeywords: ChangesKeywords;
 
   constructor(private changesService: ChangesService,
-              private userDetailsController: DetailsController) {
+              private userDetailsController: DetailsController,
+              private deviceService: Ng2DeviceService) {
+  }
+
+  public isBrowserVersionFittable(): boolean {
+    var deviceInfo = this.deviceService.getDeviceInfo();
+
+    if (deviceInfo.browser === 'safari') {
+      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
+      return  (+deviceInfo.browser_version.split(".")[0] > 5);
+    } else if (deviceInfo.browser === 'ie') {
+      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
+      return  (+deviceInfo.browser_version.split(".")[0] > 9);
+    } else {
+      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
+      return true;
+    }
+
   }
 
   public checkChangesInThread( thDate: Date, threadId: number): Promise<ThreadChanges> {
@@ -55,6 +74,12 @@ export class ChangesController {
   }
 
   private cleanIndexedDBForUsers(reply: UsersChanges): void {
+    if(reply.userIds.length > 0) {
+      localStorage.removeItem(ChangesController.VOTING_CLASSIC);
+      localStorage.removeItem(ChangesController.VOTING_JAZZ);
+      localStorage.removeItem(ChangesController.VOTING_FREE);
+      localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
+    }
     reply.userIds.forEach((userId)=>{
       this.userDetailsController.cleanUserDetails(userId);
     });
@@ -68,6 +93,11 @@ export class ChangesController {
     this.changesKeywords = null;
     var prevTime  = localStorage.getItem(ChangesController.PREVIOUS_TIME);
     var time: number = (prevTime == null) ? -1: parseInt(prevTime, 10);
+    var week: number = 604800000;
+    if((new Date().getTime() - time) > week ) {
+      time = -1;
+      alert("Кэш отсутствует или старще недели. Производится полное обновлнение  (cache_time: " + time + "now: " + new Date().getTime() + ")");
+    }
     if (time === -1) {
       localStorage.removeItem(ChangesController.COMPETITION_LIST);
       localStorage.removeItem(ChangesController.DESCRIPTION_CLASSIC);
@@ -83,16 +113,25 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.VOTING_FREE);
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
     }
-    return this.changesService
-        .checkChanges(time)
-        .then( reply => this.treatReply(reply))
-        .catch(e => this.handleError(e));
 
+    var checkResult = this.changesService
+        .checkChanges(time)
+        .then( reply => this.treatReply(reply, time))
+        .catch(e => this.handleError(e));
+    if (this.isBrowserVersionFittable()) {
+      return checkResult;
+    }
+    return;
   }
 
-  private treatReply(reply: any): Promise<void> {
+  private treatReply(reply: any, time: number): Promise<void> {
     this.changesKeywords = reply;
     localStorage.setItem(ChangesController.PREVIOUS_TIME, this.changesKeywords.time.toString());
+    //if time -1 just get server time only
+    if (time === -1) {
+      return this.userDetailsController.createStore();
+    }
+
     this.changesKeywords.keywords.forEach(keyword => {
       if(keyword.startsWith(ChangesController.COMPETITION_MEMBERS_COUNT)) {
         this.checkCountAndClean(ChangesController.COMPETITION_MEMBERS_PREFIX,
@@ -106,15 +145,11 @@ export class ChangesController {
         localStorage.removeItem(keyword);
       }
     });
-
-
-    //check updates for users
     return this.userDetailsController
           .createStoreAndGetMaxDate()
           .then(usrTime => {
             this.checkUsersChanges(usrTime);
           });
-
   }
 
   private checkCountAndClean(objectTypePrefix: string, objectCountConst: string, keyword: string): void {

@@ -11,6 +11,7 @@ export class AdminService {
     private postHeaders:Headers;
     private saveCompetitionItemUrl = 'api/saveCompetitionItem';
     private loadCompetitionItemUrl = 'api/loadCompetitionItem';
+    private removeCompetitionItemUrl = 'api/removeCompetitionItem?iid=';
 
     constructor(private http: Http, private authService: AuthService) { }
 
@@ -37,6 +38,15 @@ export class AdminService {
             {headers: this.postHeaders})
             .toPromise()
             .then(response => response.json() as CompetitionItem)
+            .catch(this.handleError);
+    }
+
+    public removeItem(competitionItem: CompetitionItem): Promise<void> {
+        this.setCSRFHeaders(this.authService.getAuth().tkn);
+        return this.http
+            .delete(this.removeCompetitionItemUrl + competitionItem.id,
+            {headers: this.postHeaders})
+            .toPromise()
             .catch(this.handleError);
     }
 

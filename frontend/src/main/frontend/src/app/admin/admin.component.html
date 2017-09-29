@@ -6,6 +6,10 @@
     <span><input type="text"  class="form-control" required [(ngModel)]="item.userId" id="userId"/> User id</span>
   </div>
   <div class="form-group">
+    <label for="adUsers">Дополнительные участники</label>
+    <input type="text"  class="form-control"  [(ngModel)]="item.adUsers" id="adUsers"/>
+  </div>
+  <div class="form-group">
     <label for="author">Композитор</label>
     <input type="text"  class="form-control"  [(ngModel)]="item.author" id="author"/>
   </div>
@@ -39,6 +43,7 @@
     <input type="text"  class="form-control"  [(ngModel)]="item.embedVideo" id="embedVideo"/>
   </div>
   <button (click)="saveCompItem(); $event.stopPropagation();">Сохранить</button>
+  <button (click)="deleteCompItem(); $event.stopPropagation();">Удалить</button>
 
   <p>Select user from the list</p>
   <ul class="voteItems">

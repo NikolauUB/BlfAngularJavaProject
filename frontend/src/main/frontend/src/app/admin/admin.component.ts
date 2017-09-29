@@ -72,6 +72,13 @@ export class AdminComponent extends DiscussionComponent implements OnInit   {
             .catch(e => this.handleError(e));
     }
 
+    deleteCompItem(): void {
+        this.errorMsg = null;
+        this.adminService
+            .removeItem(this.item)
+            .catch(e => this.handleError(e));
+    }
+
     isMemberSelected(member:CompetitionMember): boolean {
         return this.selectedItem == member;
     }

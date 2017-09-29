@@ -1,10 +1,10 @@
 <app-modal>
   <div class="app-modal-header">
-    <div><span class="detailsspan">Участник{{oneOrMany()}}:</span> <b>{{getUsernameList()}}</b></div>
+    <div><span class="detailsspan">Музыкант{{oneOrMany()}}:&nbsp;</span> <b>{{getUsernameList()}}</b></div>
   </div>
   <div class="app-modal-body">
       <div style="margin-left: 20px"><span *ngFor="let userId of voteItem.userIds">
-        <figure *ngIf="getAvatar(userId)" class="detailsavatar">
+        <figure *ngIf="browserCanWorkWithIndexedDB && getAvatar(userId)" class="detailsavatar">
           <img [src]="getAvatar(userId)"/>
           <figcaption><small><b>{{getUsername(userId)}}</b></small></figcaption>
         </figure>

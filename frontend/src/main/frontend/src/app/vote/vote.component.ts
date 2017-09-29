@@ -21,11 +21,12 @@ import { UserData } from '../model/auth/UserData';
 })
 export class VoteComponent implements OnInit {
   @ViewChild(ItemdetailsComponent)
-  detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController);
+  detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController, this.changesController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
   selectedItem: Set<VoteData> = new Set<VoteData>();
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
+  browserCanWorkWithIndexedDB: boolean = true;
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
@@ -36,7 +37,9 @@ export class VoteComponent implements OnInit {
     protected partakingService: PartakingService,
     protected competitionShortInfo: CompetitionShortInfo,
     private router: Router,
-    private detailsController: DetailsController) {
+    private detailsController: DetailsController,
+    private changesController: ChangesController) {
+
 
   }
 
@@ -54,7 +57,7 @@ export class VoteComponent implements OnInit {
   }
 
   public loadUserAvatar(userId: number): string {
-    if(this.userAvatarMap.has(userId)) {
+    if (this.userAvatarMap.has(userId)) {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
         this.currentUserData = new UserData();
@@ -88,6 +91,7 @@ export class VoteComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
     if (!this.authService.getAuth()) {
       this.authService.init().then(e=>this.getVoteInfo());
     } else {
@@ -164,6 +168,10 @@ export class VoteComponent implements OnInit {
 
   public isUserPartake(vote: VoteData): boolean {
     return (this.userItemId && vote.id === this.userItemId);
+  }
+
+  public getLastLetter(voteItem: VoteData): string {
+    return (voteItem.usernames.length > 1)? "ы":"";
   }
 
   private findUserItemId(): void {

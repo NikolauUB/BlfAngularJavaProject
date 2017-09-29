@@ -1,5 +1,6 @@
 package wind.instrument.competitions.rest;
 
+import org.hibernate.Criteria;
 import wind.instrument.competitions.configuration.SessionParameters;
 import wind.instrument.competitions.data.*;
 import wind.instrument.competitions.rest.model.CompetitionData;
@@ -13,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -22,13 +27,16 @@ import java.util.*;
 public class VoteDataService {
 
     private static Logger LOG = LoggerFactory.getLogger(VoteDataService.class);
+    /**
+     * Russian messages
+     */
+    private static ResourceBundle bundle = ResourceBundle.getBundle("Messages");
 
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
     private HttpSession httpSession;
-
 
 
     private boolean isAdmin(HttpServletResponse response) {
@@ -63,6 +71,18 @@ public class VoteDataService {
             competitionItem.setInstrmnts(competitionItemEntity.getCnItemInstruments());
             competitionItem.setUserId(competitionItemEntity.getUserId());
             competitionItem.setCompId(competitionItemEntity.getCompetitionId());
+            //additional members
+            Collection<CompetitionItemUsers> itemUsersList = competitionItemEntity.getCompetitionItemUsers();
+            StringBuilder ids = new StringBuilder();
+            itemUsersList.forEach( (item) -> {
+                if (ids.length() > 0) {
+                    ids.append(",");
+                }
+                ids.append(item.getUserId().toString());
+            });
+            if (ids.length() > 0) {
+                competitionItem.setAdUsers(ids.toString());
+            }
         }
         return competitionItem;
     }
@@ -90,8 +110,54 @@ public class VoteDataService {
             competitionItemEntity.setCompetitionId(competitionItem.getCompId());
             em.persist(competitionItemEntity);
             competitionItem.setId(competitionItemEntity.getCompetitionItemId());
+            //additional users
+            //delete old
+            CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+            CriteriaQuery<CompetitionItemUsers> criteria = criteriaBuilder.createQuery(CompetitionItemUsers.class);
+            Root<CompetitionItemUsers> from = criteria.from(CompetitionItemUsers.class);
+            criteria.select(from);
+
+            ParameterExpression<Long> competitionItemIdParam = criteriaBuilder.parameter(Long.class);
+            criteria.where(criteriaBuilder.equal(from.get("competitionItemId"), competitionItemIdParam));
+            TypedQuery<CompetitionItemUsers> query  = em.createQuery(criteria);
+            query.setParameter(competitionItemIdParam, competitionItemEntity.getCompetitionItemId());
+            List<CompetitionItemUsers> listItemUsers = query.getResultList();
+            for (CompetitionItemUsers itemUser: listItemUsers) {
+               em.remove(itemUser);
+            }
+            if (competitionItem.getAdUsers() != null && competitionItem.getAdUsers().length() > 0) {
+            String[] ids = competitionItem.getAdUsers().split(",");
+                for (String id :ids) {
+                    CompetitionItemUsers itemU = new CompetitionItemUsers();
+                    itemU.setCompetitionItemId(competitionItemEntity.getCompetitionItemId());
+                    itemU.setUserId(Long.parseLong(id));
+                    em.persist(itemU);
+                }
+            }
+
+
         }
         return competitionItem;
+    }
+
+    @RequestMapping(value = "/api/removeCompetitionItem", method = RequestMethod.DELETE)
+    public void removeCompetitionItem(@RequestParam("iid") Long itemId, HttpServletResponse response) {
+        if (this.isAdmin(response)) {
+            CompetitionItemEntity competitionItemEntity = null;
+            if (itemId != null) {
+                competitionItemEntity = em.find(CompetitionItemEntity.class, itemId);
+            }
+            if (competitionItemEntity == null) {
+                this.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Now item with id " + itemId + " exists!", response);
+                return;
+            }
+            try {
+                em.remove(competitionItemEntity);
+            } catch(Exception ex) {
+                LOG.debug("Error deleting competion item: ", ex);
+                this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
+            }
+        }
     }
 
 

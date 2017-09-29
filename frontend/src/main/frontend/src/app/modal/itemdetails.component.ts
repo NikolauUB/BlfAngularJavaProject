@@ -1,8 +1,9 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, OnInit} from "@angular/core";
 import { ModalComponent } from "./modal.component";
 import { VoteData } from '../model/VoteData';
 import { DetailsController } from '../auth/userdetails/details.controller';
 import { UserData } from '../model/auth/UserData';
+import {ChangesController} from "../changescontrol/changes.controller";
 
 @Component({
     selector: 'itemdetails-modal-component',
@@ -10,26 +11,32 @@ import { UserData } from '../model/auth/UserData';
     styleUrls: [ './modal.component.css' ]
 
 })
-export class ItemdetailsComponent {
+export class ItemdetailsComponent implements OnInit{
     @ViewChild(ModalComponent)
     modal:ModalComponent = new ModalComponent();
     voteItem: VoteData = new VoteData();
     userDataMap: Map<number, UserData> = new Map<number, UserData>();
+    browserCanWorkWithIndexedDB: boolean = true;
 
-    constructor(private detailsController: DetailsController) {
+    constructor(private detailsController: DetailsController, private changesController: ChangesController) {
+    }
 
+    ngOnInit(): void {
+        this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
     }
 
     public showDetails(item: VoteData) {
         this.voteItem = item;
-        this.loadUserData();
+        if (this.browserCanWorkWithIndexedDB) {
+            this.loadUserData();
+        }
         this.modal.show();
     }
 
     oneOrMany(): string {
         var result: string = "";
         if (this.voteItem.usernames && this.voteItem.usernames.length > 1) {
-            result = "и";
+            result = "ы";
         }
         return result;
     }

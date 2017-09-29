@@ -36,7 +36,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
   private showDiscuss(): void {
     if (this.isTakenPart()) {
-      if (this.competitionShortInfo.userThread > 0) {
+      if (this.competitionShortInfo.userThread > 0 ) {
           this.themeController
               .createStoreAndLoadMaxUpdated(this.competitionShortInfo.userThread)
               .then(thTime => this.checkChangesInThread(thTime));

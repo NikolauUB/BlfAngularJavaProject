@@ -50,6 +50,7 @@ import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
 import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
 import {VoteFreeComponent} from "./vote/free/vote.free.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
+import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 
 
 
@@ -59,9 +60,9 @@ import {VoteCompositionComponent} from "./vote/composition/vote.composition.comp
  * @param {ChangesController} service
  * @returns {() => any}
  */
-//export function runChangesController(changesService: ChangesController) {
-//  return () => changesService.init();
-//}
+export function runChangesController(changesService: ChangesController): () => Promise<void>  {
+  return () => changesService.init();
+}
 
 @NgModule({
   declarations: [
@@ -106,7 +107,8 @@ import {VoteCompositionComponent} from "./vote/composition/vote.composition.comp
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    Ng2DeviceDetectorModule.forRoot()
   ],
   providers: [
     VoteService,
@@ -120,7 +122,7 @@ import {VoteCompositionComponent} from "./vote/composition/vote.composition.comp
     ThemeController,
     {
       provide: APP_INITIALIZER,
-      useFactory: (changesService: ChangesController) => function() {  return changesService.init(); },
+      useFactory: runChangesController,
       deps: [ChangesController],
       multi: true
     },

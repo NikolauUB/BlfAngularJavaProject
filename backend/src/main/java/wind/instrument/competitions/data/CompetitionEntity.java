@@ -33,6 +33,7 @@ public class CompetitionEntity implements Serializable {
 
 
     @OneToMany(mappedBy = "competition", targetEntity=CompetitionItemEntity.class, fetch = FetchType.LAZY)
+    @OrderBy("created ASC")
     private Collection<CompetitionItemEntity> competitionItems;
 
     @OneToMany(mappedBy = "competition", targetEntity=ThemeEntity.class, fetch = FetchType.LAZY)

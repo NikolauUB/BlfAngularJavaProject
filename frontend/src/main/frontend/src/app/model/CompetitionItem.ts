@@ -1,6 +1,7 @@
 export class CompetitionItem {
     id: number;
     userId: number;
+    adUsers: string;
     compId: number;
     desc: string;
     instrmnts: string;

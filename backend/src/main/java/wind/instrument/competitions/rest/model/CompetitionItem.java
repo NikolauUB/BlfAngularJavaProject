@@ -3,6 +3,7 @@ package wind.instrument.competitions.rest.model;
 public class CompetitionItem {
     private Long id;
     private Long userId;
+    private String adUsers;
     private Long compId;
     private String desc;
     private String instrmnts;
@@ -99,5 +100,13 @@ public class CompetitionItem {
 
     public void setEmbedAudio(String embedAudio) {
         this.embedAudio = embedAudio;
+    }
+
+    public String getAdUsers() {
+        return adUsers;
+    }
+
+    public void setAdUsers(String adUsers) {
+        this.adUsers = adUsers;
     }
 }

@@ -173,4 +173,8 @@ public class CompetitionItemEntity implements Serializable {
     public void setCnItemEmbedVideo(String cnItemEmbedVideo) {
         this.cnItemEmbedVideo = cnItemEmbedVideo;
     }
+
+    public void setCompetitionItemUsers(Collection<CompetitionItemUsers> competitionItemUsers) {
+        this.competitionItemUsers = competitionItemUsers;
+    }
 }

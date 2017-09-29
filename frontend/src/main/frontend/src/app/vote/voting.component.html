@@ -11,56 +11,62 @@
 <button class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()" *ngIf="isAuthentificated() && voteInfo.voted">Изменить Ваш выбор</button>
 <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
+
 <span  *ngFor="let voteItem of voteInfo.voteData">
-  <div style="display: inline-block; margin-bottom: 20px" [class.selected]="selectedItem.has(voteItem)">
-    <!--<div class="[ form-group ]">-->
-      <div class="[ btn-group ]" style="width:370px">
+  <div style="display: inline-block; width:377px;border:solid;" [class.selected]="selectedItem.has(voteItem)">
+    <div class="[ btn-group ]" style="width:370px; height:40px">
         <a *ngIf="voteItem.order && !isAllSelected"  class="[ btn btn-default ]">
           <span *ngIf="selectedItem.has(voteItem)"><b>{{voteItem.order}}</b>
           </span>
           <span> </span>
         </a>
-        <a *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[ btn btn-default active ]" (click)="onSelect(voteItem); $event.stopPropagation();">
-          Выбрать
+        <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem)" (click)="showDetails(voteItem); $event.stopPropagation();">
+          <small>Музыкант{{getLastLetter(voteItem)}}:&nbsp;</small><b>{{voteItem.usernames.join(', ')}}</b>
         </a>
-        <a title="Подробности" class="[ btn ]" (click)="showDetails(voteItem); $event.stopPropagation();">
-          <b>{{voteItem.usernames.join(', ')}}</b>
+        <a style="float:right" class="[ btn ]"  [class.linkselected]="selectedItem.has(voteItem)" *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
+          <span aria-hidden="true" title="Отменить">&#10006;</span>
         </a>
-        <a style="float:right" class="[ btn ]"  *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
-          <span aria-hidden="true">&#10006;</span>
+        <a style="float:right" *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem)" class="[  img-rounded ]" (click)="onSelect(voteItem); $event.stopPropagation();">
+          <img src="assets/images/Up.png" title="Понравилось" style="margin-right:3px; margin-top:3px;"/>
         </a>
-      </div>
-    <!--</div>-->
-    <div  *ngIf="voteItem.videoEmbedUrl">
+    </div>
+    <div  *ngIf="voteItem.videoEmbedUrl" style="width:370px; height:305px; overflow-y: auto; text-align: center">
       <iframe width="370" height="300"
           [src]="voteItem.videoEmbedUrl | safe"
           allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
       </iframe>
     </div>
-    <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl" style="width:370px; height:304px; overflow-y: auto;">
-      Видео доступно только по ссылке. Пожалуйста, откройте его в <a href="{{voteItem.videoUrl}}" target="_blank">новом окне</a>
-      <span *ngFor="let userId of voteItem.userIds">
-        <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)"/>
+    <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl" style="width:370px; height:305px; overflow-y: auto; text-align: center">
+      <small>Видео доступно для просмотра в <a href="{{voteItem.videoUrl}}" [class.linkselected]="selectedItem.has(voteItem)" target="_blank">новом окне</a></small>
+      <span  *ngFor="let userId of voteItem.userIds">
+        <a *ngIf="browserCanWorkWithIndexedDB" href="{{voteItem.videoUrl}}" target="_blank">
+          <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Посмотреть видео в новом окне"/>
+        </a>
         <br/>
       </span>
     </div>
-    <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl" style="width:370px; height:304px; overflow-y: auto;">
-      <span *ngFor="let userId of voteItem.userIds">
-        <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)"/>
+    <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl" style="width:370px; height:305px; overflow-y: auto;">
+      <span *ngIf="!browserCanWorkWithIndexedDB">Видео отсутствует</span>
+      <span  *ngFor="let userId of voteItem.userIds">
+        <img  style="display:block; margin: auto" *ngIf="browserCanWorkWithIndexedDB && loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Видео отсутствует"/>
         <br/>
       </span>
     </div>
-    <div *ngIf="voteItem.audioEmbedUrl">
-      <iframe width="370" height="160"
+    <div *ngIf="voteItem.audioEmbedUrl"  style="width:370px; height:160px; text-align: center;">
+      <small>Послушать запись в <a href="{{voteItem.audioUrl}}" target="_blank" [class.linkselected]="selectedItem.has(voteItem)">новом окне</a></small>
+      <iframe width="358" height="134"
               [src]="voteItem.audioEmbedUrl | safe"
               frameborder="0">
       </iframe>
+      <div style="z-index: 3000; height: 12px; width: 358px; background: #EEE; position: relative; top: -18px; left:6px"></div>
     </div>
-    <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl" style="width:370px; height:160px">
-      Запись доступна только по ссылке. Пожалуйста, откройте её в <a href="{{voteItem.audioUrl}}" target="_blank">новом окне</a>
+    <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl" style="width:370px; height:160px; text-align: center;">
+      <small>Запись доступна для прослушивания в <a href="{{voteItem.audioUrl}}" target="_blank" [class.linkselected]="selectedItem.has(voteItem)">новом окне</a></small>
+      <iframe width="358" height="134" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" hspace="0" vspace="0"
+              srcdoc="<a href='{{voteItem.audioUrl}}' target='_blank'><img  src='assets/images/AudioDefault.jpg'   title='Послушать запись в новом окне'/></a>"></iframe>
+      <!--<a href="{{voteItem.audioUrl}}" target="_blank"><img  src="assets/images/AudioDefault.jpg" title="Послушать запись в новом окне"/></a>-->
     </div>
-    <hr/>
-  </div>
+ </div>
 </span>
 <itemdetails-modal-component></itemdetails-modal-component>
 
