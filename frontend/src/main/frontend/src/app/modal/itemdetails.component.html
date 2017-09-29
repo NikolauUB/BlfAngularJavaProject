@@ -4,7 +4,7 @@
   </div>
   <div class="app-modal-body">
       <div style="margin-left: 20px"><span *ngFor="let userId of voteItem.userIds">
-        <figure *ngIf="browserCanWorkWithIndexedDB && getAvatar(userId)" class="detailsavatar">
+        <figure *ngIf="getAvatar(userId)" class="detailsavatar">
           <img [src]="getAvatar(userId)"/>
           <figcaption><small><b>{{getUsername(userId)}}</b></small></figcaption>
         </figure>

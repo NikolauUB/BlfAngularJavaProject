@@ -27,9 +27,7 @@ export class ItemdetailsComponent implements OnInit{
 
     public showDetails(item: VoteData) {
         this.voteItem = item;
-        if (this.browserCanWorkWithIndexedDB) {
-            this.loadUserData();
-        }
+        this.loadUserData();
         this.modal.show();
     }
 
@@ -43,9 +41,9 @@ export class ItemdetailsComponent implements OnInit{
 
     public getAvatar(userId: number): string {
         if (this.userDataMap.has(userId)) {
-            return this.userDataMap.get(userId).previewImage;
+            return (this.userDataMap.get(userId).previewImage != null) ? this.userDataMap.get(userId).previewImage : "";
         }
-        return null;
+        return "";
     }
 
     getUsername(userId: number): string {
@@ -59,7 +57,9 @@ export class ItemdetailsComponent implements OnInit{
     private loadUserData(): void {
         this.voteItem.userIds.forEach(id => {
             var userData = new UserData();
-            this.detailsController.loadUserDetailsById(id, userData);
+            (this.browserCanWorkWithIndexedDB)
+                ? this.detailsController.loadUserDetailsById(id, userData)
+                : this.detailsController.loadUserDetailByIdFromDB(id, userData);
             this.userDataMap.set(id, userData);
         });
     }

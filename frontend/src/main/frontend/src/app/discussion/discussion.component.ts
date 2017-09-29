@@ -21,10 +21,11 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   editModal: EditModalComponent = new EditModalComponent(this.router);
   discussionItems: Array<DiscussionItem> = new Array<DiscussionItem>();
   newDiscussItem: DiscussionItem = new DiscussionItem();
-
+  browserCanWorkWithIndexedDB: boolean = false;
 
 
   ngOnInit(): void {
+      this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
   }
 
   ngAfterViewInit(): void {
@@ -36,10 +37,12 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
   private showDiscuss(): void {
     if (this.isTakenPart()) {
-      if (this.competitionShortInfo.userThread > 0 ) {
+      if (this.competitionShortInfo.userThread > 0 && this.browserCanWorkWithIndexedDB) {
           this.themeController
               .createStoreAndLoadMaxUpdated(this.competitionShortInfo.userThread)
               .then(thTime => this.checkChangesInThread(thTime));
+      } else if (this.competitionShortInfo.userThread > 0) {
+          this.loadDiscussion();
       }
     }
   }
@@ -74,7 +77,11 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   private getAuthorDetails(item: DiscussionItem): void {
     item.authorUsername = "Пользователь " + item.authorId;
     item.authorAvatar = DetailsController.defaultAvatar;
-    this.userDetailsController.loadUserDetails(item);
+    if (this.browserCanWorkWithIndexedDB) {
+        this.userDetailsController.loadUserDetails(item);
+    } else {
+        this.userDetailsController.loadUserDetailFromDBForDiscuss(item);
+    }
   }
 
   public convertTimeToDate(time: any): string {
@@ -277,7 +284,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
   private handleLoadDiscussionReply(reply: PartakeThread): void {
     this.discussionItems = reply.discussionItems;
-    if (!this.isAdmin()) { //no cache for admin
+    if (!this.isAdmin() && this.browserCanWorkWithIndexedDB) { //no cache for admin and old browsers
       this.themeController.cleanTheme(reply.threadId);
       this.themeController.saveThemeInDBbyId(this.discussionItems, reply.threadId, reply.thUpdated);
     }

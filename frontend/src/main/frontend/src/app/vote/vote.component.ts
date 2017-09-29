@@ -26,7 +26,7 @@ export class VoteComponent implements OnInit {
   selectedItem: Set<VoteData> = new Set<VoteData>();
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
-  browserCanWorkWithIndexedDB: boolean = true;
+  browserCanWorkWithIndexedDB: boolean = false;
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
@@ -60,10 +60,11 @@ export class VoteComponent implements OnInit {
     if (this.userAvatarMap.has(userId)) {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
-        this.currentUserData = new UserData();
-        this.detailsController.loadUserDetailsById(userId, this.currentUserData);
-        this.userAvatarMap.set(userId, this.currentUserData);
-
+      this.currentUserData = new UserData();
+      (this.browserCanWorkWithIndexedDB)
+      ? this.detailsController.loadUserDetailsById(userId, this.currentUserData)
+      : this.detailsController.loadUserDetailByIdFromDB(userId, this.currentUserData);
+      this.userAvatarMap.set(userId, this.currentUserData);
     }
   }
 

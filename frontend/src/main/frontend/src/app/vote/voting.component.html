@@ -39,16 +39,15 @@
     <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl" style="width:370px; height:305px; overflow-y: auto; text-align: center">
       <small>Видео доступно для просмотра в <a href="{{voteItem.videoUrl}}" [class.linkselected]="selectedItem.has(voteItem)" target="_blank">новом окне</a></small>
       <span  *ngFor="let userId of voteItem.userIds">
-        <a *ngIf="browserCanWorkWithIndexedDB" href="{{voteItem.videoUrl}}" target="_blank">
+        <a href="{{voteItem.videoUrl}}" target="_blank">
           <img style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Посмотреть видео в новом окне"/>
         </a>
         <br/>
       </span>
     </div>
     <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl" style="width:370px; height:305px; overflow-y: auto;">
-      <span *ngIf="!browserCanWorkWithIndexedDB">Видео отсутствует</span>
       <span  *ngFor="let userId of voteItem.userIds">
-        <img  style="display:block; margin: auto" *ngIf="browserCanWorkWithIndexedDB && loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Видео отсутствует"/>
+        <img  style="display:block; margin: auto" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Видео отсутствует"/>
         <br/>
       </span>
     </div>

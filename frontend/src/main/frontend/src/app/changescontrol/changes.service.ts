@@ -33,6 +33,12 @@ export class ChangesService {
           .then(response => response.json() as UsersChanges)
         .catch(this.handleError);
   }
+  public getUsersUpdatesForOldBrowsers(usrTime:number): Promise<UsersChanges> {
+      return this.http.get(this.usersUpdatesUrl + usrTime)
+          .toPromise()
+          .then(response => response.json() as UsersChanges)
+          .catch(this.handleError);
+  }
 
 
   /**

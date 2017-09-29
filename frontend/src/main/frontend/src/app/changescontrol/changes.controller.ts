@@ -67,22 +67,35 @@ export class ChangesController {
 
   public checkUsersChanges(usrTime: Date): void {
     if(usrTime == null) return;
+      this.changesService
+          .getUsersUpdates(usrTime)
+          .then(reply => this.cleanIndexedDBForUsers(reply))
+          .catch(e => this.handleError(e));
+  }
+  public checkUsersOldBrowsers(usrTime: number): void {
+    if(usrTime == null) return;
     this.changesService
-        .getUsersUpdates(usrTime)
-        .then(reply => this.cleanIndexedDBForUsers(reply))
+        .getUsersUpdatesForOldBrowsers(usrTime)
+        .then(reply => this.cleanVoteCache(reply))
         .catch(e => this.handleError(e));
   }
 
-  private cleanIndexedDBForUsers(reply: UsersChanges): void {
-    if(reply.userIds.length > 0) {
+  private cleanVoteCache(reply: UsersChanges): void {
+    if(reply.userIds && reply.userIds.length > 0) {
       localStorage.removeItem(ChangesController.VOTING_CLASSIC);
       localStorage.removeItem(ChangesController.VOTING_JAZZ);
       localStorage.removeItem(ChangesController.VOTING_FREE);
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
     }
-    reply.userIds.forEach((userId)=>{
-      this.userDetailsController.cleanUserDetails(userId);
-    });
+  }
+
+  private cleanIndexedDBForUsers(reply: UsersChanges): void {
+    this.cleanVoteCache(reply);
+    if (this.isBrowserVersionFittable()) {
+      reply.userIds.forEach((userId)=> {
+        this.userDetailsController.cleanUserDetails(userId);
+      });
+    }
   }
 
 
@@ -95,8 +108,8 @@ export class ChangesController {
     var time: number = (prevTime == null) ? -1: parseInt(prevTime, 10);
     var week: number = 604800000;
     if((new Date().getTime() - time) > week ) {
+      alert("Кэш отсутствует или старше недели. Производится полное обновление  (cache_time: " + time + "now: " + new Date().getTime() + ")");
       time = -1;
-      alert("Кэш отсутствует или старще недели. Производится полное обновлнение  (cache_time: " + time + "now: " + new Date().getTime() + ")");
     }
     if (time === -1) {
       localStorage.removeItem(ChangesController.COMPETITION_LIST);
@@ -128,10 +141,9 @@ export class ChangesController {
     this.changesKeywords = reply;
     localStorage.setItem(ChangesController.PREVIOUS_TIME, this.changesKeywords.time.toString());
     //if time -1 just get server time only
-    if (time === -1) {
+    if (time === -1 && this.isBrowserVersionFittable()) {
       return this.userDetailsController.createStore();
     }
-
     this.changesKeywords.keywords.forEach(keyword => {
       if(keyword.startsWith(ChangesController.COMPETITION_MEMBERS_COUNT)) {
         this.checkCountAndClean(ChangesController.COMPETITION_MEMBERS_PREFIX,
@@ -145,11 +157,15 @@ export class ChangesController {
         localStorage.removeItem(keyword);
       }
     });
-    return this.userDetailsController
+    if (this.isBrowserVersionFittable()) {
+      return this.userDetailsController
           .createStoreAndGetMaxDate()
           .then(usrTime => {
             this.checkUsersChanges(usrTime);
           });
+    } else {
+      this.checkUsersOldBrowsers(time);
+    }
   }
 
   private checkCountAndClean(objectTypePrefix: string, objectCountConst: string, keyword: string): void {
@@ -167,8 +183,8 @@ export class ChangesController {
   }
 
   private handleError(e: any) : void {
-    console.error(e.json().message || e.toString());
-    alert(e.json().message || e.toString());
+    console.error(e.toString() || e.json().message );
+    alert(e.toString() || e.json().message );
   }
 
 }

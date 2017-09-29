@@ -28,6 +28,13 @@ export class DetailsController {
       });
   }
 
+  public loadUserDetailFromDBForDiscuss(item: DiscussionItem): void {
+    this.authService.getUserDetails(item.authorId)
+        .then(reply => this.fillInDiscussItem(reply, item))
+        .catch( e =>  console.log(e));
+  }
+
+
   public loadUserDetailsById(userId: number, userData: UserData): void {
     this.db.getByKey('userdetails', userId)
         .then((details) => {
@@ -43,6 +50,12 @@ export class DetailsController {
         }, (error) => {
           console.log(error);
         });
+  }
+
+  public loadUserDetailByIdFromDB(userId: number, userData: UserData): void {
+    this.authService.getUserDetails(userId)
+        .then(reply => {this.fillInUserData(reply, userData);})
+        .catch( e =>  console.log(e));
   }
 
   public updateUserDetails(userId: number): void {
@@ -62,18 +75,26 @@ export class DetailsController {
     this.db.delete('userdetails', userId).catch(e=> console.log(e));
   }
 
-  private saveUserDetailsInDB(reply:UserData, item: DiscussionItem) {
+  private fillInDiscussItem(reply:UserData, item: DiscussionItem) {
     item.authorUsername = reply.username;
     item.authorAvatar = reply.previewImage;
+  }
+
+  private saveUserDetailsInDB(reply:UserData, item: DiscussionItem) {
+    this.fillInDiscussItem(reply, item);
     this.saveUserDetailsInDBbyId(reply, item.authorId, null);
   }
 
-  private saveUserDetailsInDBbyId(reply: UserData, userId: number, userData: UserData) {
+  private fillInUserData(reply: UserData, userData: UserData) {
     if (userData) {
       userData.username = reply.username;
       userData.previewImage = reply.previewImage;
       userData.created = reply.created;
     }
+  }
+
+  private saveUserDetailsInDBbyId(reply: UserData, userId: number, userData: UserData) {
+    this.fillInUserData(reply, userData);
     this.db.add('userdetails',
         { id: userId,
           username: reply.username,
