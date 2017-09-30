@@ -51,6 +51,7 @@ import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
 import {VoteFreeComponent} from "./vote/free/vote.free.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
+import {OpinionsComponent} from "./vote/opinions/opinions.component";
 
 
 
@@ -80,6 +81,7 @@ export function runChangesController(changesService: ChangesController): () => P
     VoteBaroqueComponent,
     VoteJazzComponent,
     VoteFreeComponent,
+    OpinionsComponent,
     VoteCompositionComponent,
     RulesComponent,
     LoginComponent,

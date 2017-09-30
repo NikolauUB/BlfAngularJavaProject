@@ -23,9 +23,11 @@ export class VoteComponent implements OnInit {
   @ViewChild(ItemdetailsComponent)
   detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController, this.changesController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
+  emptyVoteData: Array<VoteData> = new Array<VoteData>();
   selectedItem: Set<VoteData> = new Set<VoteData>();
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
+  opinionsMode: boolean = false;
   browserCanWorkWithIndexedDB: boolean = false;
   isAllSelected: boolean = false;
   userItemId: number;
@@ -66,6 +68,16 @@ export class VoteComponent implements OnInit {
       : this.detailsController.loadUserDetailByIdFromDB(userId, this.currentUserData);
       this.userAvatarMap.set(userId, this.currentUserData);
     }
+  }
+
+  public getGoToLoginBtnTitle(): string {
+    return (this.opinionsMode)
+      ? "Для участия в обсуждении необходимо зайти на сайт"
+      : "Для сохранения результатов голосования необходимо зайти на сайт";
+  }
+
+  public getVoteDataArray(): Array<VoteData>{
+    return (this.opinionsMode) ? this.emptyVoteData : this.voteInfo.voteData;
   }
 
   private saveInLocalStorageAndPrepare(voteInfo: CompetitionInfo): void {
