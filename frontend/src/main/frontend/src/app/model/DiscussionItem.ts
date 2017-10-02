@@ -9,6 +9,4 @@ export class DiscussionItem {
     updateDate: Date;
     authorUsername: string = "";
     authorAvatar: string = "";
-    isChangedLatest:boolean = false;
-
 }

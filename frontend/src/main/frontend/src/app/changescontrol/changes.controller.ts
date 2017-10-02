@@ -47,7 +47,7 @@ export class ChangesController {
 
     if (deviceInfo.browser === 'safari') {
       //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
-      return  (+deviceInfo.browser_version.split(".")[0] > 5);
+      return  (+deviceInfo.browser_version.split(".")[0] > 7);
     } else if (deviceInfo.browser === 'ie') {
       //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
       return  (+deviceInfo.browser_version.split(".")[0] > 9);

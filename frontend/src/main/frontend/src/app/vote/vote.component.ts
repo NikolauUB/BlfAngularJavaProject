@@ -90,6 +90,7 @@ export class VoteComponent implements OnInit {
 
   private prepareView(voteInfo: CompetitionInfo): void {
     this.voteInfo = voteInfo;
+    this.competitionShortInfo.compId = this.voteInfo.competitionData.id;
     this.userItemId = null;
     this.findUserItemId();
     if (this.voteInfo.voted) {

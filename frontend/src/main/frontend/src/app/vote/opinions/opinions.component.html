@@ -1,1 +1,44 @@
-<div>Обсуждения будут тут</div>
+<div *ngIf="hasPrevious()"><a (click)="viewPreviousPage(); $event.stopPropagation()">Показать предыдущие отзывы {{getOpinionCount()}}</a> </div>
+<div *ngFor="let item of votingThread.oi">
+  <div style="width:85%; min-height: 200px; margin-left:5%">
+    <hr  style="height: 12px;border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);"/>
+    <div class="header">
+      <b>{{item.authorUsername}}</b>&nbsp;&nbsp;&nbsp;{{this.convertTimeToDate(item.creationDate)}}
+    </div>
+    <div class="body">
+      <table>
+        <tr><td style="text-align:center; vertical-align:top">
+          <div style="display: inline-block; vertical-align: top; height:200px; width:200px; margin-right: 10px"><img  src="{{item.authorAvatar}}"/></div>
+        </td>
+          <td style="vertical-align:top">
+            <div *ngIf="!isItemEditting(item)" style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>
+            <div *ngIf="isItemEditting(item)" style="overflow: scroll; height: 200px;">
+              <textarea #nickEditE id="nickEditE" style="width: 740px; height: 140px" cols="80"></textarea>
+            </div>
+          </td></tr>
+      </table>
+    </div>
+    <div class="footer">
+      <div *ngIf="isUpdated(item)" style="float: left">
+        <small>Изменено:</small>&nbsp;{{this.convertTimeToDate(item.updateDate) }}
+      </div>
+      <div style="float: right">
+        <button  *ngIf="canReply(item)" class="btn btn-xs"(click)="reply(item); $event.stopPropagation()">Ответить</button>
+        <button  *ngIf="canEdit(item) && !isItemEditting(item)" class="btn btn-xs" (click)="editItem(item); $event.stopPropagation()">Редактировать</button>
+        <button  *ngIf="canEdit(item) && isItemEditting(item)" class="btn btn-xs" (click)="updateItem(item); $event.stopPropagation()">Cохранить</button>
+        <button *ngIf="canDelete(item)" class="btn btn-xs" (click)="deleteItem(item); $event.stopPropagation()">Удалить</button>
+      </div>
+    </div>
+    <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"/>
+  </div>
+</div>
+<div *ngIf="hasNext()"><a (click)="loadOpinionsFirstPage(); $event.stopPropagation()">Вернуться к последней странице</a> </div>
+
+
+<div>
+  <div id="editor" style="overflow-y: scroll; height: 400px;">
+    <textarea id="nickEdit" style="width: 740px; height: 300px" cols="80"></textarea>
+  </div>
+  <button  class="[ btn btn-success active ]"  (click)="createItem(this.newOpinionItem); $event.stopPropagation()">Сохранить</button>
+  <button  class="[ btn btn-success active ]"  (click)="cancelChanges(this.newOpinionItem); $event.stopPropagation()">Отменить</button>
+</div>

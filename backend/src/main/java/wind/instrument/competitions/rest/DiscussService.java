@@ -341,6 +341,7 @@ public class DiscussService {
 
     }
 
+
     private DiscussionItem persistMessage(DiscussionItem discussionItem,
                                 ThemeEntity usersPartakeTheme, //null for admin
                                 UserEntity currentUser,

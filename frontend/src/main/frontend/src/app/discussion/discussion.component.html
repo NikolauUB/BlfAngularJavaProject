@@ -32,7 +32,6 @@
         <div *ngIf="isUpdated(item)" style="float: left">
           <small>Изменено:</small>&nbsp;{{this.convertTimeToDate(item.updateDate) }}
         </div>
-        {{item.isChangedLatest}}
         <div style="float: right">
           <button  *ngIf="canReply(item)" class="btn btn-xs"(click)="reply(item); $event.stopPropagation()">Ответить</button>
           <button  *ngIf="canEdit(item)" class="btn btn-xs" (click)="editItem(item); $event.stopPropagation()">Редактировать</button>

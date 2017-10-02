@@ -52,6 +52,7 @@ import {VoteFreeComponent} from "./vote/free/vote.free.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import {OpinionsComponent} from "./vote/opinions/opinions.component";
+import { OpinionService } from "./vote/opinions/opinion.service";
 
 
 
@@ -116,6 +117,7 @@ export function runChangesController(changesService: ChangesController): () => P
     VoteService,
     AuthService,
     AdminService,
+    OpinionService,
     PartakingService,
     CompetitionShortInfo,
     DetailsController,
