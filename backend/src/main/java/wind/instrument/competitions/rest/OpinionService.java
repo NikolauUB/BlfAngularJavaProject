@@ -68,7 +68,6 @@ public class OpinionService {
         ThemeEntity opinionTheme = this.getVotingThemeByCompetitionId(competitionId);
         boolean isFirstPage =  (msgStartAfterId == null || msgStartAfterId.longValue() == -1l);
 
-        System.out.println("FIRT: " + isFirstPage);
         //find messages in the theme
         if (opinionTheme != null) {
             result.setId(opinionTheme.getId());
@@ -149,7 +148,7 @@ public class OpinionService {
     @RequestMapping(value = "/api/saveOpinion", method = RequestMethod.POST)
     public DiscussionItem saveOpinion(@RequestBody DiscussionItem discussionItem, HttpServletResponse response) {
 
-        if(discussionItem.getMsgText() == null || discussionItem.getMsgText().trim().length() == 0) {
+        if (discussionItem.getMsgText() == null || discussionItem.getMsgText().trim().length() == 0) {
             this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, bundle.getString("EMPTY_MSG_BODY"), response);
             return discussionItem;
         }
@@ -169,6 +168,19 @@ public class OpinionService {
         }
 
     }
+
+    @RequestMapping(value = "/api/deleteOpinion", method = RequestMethod.DELETE)
+    public void deleteOpinion(@RequestParam("iid") Long msgId, HttpServletResponse response) {
+        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        MessageEntity message = em.find(MessageEntity.class, msgId);
+        if (!message.getUserId().equals(currentUser.getUserId())) {
+            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message not belongs to you", response);
+            return;
+        }
+        em.remove(message);
+    }
+
+
     private ThemeEntity getTheme(DiscussionItem discussionItem, UserEntity currentUser, HttpServletResponse response) {
         ThemeEntity opinionTheme = null;
         try {

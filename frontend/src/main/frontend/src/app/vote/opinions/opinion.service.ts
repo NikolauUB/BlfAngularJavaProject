@@ -12,6 +12,7 @@ export class OpinionService {
     private postHeaders:Headers;
     private getVotingOpinionsUrl = 'api/getVotingOpinions?cId=';
     private saveOpinionsUrl = 'api/saveOpinion';
+    private deleteOpinionUrl = 'api/deleteOpinion?iid=';
 
 
     constructor(private http: Http, private authService: AuthService) { }
@@ -36,12 +37,15 @@ export class OpinionService {
     public saveOpinionItem(discussionItem: DiscussionItem): Promise<DiscussionItem>  {
         this.setCSRFHeaders(this.authService.getAuth().tkn);
         return this.http
-            .post(this.saveOpinionsUrl,
-            JSON.stringify(discussionItem),
+            .delete(this.deleteOpinionUrl + discussionItem.msgId,
             {headers: this.postHeaders})
             .toPromise()
-            .then(response => response.json() as DiscussionItem)
             .catch(this.handleError);
+    }
+
+    public deleteOpinionItem(discussionItem: DiscussionItem): Promise<any> {
+        this.setCSRFHeaders(this.authService.getAuth().tkn);
+
     }
 
 

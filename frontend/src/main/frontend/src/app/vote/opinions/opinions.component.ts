@@ -108,6 +108,17 @@ export class OpinionsComponent implements AfterViewInit {
             });
         }
     }
+    public deleteItem(item: DiscussionItem): void {
+        if (this.isAutheticated()) {
+            this.opinionService.deleteOpinionItem(item)
+                .then(e => this.removeFromList(item))
+                .catch(e =>this.handleError(e));
+        }
+    }
+
+    private removeFromList(item: DiscussionItem): void {
+    
+    }
 
     public createItem(item: DiscussionItem): void {
         if (this.isAutheticated()) {
