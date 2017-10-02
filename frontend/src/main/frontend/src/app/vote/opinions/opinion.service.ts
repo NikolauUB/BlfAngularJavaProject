@@ -37,17 +37,23 @@ export class OpinionService {
     public saveOpinionItem(discussionItem: DiscussionItem): Promise<DiscussionItem>  {
         this.setCSRFHeaders(this.authService.getAuth().tkn);
         return this.http
-            .delete(this.deleteOpinionUrl + discussionItem.msgId,
+            .post(this.saveOpinionsUrl,
+            JSON.stringify(discussionItem),
             {headers: this.postHeaders})
             .toPromise()
+            .then(response => response.json() as DiscussionItem)
             .catch(this.handleError);
     }
 
     public deleteOpinionItem(discussionItem: DiscussionItem): Promise<any> {
         this.setCSRFHeaders(this.authService.getAuth().tkn);
+        return this.http
+            .delete(this.deleteOpinionUrl + discussionItem.msgId,
+            {headers: this.postHeaders})
+            .toPromise()
+            .catch(this.handleError);
 
     }
-
 
 
     private handleError(error: any): Promise<any> {

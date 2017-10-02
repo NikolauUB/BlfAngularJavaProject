@@ -109,13 +109,15 @@ public class DiscussService {
             List<CompetitionEntity>  competitionList = activeCometQuery.getResultList();
             competitionList.forEach((item)->{
                 item.getThemesByMembers().forEach((theme) -> {
-                    CompetitionMember competitionMember = new CompetitionMember();
-                    UserEntity member = theme.getOwner();
-                    competitionMember.setmId(member.getUserId());
-                    competitionMember.setmUsername(member.getUsername());
-                    competitionMember.setCompType(item.getCompetitionType().getValue());
-                    competitionMember.setThreadId(theme.getId());
-                    result.add(competitionMember);
+                    if ( theme.getThemeType().equals(ThemeType.COMPETITION_REQUEST) ) {
+                        CompetitionMember competitionMember = new CompetitionMember();
+                        UserEntity member = theme.getOwner();
+                        competitionMember.setmId(member.getUserId());
+                        competitionMember.setmUsername(member.getUsername());
+                        competitionMember.setCompType(item.getCompetitionType().getValue());
+                        competitionMember.setThreadId(theme.getId());
+                        result.add(competitionMember);
+                    }
                 });
             });
         } catch (NoResultException ex) {

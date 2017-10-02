@@ -177,7 +177,10 @@ public class OpinionService {
             this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message not belongs to you", response);
             return;
         }
+        ThemeEntity themeEntity = em.find(ThemeEntity.class, message.getThemeId());
         em.remove(message);
+        themeEntity.setUpdated(new Date());
+        em.persist(themeEntity);
     }
 
 

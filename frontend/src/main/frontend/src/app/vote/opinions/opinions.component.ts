@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CompetitionShortInfo} from "../../partaking/CompetitionShortInfo";
 import {ChangesController} from "../../changescontrol/changes.controller";
 import {DetailsController} from "../../auth/userdetails/details.controller";
+import { UserData } from '../../model/auth/UserData';
 
 declare var nicEditor: any;
 
@@ -37,7 +38,6 @@ export class OpinionsComponent implements AfterViewInit {
     }
 
     public isAutheticated(): boolean {
-
         return (this.authService && this.authService.getAuth()) ? this.authService.getAuth().auth : false;
     }
 
@@ -64,21 +64,23 @@ export class OpinionsComponent implements AfterViewInit {
 
     public getOpinionCount(): string {
         if (this.votingThread.yc === -1) {
-            return  " (количество: " + (this.votingThread.ac - 10) + ")";
+            return  " ( " + (this.votingThread.ac - 10) + " )";
         } else {
-            return  " (количество: " + this.votingThread.yc + ")";
+            return  " ( " + this.votingThread.yc + " )";
         }
     }
 
     ngAfterViewInit() {
-        this.nicEdit = new nicEditor({
-            buttonList: ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify',
-                'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat',
-                'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
-                'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
-        }).panelInstance('nickEdit');
+        if (this.isAutheticated()) {
+            this.nicEdit = new nicEditor({
+                buttonList: ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify',
+                    'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat',
+                    'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
+                    'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
+                }).panelInstance('nickEdit');
+        }
+        this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
         this.loadOpinionsFirstPage();
-
     }
 
     public loadOpinionsFirstPage(): void {
@@ -109,7 +111,8 @@ export class OpinionsComponent implements AfterViewInit {
         }
     }
     public deleteItem(item: DiscussionItem): void {
-        if (this.isAutheticated()) {
+
+        if (this.isAutheticated() && confirm("Соообщения не могут быть восстановлены после удаления. Продолжить?")) {
             this.opinionService.deleteOpinionItem(item)
                 .then(e => this.removeFromList(item))
                 .catch(e =>this.handleError(e));
@@ -117,7 +120,9 @@ export class OpinionsComponent implements AfterViewInit {
     }
 
     private removeFromList(item: DiscussionItem): void {
-    
+        this.votingThread.oi = this.votingThread.oi.filter((itm)=>{
+            return itm.msgId !== item.msgId;
+}       );
     }
 
     public createItem(item: DiscussionItem): void {
@@ -125,6 +130,7 @@ export class OpinionsComponent implements AfterViewInit {
             item.authorId = this.authService.getAuth().uId;
             item.competitionId = this.competitionShortInfo.compId;
             this.saveItem(item, this.nicEdit.instanceById('nickEdit').getContent());
+            this.nicEdit.instanceById('nickEdit').setContent("");
         }
     }
     public isItemEditting(item: DiscussionItem): boolean {
@@ -138,10 +144,13 @@ export class OpinionsComponent implements AfterViewInit {
             buttonList: ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify',
                 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat',
                 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
-                'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
+                'fontSize', 'fontFamily', 'fontFormat', 'xhtml'],
+            width: (window.innerWidth*2)/3
         }).panelInstance('nickEditE');
         this.nicEditE.instanceById('nickEditE').setContent(item.msgText);
     }
+
+
 
     public updateItem(item: DiscussionItem): void {
         this.saveItem(item, this.nicEditE.instanceById('nickEditE').getContent());
@@ -209,11 +218,12 @@ export class OpinionsComponent implements AfterViewInit {
     private getAuthorDetails(item: DiscussionItem): void {
         item.authorUsername = "Пользователь " + item.authorId;
         item.authorAvatar = DetailsController.defaultAvatar;
-        //if (this.browserCanWorkWithIndexedDB) {
-        //    this.userDetailsController.loadUserDetails(item);
-        //} else {
-        //    this.userDetailsController.loadUserDetailFromDBForDiscuss(item);
-        //}
+        if (this.browserCanWorkWithIndexedDB) {
+            this.userDetailsController.loadUserDetails(item);
+        } else {
+            this.userDetailsController
+                    .loadUserDetailInItemAndUserDataByIdFromDB(item);
+        }
     }
 
 }

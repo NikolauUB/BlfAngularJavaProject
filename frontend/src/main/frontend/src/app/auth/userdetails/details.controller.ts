@@ -8,6 +8,7 @@ import {DiscussionItem} from "app/model/DiscussionItem";
 export class DetailsController {
   private db: AngularIndexedDB = new AngularIndexedDB('UserDetails', 1);
   public static defaultAvatar: string = "assets/images/defaultAvatar.jpg";
+  userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
 
   constructor(private authService: AuthService) {
   }
@@ -56,6 +57,24 @@ export class DetailsController {
     this.authService.getUserDetails(userId)
         .then(reply => {this.fillInUserData(reply, userData);})
         .catch( e =>  console.log(e));
+  }
+
+  public loadUserDetailInItemAndUserDataByIdFromDB(item: DiscussionItem): void {
+    if (this.userAvatarMap.has(item.authorId)) {
+      var usrData = this.userAvatarMap.get(item.authorId);
+      item.authorAvatar = usrData.previewImage;
+      item.authorUsername = usrData.username;
+      console.info("from Map" + item.authorId);
+    } else {
+      this.authService.getUserDetails(item.authorId)
+          .then(reply => {
+
+            this.userAvatarMap.set(item.authorId, reply);
+            this.fillInDiscussItem(reply, item);
+            console.info("from db" + item.authorId);
+          })
+          .catch(e =>  console.log(e));
+    }
   }
 
   public updateUserDetails(userId: number): void {
