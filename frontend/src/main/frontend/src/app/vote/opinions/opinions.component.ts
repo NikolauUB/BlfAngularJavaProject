@@ -24,6 +24,7 @@ export class OpinionsComponent implements AfterViewInit {
     votingThread: VotingThread = new VotingThread();
     browserCanWorkWithIndexedDB: boolean = false;
     idOfFirstPageItem: number = null;
+    editErrorMsg: string;
 
 
     opinionErrorMsg: string;
@@ -48,6 +49,16 @@ export class OpinionsComponent implements AfterViewInit {
             .catch(e => this.handleError(e));
 
 
+    }
+
+    public replyTo(item: DiscussionItem):void {
+        var shortText = (item.msgText.length > 700) ? item.msgText.substring(0, 697) + "..." : item.msgText;
+        var quota = "<small><b>Ответ на сообщение:</b></small><br/><table border='1' cellpadding='10' cellpadding='10' style='width:90%'>"
+            + "<tr><td><b>Автор:&nbsp;</b>" + item.authorUsername + "</td><td><b>Сообщение от:&nbsp;</b>" + this.convertTimeToDate(item.creationDate) + "</td></tr>"
+            + "<tr><td colspan='2'>" + shortText + "</td></tr></table><br/><br/>";
+        this.nicEdit.instanceById('nickEdit').setContent(quota);
+        this.editItemId = -1;
+        window.scrollTo(0,document.body.scrollHeight);
     }
 
     public hasPrevious(): boolean {
@@ -129,8 +140,10 @@ export class OpinionsComponent implements AfterViewInit {
         if (this.isAutheticated()) {
             item.authorId = this.authService.getAuth().uId;
             item.competitionId = this.competitionShortInfo.compId;
-            this.saveItem(item, this.nicEdit.instanceById('nickEdit').getContent());
-            this.nicEdit.instanceById('nickEdit').setContent("");
+            if (this.saveItem(item, this.nicEdit.instanceById('nickEdit').getContent())) {
+                this.nicEdit.instanceById('nickEdit').setContent("");
+                this.editErrorMsg = null;
+            }
         }
     }
     public isItemEditting(item: DiscussionItem): boolean {
@@ -138,6 +151,7 @@ export class OpinionsComponent implements AfterViewInit {
     }
 
     public editItem(item: DiscussionItem): void {
+        this.editErrorMsg = null;
         this.editItemId = item.msgId;
         this.changeDetectorRef.detectChanges();
         this.nicEditE = new nicEditor({
@@ -149,22 +163,43 @@ export class OpinionsComponent implements AfterViewInit {
         }).panelInstance('nickEditE');
         this.nicEditE.instanceById('nickEditE').setContent(item.msgText);
     }
+    public cancelEdit(): void {
+        this.editItemId = -1;
+        this.editErrorMsg = null;
+    }
 
 
 
     public updateItem(item: DiscussionItem): void {
-        this.saveItem(item, this.nicEditE.instanceById('nickEditE').getContent());
-        this.editItemId = -1;
+        if (this.saveItem(item, this.nicEditE.instanceById('nickEditE').getContent())){
+            this.editItemId = -1;
+            this.editErrorMsg = null;
+        }
     }
 
-    private saveItem(item: DiscussionItem, msg: string): void {
-        if (this.isAutheticated() && item.msgText != msg) {
+    private saveItem(item: DiscussionItem, msg: string): boolean {
+        if (this.isAutheticated()) {
+            if (msg.trim().length === 0) {
+                this.editErrorMsg="Cообщение не может быть пустым";
+                return false;
+            }
+
+            if (msg.length > 16384) {
+                this.editErrorMsg="Объем одного сообщения ограничен размером 16 тыс символов. Размер текста превышен на " + (msg.length - 16384);
+                return false;
+            }
+            if (item.msgText === msg) {
+                this.editErrorMsg="Сообщение не было изменено";
+                return false;
+            }
             item.msgText = msg;
             this.opinionService
                 .saveOpinionItem(item)
                 .then(reply => this.treatResult(reply, item))
                 .catch(e => this.handleError(e));
+            return true;
         }
+        return false;
     }
 
     private treatResult(replyItem: DiscussionItem, item: DiscussionItem): void {

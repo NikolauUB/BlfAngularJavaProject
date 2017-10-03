@@ -15,9 +15,10 @@
         </td>
           <td style="vertical-align:top">
             <div *ngIf="!isItemEditting(item)" style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>
-            <div *ngIf="isItemEditting(item)" style="overflow: scroll; height: 200px;">
-              <textarea id="nickEditE" style="width: 1000px;height: 140px" cols="80"></textarea>
+            <div *ngIf="isItemEditting(item)" style="overflow: scroll; height: 340px;">
+              <textarea id="nickEditE" style="width: 1000px;height: 300px" cols="80"></textarea>
             </div>
+            <div style="display: inline-block" class="alert alert-danger" *ngIf="isItemEditting(item) && editErrorMsg">{{editErrorMsg}}</div>
           </td></tr>
       </table>
     </div>
@@ -26,10 +27,11 @@
         <small>Изменено:</small>&nbsp;{{this.convertTimeToDate(item.updateDate) }}
       </div>
       <div style="float: right">
-        <button  *ngIf="canReply(item)" class="btn btn-xs"(click)="reply(item); $event.stopPropagation()">Ответить</button>
+        <button  *ngIf="canReply(item)" class="btn btn-xs"(click)="replyTo(item); $event.stopPropagation()">Ответить</button>
         <button  *ngIf="canEdit(item) && !isItemEditting(item)" class="btn btn-xs" (click)="editItem(item); $event.stopPropagation()">Редактировать</button>
         <button  *ngIf="canEdit(item) && isItemEditting(item)" class="btn btn-xs" (click)="updateItem(item); $event.stopPropagation()">Cохранить</button>
-        <button *ngIf="canDelete(item)" class="btn btn-xs" (click)="deleteItem(item); $event.stopPropagation()">Удалить</button>
+        <button *ngIf="canDelete(item) &&  !isItemEditting(item)" class="btn btn-xs" (click)="deleteItem(item); $event.stopPropagation()">Удалить</button>
+        <button *ngIf="canEdit(item) && isItemEditting(item)" class="btn btn-xs" (click)="cancelEdit(); $event.stopPropagation()">Отменить</button>
       </div>
     </div>
     <hr style="border: 0; height: 1px; background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));"/>
@@ -41,10 +43,18 @@
 </div>
 
 
-<div *ngIf="isAutheticated()" style="margin-left:5%;width:85%">
-  <div id="editor" style="overflow-y: scroll; height: 400px;">
-    <textarea id="nickEdit" style="width: 1000px; height: 300px" cols="80"></textarea>
-  </div>
-  <button  class="[ btn btn-success active ]"  (click)="createItem(this.newOpinionItem); $event.stopPropagation()">Сохранить</button>
-  <button  class="[ btn btn-success active ]"  (click)="cancelChanges(this.newOpinionItem); $event.stopPropagation()">Отменить</button>
+<div *ngIf="isAutheticated()" [hidden]="(this.editItemId > -1)" style="margin-left:5%;width:85%">
+  <table>
+    <tr><td style="text-align:center; vertical-align:top">
+      <div style="display: inline-block; vertical-align: top; height:200px; width:200px; margin-right: 10px"></div>
+    </td>
+      <td style="vertical-align:top">
+        <div id="editor" style="overflow-y: scroll; height: 350px;">
+          <div style="display: inline-block" class="alert alert-danger" *ngIf="(this.editItemId == -1) && editErrorMsg">{{editErrorMsg}}</div>
+          <textarea id="nickEdit" style="width: 1000px; height: 300px;" cols="80"></textarea>
+        </div>
+        <button  class="[ btn btn-success active ]"  (click)="createItem(this.newOpinionItem); $event.stopPropagation()">Сохранить</button>
+        <button  class="[ btn btn-success active ]"  (click)="cancelChanges(this.newOpinionItem); $event.stopPropagation()">Отменить</button>
+      </td></tr>
+  </table>
 </div>
