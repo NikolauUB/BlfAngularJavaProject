@@ -19,7 +19,7 @@ body {
 }
 .wrapper {
   width: 90%;
-  min-width: 800px;
+  min-width: 850px;
   margin: 20px auto;
   border-radius: 10px;
   border: solid 3px #fff;
@@ -28,8 +28,6 @@ body {
 
 .top {
   min-height: 100px;
-  background: #ED6B16;
-  background-image: url('../assets/images/logo1.jpg');
   border-radius: 10px 10px 0 0;
 }
 

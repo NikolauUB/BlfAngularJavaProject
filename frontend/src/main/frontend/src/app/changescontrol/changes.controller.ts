@@ -108,7 +108,7 @@ export class ChangesController {
     var time: number = (prevTime == null) ? -1: parseInt(prevTime, 10);
     var week: number = 604800000;
     if((new Date().getTime() - time) > week ) {
-      alert("Кэш отсутствует или старше недели. Производится полное обновление  (cache_time: " + time + "now: " + new Date().getTime() + ")");
+      //alert("Кэш отсутствует или старше недели. Производится полное обновление  (cache_time: " + time + "now: " + new Date().getTime() + ")");
       time = -1;
     }
     if (time === -1) {

@@ -132,7 +132,7 @@ export class DetailsController {
       objectStore.createIndex("avatar", "avatar", {unique: false});
       objectStore.createIndex("created", "created", {unique: false});
       objectStore.createIndex("updated", "updated", {unique: false});
-    }).then(e=>alert("created"));
+    });
   }
 
   public getMaxUpdatedDate(): Promise<Date> {
