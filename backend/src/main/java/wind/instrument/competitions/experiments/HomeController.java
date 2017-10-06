@@ -1,4 +1,4 @@
-package wind.instrument.competitions;
+package wind.instrument.competitions.experiments;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,22 +14,34 @@ public class HomeController {
     @PersistenceContext
     private EntityManager em;
 
-    @RequestMapping(value="/home")
-    public String showHomePage(ModelMap model){
+    @RequestMapping(value = "/home")
+    public String showHomePage(ModelMap model) {
 
         System.out.println("Current user:" + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return "welcome";
     }
-    @RequestMapping(value="/editBytiny", method = RequestMethod.GET)
+
+    /**
+     * test tiny editor
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/editBytiny", method = RequestMethod.GET)
     public String showEditorTiny(ModelMap model) {
         return "ThemeThreadTinyTest";
     }
 
-    @RequestMapping(value="/editBynicEdit", method = RequestMethod.GET)
+    /**
+     * Test nicEdit editor
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/editBynicEdit", method = RequestMethod.GET)
     public String showEditor(ModelMap model) {
         return "NicEditTest";
     }
-
 
 
 }

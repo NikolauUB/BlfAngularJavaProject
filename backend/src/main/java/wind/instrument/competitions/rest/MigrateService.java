@@ -32,7 +32,7 @@ public class MigrateService {
     //for testing only
     @RequestMapping("/migrate")
     public String migrate(HttpServletRequest req, HttpServletResponse res) {
-        if(!AuthService.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
+        if (!AuthService.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
             res.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return "Access Error!";
         }
@@ -98,17 +98,17 @@ public class MigrateService {
 
 
     private String getJazzDescription() {
-        return  "<p><strong>Композитор</strong>: Скотт Джо́плин (1868 - 1917, Scott Joplin)</p>" +
+        return "<p><strong>Композитор</strong>: Скотт Джо́плин (1868 - 1917, Scott Joplin)</p>" +
                 "<p><strong>Произведение</strong>: &quot;The Entertainer&quot;</p>" +
                 "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=kHtwF-gpluc\" target=\"_blank\">&nbsp;https://www.youtube.com/watch?v=kHtwF-gpluc</a> (гитара, но мы сможем и на духовом инструменте)</p>" +
                 "<p><strong>Ноты</strong>: <a href=\"https://cloud.mail.ru/public/52rG/TDexuQCrF\" target=\"_blank\">https://cloud.mail.ru/public/52rG/TDexuQCrF</a></p>" +
                 "<p>Есть минусовки в разных темпах:&nbsp;</p>" +
                 "<ul>" +
-	            "<li>Teмп 52: <a href=\"https://cloud.mail.ru/public/HqdY/PqLfo8JNV\" target=\"_blank\">https://cloud.mail.ru/public/HqdY/PqLfo8JNV</a></li>" +
-	            "<li>Темп 64: <a href=\"https://cloud.mail.ru/public/JEUp/nuxv6jj9x\" target=\"_blank\">https://cloud.mail.ru/public/JEUp/nuxv6jj9x</a></li>" +
-	            "<li>Темп 76: <a href=\"https://cloud.mail.ru/public/6V9S/eb3FbZiDe\" target=\"_blank\">https://cloud.mail.ru/public/6V9S/eb3FbZiDe</a></li>" +
-	            "<li>Темп 88: <a href=\"https://cloud.mail.ru/public/CKus/shbP5NdNs\" target=\"_blank\">https://cloud.mail.ru/public/CKus/shbP5NdNs</a></li>" +
-	            "<li>Темп 100: <a href=\"https://cloud.mail.ru/public/MqHe/m6j5jsPZK\" target=\"_blank\">https://cloud.mail.ru/public/MqHe/m6j5jsPZK</a></li>" +
+                "<li>Teмп 52: <a href=\"https://cloud.mail.ru/public/HqdY/PqLfo8JNV\" target=\"_blank\">https://cloud.mail.ru/public/HqdY/PqLfo8JNV</a></li>" +
+                "<li>Темп 64: <a href=\"https://cloud.mail.ru/public/JEUp/nuxv6jj9x\" target=\"_blank\">https://cloud.mail.ru/public/JEUp/nuxv6jj9x</a></li>" +
+                "<li>Темп 76: <a href=\"https://cloud.mail.ru/public/6V9S/eb3FbZiDe\" target=\"_blank\">https://cloud.mail.ru/public/6V9S/eb3FbZiDe</a></li>" +
+                "<li>Темп 88: <a href=\"https://cloud.mail.ru/public/CKus/shbP5NdNs\" target=\"_blank\">https://cloud.mail.ru/public/CKus/shbP5NdNs</a></li>" +
+                "<li>Темп 100: <a href=\"https://cloud.mail.ru/public/MqHe/m6j5jsPZK\" target=\"_blank\">https://cloud.mail.ru/public/MqHe/m6j5jsPZK</a></li>" +
                 "</ul>" +
                 "<p>Есть также плюс в одном из темпов: <a href=\"https://cloud.mail.ru/public/2xYE/1emrzc1eX\" target=\"_blank\">https://cloud.mail.ru/public/2xYE/1emrzc1eX</a></p>" +
                 "<p>Удачи!</p>";

@@ -2,30 +2,31 @@ package wind.instrument.competitions.data;
 
 import javax.persistence.*;
 import java.util.Date;
-@Entity(name="MessageEntity")
+
+@Entity(name = "MessageEntity")
 @Table(name = "message", schema = "forumdata")
 public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name =  "msg_id")
+    @Column(name = "msg_id")
     private Long msgId;
-    @Column(name =  "theme_id")
+    @Column(name = "theme_id")
     private Long themeId;
     @Column(name = "is_hidden")
     private Boolean isHidden;
     @Column(name = "reason_to_hide")
     private Integer reasonToHidden;
-    @Column(name =  "msg_body", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "msg_body", nullable = false, columnDefinition = "TEXT")
     private String msgBody;
-    @Column(name =  "msg_positive_rate")
+    @Column(name = "msg_positive_rate")
     private Integer msgPositiveRate;
-    @Column(name =  "msg_negative_rate")
+    @Column(name = "msg_negative_rate")
     private Integer msgNegativeRate;
-    @Column(name =  "parent_msg_id")
+    @Column(name = "parent_msg_id")
     private Long parentMsgId;
     @Column(name = "user_id_replied_to")
     private Long userIdRepliedTo;
-    @Column(name =  "user_id")
+    @Column(name = "user_id")
     private Long userId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

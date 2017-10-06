@@ -17,7 +17,6 @@ public class VoteData {
     private Integer order;
 
     public VoteData() {
-
     }
 
     public VoteData(long id,

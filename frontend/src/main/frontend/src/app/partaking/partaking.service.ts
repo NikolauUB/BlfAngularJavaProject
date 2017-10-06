@@ -5,7 +5,6 @@ import 'rxjs/add/operator/toPromise';
 
 import { PartakeThread } from '../model/PartakeThread';
 import { DiscussionItem } from '../model/DiscussionItem';
-import {StatusOfDiscussionItem} from "../model/StatusOfDiscussionItem";
 import {ActiveCompetitions} from "app/model/ActiveCompetitions";
 import {AuthService} from "../auth/auth.service";
 import {CompetitionData} from "../model/CompetitionData";

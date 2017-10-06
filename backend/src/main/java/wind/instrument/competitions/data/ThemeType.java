@@ -21,6 +21,7 @@ public enum ThemeType {
             map.put(type.value, type);
         }
     }
+
     public static ThemeType valueOf(int typeIndex) {
         return map.get(typeIndex);
     }

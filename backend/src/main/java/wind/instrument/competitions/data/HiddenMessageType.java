@@ -17,11 +17,13 @@ public enum HiddenMessageType {
     private HiddenMessageType(int value) {
         this.value = value;
     }
+
     static {
         for (HiddenMessageType type : HiddenMessageType.values()) {
             map.put(type.value, type);
         }
     }
+
     public static HiddenMessageType valueOf(int typeIndex) {
         return map.get(typeIndex);
     }

@@ -6,14 +6,14 @@ import java.io.Serializable;
 /**
  * Additional users for item. The owner is set in competition_items
  */
-@Entity(name="CompetitionItemUsers")
+@Entity(name = "CompetitionItemUsers")
 @Table(name = "competition_item_users", schema = "forumdata")
 public class CompetitionItemUsers implements Serializable {
     @Id
-    @Column(name =  "competition_item_id")
+    @Column(name = "competition_item_id")
     private Long competitionItemId;
     @Id
-    @Column(name =  "user_id")
+    @Column(name = "user_id")
     private Long userId;
 
     @ManyToOne(optional = false)

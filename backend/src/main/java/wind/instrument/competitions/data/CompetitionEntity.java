@@ -8,35 +8,35 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity(name="CompetitionEntity")
+@Entity(name = "CompetitionEntity")
 @Table(name = "competitions", schema = "forumdata")
 public class CompetitionEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name =  "competition_id")
+    @Column(name = "competition_id")
     private Long competitionId;
-    @Column(name =  "competition_name")
+    @Column(name = "competition_name")
     private String competitionName;
-    @Column(name =  "competition_desc", columnDefinition = "TEXT")
+    @Column(name = "competition_desc", columnDefinition = "TEXT")
     private String competitionDesc;
-    @Column(name =  "competition_sample_video")
+    @Column(name = "competition_sample_video")
     private String competitionSampleVideo;
-    @Column(name =  "competition_start")
+    @Column(name = "competition_start")
     private Date competitionStart;
-    @Column(name =  "competition_end")
+    @Column(name = "competition_end")
     private Date competitionEnd;
-    @Column(name =  "competition_type", nullable = false)
+    @Column(name = "competition_type", nullable = false)
     private Integer competitionType;
-    @Column(name =  "active", nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean active;
 
 
-    @OneToMany(mappedBy = "competition", targetEntity=CompetitionItemEntity.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "competition", targetEntity = CompetitionItemEntity.class, fetch = FetchType.LAZY)
     @OrderBy("created ASC")
     private Collection<CompetitionItemEntity> competitionItems;
 
-    @OneToMany(mappedBy = "competition", targetEntity=ThemeEntity.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "competition", targetEntity = ThemeEntity.class, fetch = FetchType.LAZY)
     @Fetch(value = FetchMode.SUBSELECT)
     private Collection<ThemeEntity> themesByMembers;
 

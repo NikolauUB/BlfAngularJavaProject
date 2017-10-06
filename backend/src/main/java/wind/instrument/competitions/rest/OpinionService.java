@@ -50,13 +50,9 @@ public class OpinionService {
      * @return
      */
     @RequestMapping(value = "/api/getVotingOpinions", method = RequestMethod.GET)
-        public VotingThread getVotingOpinions(@RequestParam("cId") Long competitionId, @RequestParam(value= "saId", required = false) Long msgStartAfterId,
+    public VotingThread getVotingOpinions(@RequestParam("cId") Long competitionId, @RequestParam(value= "saId", required = false) Long msgStartAfterId,
                                           @RequestParam(value="cd", required = false) Long controlDate, HttpServletResponse response) {
         VotingThread result = new VotingThread();
-        if (competitionId == null) {
-            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition id is not set!", response);
-            return result;
-        }
         //if controlDate not null and msgStartAfterId = null do  check for updates
         if (controlDate != null && msgStartAfterId == null) {
             if (!this.themeHasChanges(competitionId, controlDate)) {
@@ -103,57 +99,24 @@ public class OpinionService {
                         result.setYc(youngerMsgCount);
                     }
                 }
-               this.fillInOpinionItems(msgList, competitionId, result);
+                result.setOi(ServiceUtil.fillInDiscussionItems(msgList, competitionId));
             } catch (Exception ex) {
-                LOG.debug("Some error getting VotingOpinions: ",ex);
+                LOG.error("Some error getting VotingOpinions: ",ex);
             }
         }
         return result;
     }
 
-    private boolean themeHasChanges(Long id, Long controlDate) {
-        TypedQuery<Long> themeQuery =
-                em.createQuery("select count(*) from ThemeEntity t where t.themeType = :type and t.competitionId = :cId and t.updated > :cDate",
-                        Long.class);
-        try {
-            Date threadControlDate = new Date(controlDate.longValue());
-            Long count = themeQuery.setParameter("cId", id)
-                    .setParameter("type", ThemeType.COMPETITION_VOTING.getValue())
-                    .setParameter("cDate", threadControlDate)
-                    .getSingleResult();
-            return (count != null && count > 0);
-        } catch (NoResultException ex) {
-            LOG.debug("Some error getting themeHasChanges: ",ex);
-            return true;
-        }
-    }
-
-    private void fillInOpinionItems(List<MessageEntity> messages, Long competitionId, VotingThread result) {
-        ArrayList<DiscussionItem> opinionItemList = new ArrayList<DiscussionItem>();
-        for (MessageEntity item : messages) {
-            DiscussionItem opinionItem = new DiscussionItem();
-            opinionItem.setCompetitionId(competitionId);
-            opinionItem.setAuthorId(item.getUserId());
-            opinionItem.setUpdateDate(item.getUpdated());
-            opinionItem.setCreationDate(item.getCreated());
-            opinionItem.setMsgId(item.getMsgId());
-            opinionItem.setMsgText(item.getMsgBody());
-            opinionItem.setMsgThreadId(item.getThemeId());
-            opinionItem.setParentMsgId(item.getParentMsgId());
-            opinionItemList.add(opinionItem);
-        }
-        result.setOi(opinionItemList);
-    }
 
     @RequestMapping(value = "/api/saveOpinion", method = RequestMethod.POST)
     public DiscussionItem saveOpinion(@RequestBody DiscussionItem discussionItem, HttpServletResponse response) {
 
         if (discussionItem.getMsgText() == null || discussionItem.getMsgText().trim().length() == 0) {
-            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, bundle.getString("EMPTY_MSG_BODY"), response);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, bundle.getString("EMPTY_MSG_BODY"), response);
             return discussionItem;
         }
         if (discussionItem.getCompetitionId() == null) {
-            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition id is not set!", response);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Competition id is not set!", response);
             return discussionItem;
         }
         UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
@@ -162,8 +125,8 @@ public class OpinionService {
             ThemeEntity opinionTheme = this.getTheme(discussionItem, currentUser, response);
             return persistMessage(discussionItem, opinionTheme, currentUser, response);
         } catch (Exception ex) {
-            LOG.debug("Error saving voting message: ",ex);
-            this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
+            LOG.error("Error saving voting message: ",ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
             return discussionItem;
         }
 
@@ -171,10 +134,10 @@ public class OpinionService {
 
     @RequestMapping(value = "/api/deleteOpinion", method = RequestMethod.DELETE)
     public void deleteOpinion(@RequestParam("iid") Long msgId, HttpServletResponse response) {
-        UserEntity currentUser = em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
         MessageEntity message = em.find(MessageEntity.class, msgId);
         if (!message.getUserId().equals(currentUser.getUserId())) {
-            this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message not belongs to you", response);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Message not belongs to you", response);
             return;
         }
         ThemeEntity themeEntity = em.find(ThemeEntity.class, message.getThemeId());
@@ -197,8 +160,8 @@ public class OpinionService {
                 em.persist(opinionTheme);
             }
         } catch (Exception ex) {
-            LOG.debug("Error getting or saving voting theme: ",ex);
-            this.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
+            LOG.error("Error getting or saving voting theme: ",ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, bundle.getString("SERVER_ERROR"), response);
             return null;
         }
         return opinionTheme;
@@ -225,13 +188,13 @@ public class OpinionService {
         if (discussionItem.getMsgId() != null) {
             message = em.find(MessageEntity.class, discussionItem.getMsgId());
             if(opinionTheme != null && !message.getThemeId().equals(opinionTheme.getId())) {
-                LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to theme " + opinionTheme.getId());
-                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + opinionTheme.getId()", response);
+                LOG.error("ERROR: Message " + message.getMsgId() + " doesn't belong to theme " + opinionTheme.getId());
+                ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + opinionTheme.getId()", response);
                 return discussionItem;
             }
             if(!message.getUserId().equals(currentUser.getUserId())) {
-                LOG.debug("ERROR: Message " + message.getMsgId() + " doesn't belong to user " + currentUser.getUserId());
-                this.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request! Message doesn't belongs to you", response);
+                LOG.error("ERROR: Message " + message.getMsgId() + " doesn't belong to user " + currentUser.getUserId());
+                ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Bad request! Message doesn't belongs to you", response);
                 return discussionItem;
             }
         } else {
@@ -256,12 +219,21 @@ public class OpinionService {
         return discussionItem;
     }
 
-
-    private void sendResponseError(int code, String text,  HttpServletResponse response) {
+    private boolean themeHasChanges(Long id, Long controlDate) {
+        TypedQuery<Long> themeQuery =
+                em.createQuery("select count(*) from ThemeEntity t where t.themeType = :type and t.competitionId = :cId and t.updated > :cDate",
+                        Long.class);
         try {
-            response.sendError(code, text);
-        } catch (Exception ex) {
-            LOG.error("Something wrong sending error responses", ex);
+            Date threadControlDate = new Date(controlDate.longValue());
+            Long count = themeQuery.setParameter("cId", id)
+                    .setParameter("type", ThemeType.COMPETITION_VOTING.getValue())
+                    .setParameter("cDate", threadControlDate)
+                    .getSingleResult();
+            return (count != null && count > 0);
+        } catch (NoResultException ex) {
+            LOG.debug("Some error getting themeHasChanges: ",ex);
+            return true;
         }
     }
+
 }

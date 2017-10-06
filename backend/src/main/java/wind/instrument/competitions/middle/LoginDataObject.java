@@ -3,13 +3,15 @@ package wind.instrument.competitions.middle;
 public class LoginDataObject {
     private String username;
     private String password;
-    public LoginDataObject(){
+
+    public LoginDataObject() {
     }
 
-    public LoginDataObject(String anUsername, String aPassword){
+    public LoginDataObject(String anUsername, String aPassword) {
         this.username = anUsername;
         this.password = aPassword;
     }
+
     public String getUsername() {
         return username;
     }

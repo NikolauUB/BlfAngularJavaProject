@@ -16,11 +16,13 @@ public enum CompetitionType {
     private CompetitionType(int value) {
         this.value = value;
     }
+
     static {
         for (CompetitionType type : CompetitionType.values()) {
             map.put(type.value, type);
         }
     }
+
     public static CompetitionType valueOf(int typeIndex) {
         return map.get(typeIndex);
     }

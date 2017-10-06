@@ -1,7 +1,5 @@
 package wind.instrument.competitions.rest.model.changes;
 
-import java.util.ArrayList;
-
 public class ThreadChanges {
     private Boolean thChanged;
 

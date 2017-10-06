@@ -40,39 +40,38 @@ public class Question {
      */
     private static int RANDOM_DIRECT_OR_ALTERNATIVE = 2;
 
+    private String[] nonWind;
+    private String[] wind;
+
     public Question() {
-        this.createQuestion();
+    }
+
+    public void createQuestion() {
+        correctAnswers = new ArrayList<String>();
+        nonWindInstruments = new ArrayList<String>(Arrays.asList(this.getNonWind()));
+        windInstruments = new ArrayList<String>(Arrays.asList(this.getWind()));
     }
 
     /**
-     * @param replies - replies which come from client
+     * @param replies        - replies which come from client
      * @param correctReplies - replies saved in session of client
      * @throws BotCheckException
      */
-    public static void  checkUserReply(LinkedList<String> replies, ArrayList<String> correctReplies) throws BotCheckException {
+    public static void checkUserReply(LinkedList<String> replies, ArrayList<String> correctReplies) throws BotCheckException {
         if (replies == null || replies.size() == 0) {
             throw new BotCheckException(bundle.getString("AntiBotErrorNoReplies"));
         }
-        if(correctReplies == null) {
+        if (correctReplies == null) {
             throw new BotCheckException(bundle.getString("AntiBotErrorEmtpySession"));
         }
         if (replies.size() < correctReplies.size() || replies.size() > correctReplies.size()) {
             throw new BotCheckException(bundle.getString("AntiBotErrorReplyCountWrong"));
         }
         for (String reply : replies) {
-            if(!correctReplies.contains(reply)) {
+            if (!correctReplies.contains(reply)) {
                 throw new BotCheckException(bundle.getString("AntiBotErrorWrongReplies"));
             }
         }
-    }
-
-    /**
-     * Generate random wind instruments amount in current test
-     * @param max
-     */
-    private void generateWindInstrumentAmount(int max) {
-        Random  rand = new Random();
-        this.windInstAmount = rand.nextInt(max) + 1;
     }
 
     /**
@@ -85,8 +84,8 @@ public class Question {
     /**
      * @return list of all answers for current test
      */
-    public  ArrayList<String> getQuestionAnswers() {
-        if(windInstruments.size() == 0 || nonWindInstruments.size() == 0) {
+    public ArrayList<String> getQuestionAnswers() {
+        if (windInstruments.size() == 0 || nonWindInstruments.size() == 0) {
             return new ArrayList<String>();
         }
         ArrayList<String> result = new ArrayList<String>();
@@ -95,8 +94,8 @@ public class Question {
         int alternativeCounter = 0;
         HashSet<Integer> duplicateDirectControl = new HashSet<Integer>();
         HashSet<Integer> duplicateAlternativeControl = new HashSet<Integer>();
-        Random  rand = new Random();
-        while ((directCounter + alternativeCounter) < MAX_ANSWERS ) {
+        Random rand = new Random();
+        while ((directCounter + alternativeCounter) < MAX_ANSWERS) {
             if (rand.nextInt(RANDOM_DIRECT_OR_ALTERNATIVE) == 0 && directCounter < this.windInstAmount) {
                 directCounter = addRandomInstrument(duplicateDirectControl,
                         directCounter, windInstruments, result, true);
@@ -112,19 +111,19 @@ public class Question {
      * direct - true answers
      * alternative  - false answers
      *
-     * @param duplicateControl - direct or alternative hashset.
-     * @param counter - direct or alternative answers counter.
+     * @param duplicateControl     - direct or alternative hashset.
+     * @param counter              - direct or alternative answers counter.
      * @param instrumentCollection - direct or alternative (wind or non-wind) list
-     * @param result - common list of all answers
-     * @param isCorrect - true = direct(wind), false = alternative(non-wind)
+     * @param result               - common list of all answers
+     * @param isCorrect            - true = direct(wind), false = alternative(non-wind)
      * @return counter direct or alternative depending on input parameters
      */
-    private int addRandomInstrument( HashSet<Integer> duplicateControl,
-                                            int counter,
-                                            ArrayList<String> instrumentCollection,
-                                            ArrayList<String> result,
-                                            boolean isCorrect){
-        Random  rand = new Random();
+    private int addRandomInstrument(HashSet<Integer> duplicateControl,
+                                    int counter,
+                                    ArrayList<String> instrumentCollection,
+                                    ArrayList<String> result,
+                                    boolean isCorrect) {
+        Random rand = new Random();
         Integer index = rand.nextInt(instrumentCollection.size() - 1);
         if (!duplicateControl.contains(index)) {
             result.add(instrumentCollection.get(index));
@@ -136,8 +135,32 @@ public class Question {
     }
 
 
+    /**
+     * Generate random wind instruments amount in current test
+     *
+     * @param max
+     */
+    private void generateWindInstrumentAmount(int max) {
+        Random rand = new Random();
+        this.windInstAmount = rand.nextInt(max) + 1;
+    }
 
-        nonWindInstruments = new ArrayList<String>(Arrays.asList(nonWind));
-        windInstruments = new ArrayList<String>(Arrays.asList(wind));
+    /**
+     * these arrays are initialized from private-bean-data-config.xml
+     */
+    public String[] getNonWind() {
+        return nonWind;
+    }
+
+    public void setNonWind(String[] nonWind) {
+        this.nonWind = nonWind;
+    }
+
+    public String[] getWind() {
+        return wind;
+    }
+
+    public void setWind(String[] wind) {
+        this.wind = wind;
     }
 }

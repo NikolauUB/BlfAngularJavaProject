@@ -4,21 +4,21 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(name="CompetitionVotingEntity")
-@Table(name = "competition_voting", schema = "forumdata",   uniqueConstraints=
-@UniqueConstraint(columnNames={"user_id", "competition_item_id"}))
+@Entity(name = "CompetitionVotingEntity")
+@Table(name = "competition_voting", schema = "forumdata", uniqueConstraints =
+@UniqueConstraint(columnNames = {"user_id", "competition_item_id"}))
 public class CompetitionVotingEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name =  "competition_voting_id")
+    @Column(name = "competition_voting_id")
     private Long competitionVotingId;
-    @Column(name =  "competition_id")
+    @Column(name = "competition_id")
     private Long competitionId;
-    @Column(name =  "competition_item_id")
+    @Column(name = "competition_item_id")
     private Long competitionItemId;
-    @Column(name =  "voting_order")
+    @Column(name = "voting_order")
     private Integer votingOrder;
-    @Column(name =  "user_id")
+    @Column(name = "user_id")
     private Long userId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)

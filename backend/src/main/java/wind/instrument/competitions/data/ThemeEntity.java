@@ -4,33 +4,32 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity(name="ThemeEntity")
+@Entity(name = "ThemeEntity")
 @Table(name = "theme", schema = "forumdata")
 public class ThemeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name =  "theme_id")
+    @Column(name = "theme_id")
     private Long id;
-    @Column(name =  "competition_id")
+    @Column(name = "competition_id")
     private Long competitionId;
-    @Column(name =  "theme_name", columnDefinition = "TEXT")
+    @Column(name = "theme_name", columnDefinition = "TEXT")
     private String name;
-    @Column(name =  "theme_type", nullable = false)
+    @Column(name = "theme_type", nullable = false)
     private Integer themeType;
-    @Column(name =  "user_id")
+    @Column(name = "user_id")
     private Long userId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
-    @OneToMany(mappedBy = "theme", targetEntity=MessageEntity.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theme", targetEntity = MessageEntity.class, fetch = FetchType.EAGER)
     private Collection<MessageEntity> messages;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
     private CompetitionEntity competition;
-  
+
     private Date created;
     private Date updated;
-
 
 
     @PrePersist

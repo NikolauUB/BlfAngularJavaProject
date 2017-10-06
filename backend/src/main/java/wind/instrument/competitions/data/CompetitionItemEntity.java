@@ -5,32 +5,32 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity(name="CompetitionItemEntity")
+@Entity(name = "CompetitionItemEntity")
 @Table(name = "competition_items", schema = "forumdata")
 public class CompetitionItemEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name =  "competition_item_id")
+    @Column(name = "competition_item_id")
     private Long competitionItemId;
-    @Column(name =  "competition_id")
+    @Column(name = "competition_id")
     private Long competitionId;
-    @Column(name =  "cn_item_composition")
+    @Column(name = "cn_item_composition")
     private String cnItemComposition;
-    @Column(name =  "cn_item_author")
+    @Column(name = "cn_item_author")
     private String cnItemAuthor;
-    @Column(name =  "cn_item_instruments")
+    @Column(name = "cn_item_instruments")
     private String cnItemInstruments;
-    @Column(name =  "cn_item_description", columnDefinition = "TEXT")
+    @Column(name = "cn_item_description", columnDefinition = "TEXT")
     private String cnItemDescription;
-    @Column(name =  "cn_item_audio")
+    @Column(name = "cn_item_audio")
     private String cnItemAudio;
-    @Column(name =  "cn_item_embed_audio")
+    @Column(name = "cn_item_embed_audio")
     private String cnItemEmbedAudio;
-    @Column(name =  "cn_item_video")
+    @Column(name = "cn_item_video")
     private String cnItemVideo;
-    @Column(name =  "cn_item_embed_video")
+    @Column(name = "cn_item_embed_video")
     private String cnItemEmbedVideo;
-    @Column(name =  "user_id")
+    @Column(name = "user_id")
     private Long userId;
 
     @ManyToOne(optional = false)
@@ -41,7 +41,7 @@ public class CompetitionItemEntity implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
 
-    @OneToMany(mappedBy = "competitionItem", targetEntity=CompetitionItemUsers.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "competitionItem", targetEntity = CompetitionItemUsers.class, fetch = FetchType.LAZY)
     private Collection<CompetitionItemUsers> competitionItemUsers;
 
     private Date created;
