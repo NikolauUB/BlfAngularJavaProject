@@ -9,7 +9,6 @@ import wind.instrument.competitions.data.MessageEntity;
 import wind.instrument.competitions.data.ThemeEntity;
 import wind.instrument.competitions.data.ThemeType;
 import wind.instrument.competitions.data.UserEntity;
-import wind.instrument.competitions.rest.model.PartakeThread;
 import wind.instrument.competitions.rest.model.VotingThread;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 
@@ -19,7 +18,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;

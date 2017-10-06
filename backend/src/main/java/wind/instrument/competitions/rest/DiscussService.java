@@ -9,6 +9,7 @@ import wind.instrument.competitions.data.MessageEntity;
 import wind.instrument.competitions.data.ThemeEntity;
 import wind.instrument.competitions.data.ThemeType;
 import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.middle.AdminInfo;
 import wind.instrument.competitions.rest.model.PartakeThread;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 
@@ -91,7 +92,7 @@ public class DiscussService {
         PartakeThread result = new PartakeThread();
         result.setThreadId(themeId);
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
-        if (!AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
+        if (!AdminInfo.ADMIN_USERNAME.equals(currentUser.getUsername())) {
             return result;
         }
         TypedQuery<MessageEntity> msgQuery =
@@ -188,7 +189,7 @@ public class DiscussService {
             return discussionItem;
         }
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
-        if (AuthService.ADMIN_USERNAME.equals(currentUser.getUsername()) && discussionItem.getParentMsgId() != null) {
+        if (AdminInfo.ADMIN_USERNAME.equals(currentUser.getUsername()) && discussionItem.getParentMsgId() != null) {
             return persistMessage(discussionItem, null, currentUser, response);
         }
 

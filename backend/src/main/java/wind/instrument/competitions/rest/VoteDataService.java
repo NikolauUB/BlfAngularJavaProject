@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import wind.instrument.competitions.data.*;
+import wind.instrument.competitions.middle.AdminInfo;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionInfo;
 import wind.instrument.competitions.rest.model.CompetitionItem;
@@ -276,7 +277,7 @@ public class VoteDataService {
 
     private boolean isAdmin(HttpServletResponse response) {
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
-        if (!AuthService.ADMIN_USERNAME.equals(currentUser.getUsername())) {
+        if (!AdminInfo.ADMIN_USERNAME.equals(currentUser.getUsername())) {
             try {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not administrator");
             } catch (Exception ex) {

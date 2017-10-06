@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wind.instrument.competitions.data.MessageEntity;
 import wind.instrument.competitions.data.UserEntity;
-import wind.instrument.competitions.rest.model.VotingThread;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 
 import javax.persistence.EntityManager;

@@ -48,11 +48,6 @@ public class AuthService {
      * Russian messages
      */
     private static ResourceBundle bundle = ResourceBundle.getBundle("Messages");
-    /**
-     * Single user with admin privileges
-     */
-    //todo add user with such name with migration
-    public static String ADMIN_USERNAME = "NikolayUB";
 
     @Autowired
     private HttpSession httpSession;
@@ -66,6 +61,7 @@ public class AuthService {
     @Qualifier("antiBotQuestion")
     @Autowired
     private Question antiBotQuestion;
+
 
     /**
      * Frond end calls checkAuth first and gets new csrf token
@@ -299,6 +295,4 @@ public class AuthService {
         result.setNewQuestion(this.restRegistrationQuestion());
         return result;
     }
-
-
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wind.instrument.competitions.configuration.SessionParameters;
 import wind.instrument.competitions.data.CompetitionEntity;
 import wind.instrument.competitions.data.CompetitionType;
+import wind.instrument.competitions.middle.AdminInfo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,7 +33,7 @@ public class MigrateService {
     //for testing only
     @RequestMapping("/migrate")
     public String migrate(HttpServletRequest req, HttpServletResponse res) {
-        if (!AuthService.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
+        if (!AdminInfo.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
             res.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return "Access Error!";
         }
