@@ -64,7 +64,6 @@ export class OpinionsComponent implements AfterViewInit {
     public replyTo(item: DiscussionItem):void {
         var quotaText = item.msgText;
         var splitForQuota = quotaText.split("</td></tr></tbody></table></div>");
-        alert(splitForQuota.length);
         if (splitForQuota.length > 1) {
             quotaText = splitForQuota[splitForQuota.length - 1];
         }

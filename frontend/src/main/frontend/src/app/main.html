@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div id="header-inner" class="top">
     <div id="logo-title">
-      <div id="logo"><img src="assets/images/LogoUL.png"/></div>
+      <div id="logo"><img src="assets/images/LogoUL1.png"/></div>
     </div>
   </div>
         <ul class="navigation">
@@ -18,12 +18,12 @@
           </li>
 
           <div  class ="upperMenu" *ngIf="!isUsersAuthentificated()">
-            <li><a class="[ btn active ]" routerLink="/login" routerLinkActive="active">Войти</a></li>
-            <li><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
+            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/login" routerLinkActive="active">Войти</a></li>
+            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
           </div>
           <div  class ="upperMenu" *ngIf="isUsersAuthentificated()">
-            <li><a (click)="doLogout(); $event.stopPropagation()">Выйти</a></li>
-            <li><a routerLink="/profile" routerLinkActive="active">Личный кабинет</a></li>
+            <li class="upperMenuLi"><a class="upperMenuButton" href="" (click)="doLogout(); $event.stopPropagation()">Выйти</a></li>
+            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/profile" routerLinkActive="active">Личный кабинет</a></li>
           </div>
           <div  class ="welcome" *ngIf="isUsersAuthentificated()">
             <li><a>Добро пожаловать, {{getUserName()}}</a>
@@ -31,7 +31,7 @@
                 <li><a routerLink="/profile" routerLinkActive="active">Сменить имя и фотографию</a></li>
                 <li><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a></li>
                 <li><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></li>
-                <li><a (click)="doLogout(); $event.stopPropagation()">Выход&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li><a href="" (click)="doLogout(); $event.stopPropagation()">Выход&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
               </ul>
             </li>
           </div>

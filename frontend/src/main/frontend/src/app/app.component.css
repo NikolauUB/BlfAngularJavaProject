@@ -62,13 +62,27 @@ body {
 .upperMenu {
   float: right;
   display: block;
-  padding: 0 20px;
+  padding: 0 0 0 0;
   text-decoration: none;
-  margin-top: -60px;
-  line-height: 40px;
-  color: #fff;
-  background: rgb(58, 58, 58);
+  margin-top: -34px;
+  line-height: 21px;
+
+
 }
+.upperMenuButton {
+  background: rgb(115, 115, 115);
+  height: 24px;
+  margin-right: 10px;
+  line-height: 21px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+}
+.upperMenuLi {
+  height: 24px;
+  margin-right: 10px;
+  line-height: 21px;
+}
+
+
 
 .welcome {
   float: right;
@@ -84,6 +98,11 @@ body {
 .navigation li:hover {
   background: #222;
 }
+.navigation .upperMenu li:hover {
+  background: #222;
+  margin-right: 11px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+}
 
 .navigation li:first-child {
   -webkit-border-radius: 5px 5px 0 0;
@@ -97,6 +116,15 @@ body {
   line-height: 40px;
   color: #fff;
 }
+
+.navigation .upperMenu li a {
+  display: block;
+  padding: 0 20px;
+  text-decoration: none;
+  line-height: 21px;
+  color: #fff;
+}
+
 
 .navigation ul {
   display: none;

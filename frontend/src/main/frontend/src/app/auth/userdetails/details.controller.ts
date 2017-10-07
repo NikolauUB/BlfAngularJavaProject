@@ -22,7 +22,9 @@ export class DetailsController {
               .catch( e =>  console.log(e));
         } else {
           item.authorUsername = details.username;
-          item.authorAvatar = details.avatar;
+          if(details.avatar) {
+              item.authorAvatar = details.avatar;
+          }
         }
       }, (error) => {
         console.log(error);
@@ -45,7 +47,9 @@ export class DetailsController {
                 .catch( e =>  console.log(e));
           } else {
             userData.username = details.username;
-            userData.previewImage = details.avatar;
+            if (details.avatar) {
+                userData.previewImage = details.avatar;
+            }
             userData.created = details.created;
           }
         }, (error) => {
@@ -62,7 +66,9 @@ export class DetailsController {
   public loadUserDetailInItemAndUserDataByIdFromDB(item: DiscussionItem): void {
     if (this.userAvatarMap.has(item.authorId)) {
       var usrData = this.userAvatarMap.get(item.authorId);
-      item.authorAvatar = usrData.previewImage;
+      if (usrData.previewImage) {
+          item.authorAvatar = usrData.previewImage;
+      }
       item.authorUsername = usrData.username;
       console.info("from Map" + item.authorId);
     } else {
@@ -96,7 +102,9 @@ export class DetailsController {
 
   private fillInDiscussItem(reply:UserData, item: DiscussionItem) {
     item.authorUsername = reply.username;
-    item.authorAvatar = reply.previewImage;
+    if (reply.previewImage) {
+        item.authorAvatar = reply.previewImage;
+    }
   }
 
   private saveUserDetailsInDB(reply:UserData, item: DiscussionItem) {
@@ -107,7 +115,9 @@ export class DetailsController {
   private fillInUserData(reply: UserData, userData: UserData) {
     if (userData) {
       userData.username = reply.username;
-      userData.previewImage = reply.previewImage;
+      if (reply.previewImage) {
+          userData.previewImage = reply.previewImage;
+      }
       userData.created = reply.created;
     }
   }
