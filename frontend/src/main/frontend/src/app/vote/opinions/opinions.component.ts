@@ -1,15 +1,15 @@
-import {Component, AfterViewInit, Inject, ChangeDetectorRef} from "@angular/core";
+import {AfterViewInit, ChangeDetectorRef, Component, Inject} from "@angular/core";
 import {DiscussionItem} from "../../model/DiscussionItem";
 import {VotingThread} from "../../model/VotingThread";
-import { OpinionService } from "./opinion.service";
-import  {AuthService } from "../../auth/auth.service";
-import { Router } from '@angular/router';
-import { CompetitionShortInfo} from "../../partaking/CompetitionShortInfo";
+import {OpinionService} from "./opinion.service";
+import {AuthService} from "../../auth/auth.service";
+import {Router} from '@angular/router';
+import {CompetitionShortInfo} from "../../partaking/CompetitionShortInfo";
 import {ChangesController} from "../../changescontrol/changes.controller";
 import {DetailsController} from "../../auth/userdetails/details.controller";
-import { UserData } from '../../model/auth/UserData';
 
 declare var nicEditor: any;
+declare var $;
 
 @Component({
     selector: 'opinions-app',
@@ -51,11 +51,27 @@ export class OpinionsComponent implements AfterViewInit {
 
     }
 
+    onResize(event:any) {
+        this.adjustNicEdits();
+    }
+
+    private adjustNicEdits() {
+        $('.nicEdit-panelContain').parent().width("100%");
+        $('.nicEdit-panelContain').parent().next().width('100%');
+        $('.nicEdit-main').width('99%');
+    }
+
     public replyTo(item: DiscussionItem):void {
-        var shortText = (item.msgText.length > 700) ? item.msgText.substring(0, 697) + "..." : item.msgText;
-        var quota = "<small><b>Ответ на сообщение:</b></small><br/><table border='1' cellpadding='10' cellpadding='10' style='width:90%'>"
-            + "<tr><td><b>Автор:&nbsp;</b>" + item.authorUsername + "</td><td><b>Сообщение от:&nbsp;</b>" + this.convertTimeToDate(item.creationDate) + "</td></tr>"
-            + "<tr><td colspan='2'>" + shortText + "</td></tr></table><br/><br/>";
+        var quotaText = item.msgText;
+        var splitForQuota = quotaText.split("</td></tr></tbody></table></div>");
+        alert(splitForQuota.length);
+        if (splitForQuota.length > 1) {
+            quotaText = splitForQuota[splitForQuota.length - 1];
+        }
+        var shortText = (quotaText.length > 500) ? quotaText.substring(0, 497) + "..." : quotaText;
+        var quota = "<div><small><b>Ответ на сообщение:</b></small><br/><table border='1' cellpadding='10' cellpadding='10' style='width:90%'>"
+            + "<tr><td><b>&nbsp;Автор:&nbsp;</b>" + item.authorUsername + "&nbsp;</td><td><b>&nbsp;Сообщение от:&nbsp;</b>" + this.convertTimeToDate(item.creationDate) + "&nbsp;</td></tr>"
+            + "<tr><td colspan='2'>" + shortText + "</td></tr></table></div data=1><br>";
         this.nicEdit.instanceById('nickEdit').setContent(quota);
         this.editItemId = -1;
         window.scrollTo(0,document.body.scrollHeight);
@@ -89,6 +105,7 @@ export class OpinionsComponent implements AfterViewInit {
                     'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
                     'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
                 }).panelInstance('nickEdit');
+            this.adjustNicEdits();
         }
         this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
         this.loadOpinionsFirstPage();
@@ -158,9 +175,9 @@ export class OpinionsComponent implements AfterViewInit {
             buttonList: ['bold', 'italic', 'underline', 'left', 'center', 'right', 'justify',
                 'ol', 'ul', 'subscript', 'superscript', 'strikethrough', 'removeformat',
                 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
-                'fontSize', 'fontFamily', 'fontFormat', 'xhtml'],
-            width: (window.innerWidth*2)/3
+                'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
         }).panelInstance('nickEditE');
+        this.adjustNicEdits();
         this.nicEditE.instanceById('nickEditE').setContent(item.msgText);
     }
     public cancelEdit(): void {
@@ -179,7 +196,7 @@ export class OpinionsComponent implements AfterViewInit {
 
     private saveItem(item: DiscussionItem, msg: string): boolean {
         if (this.isAutheticated()) {
-            if (msg.trim().length === 0) {
+            if (msg.trim().length === 0 || msg.trim() == "<br>") {
                 this.editErrorMsg="Cообщение не может быть пустым";
                 return false;
             }
@@ -246,7 +263,7 @@ export class OpinionsComponent implements AfterViewInit {
             alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт!");
             this.router.navigateByUrl("login");
         } else {
-            this.opinionErrorMsg = e.json().message || e.toString();
+            this.opinionErrorMsg =  e.toString() || e.json().message;
         }
     }
 

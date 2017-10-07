@@ -26,7 +26,11 @@ public class ServiceUtil {
     }
 
     protected static UserEntity findCurrentUser(EntityManager em, HttpSession httpSession) {
-        return em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        if (httpSession.getAttribute("USER_ID") != null) {
+            return em.find(UserEntity.class, httpSession.getAttribute("USER_ID"));
+        } else {
+            return null;
+        }
     }
 
     /**

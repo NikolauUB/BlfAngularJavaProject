@@ -1,7 +1,7 @@
 <div class="wrapper">
-  <div id="header-inner" class="top logo_background">
+  <div id="header-inner" class="top">
     <div id="logo-title">
-      <div id="logo"></div>
+      <div id="logo"><img src="assets/images/LogoUL.png"/></div>
     </div>
   </div>
         <ul class="navigation">
@@ -17,13 +17,13 @@
             </ul>
           </li>
 
-          <div  class ="welcome" *ngIf="!isUsersAuthentificated()">
-            <li><a *ngIf="!isUsersAuthentificated()" routerLink="/login" routerLinkActive="active">Вход</a>
-              <ul>
-                <li><a routerLink="/login" routerLinkActive="active">Войти</a></li>
-                <li><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
-              </ul>
-            </li>
+          <div  class ="upperMenu" *ngIf="!isUsersAuthentificated()">
+            <li><a class="[ btn active ]" routerLink="/login" routerLinkActive="active">Войти</a></li>
+            <li><a routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
+          </div>
+          <div  class ="upperMenu" *ngIf="isUsersAuthentificated()">
+            <li><a (click)="doLogout(); $event.stopPropagation()">Выйти</a></li>
+            <li><a routerLink="/profile" routerLinkActive="active">Личный кабинет</a></li>
           </div>
           <div  class ="welcome" *ngIf="isUsersAuthentificated()">
             <li><a>Добро пожаловать, {{getUserName()}}</a>
@@ -35,6 +35,7 @@
               </ul>
             </li>
           </div>
+
           <div class="clear"></div>
 
         </ul>

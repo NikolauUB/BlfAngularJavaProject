@@ -27,7 +27,7 @@ body {
 }
 
 .top {
-  min-height: 100px;
+  min-height: 115px;
   border-radius: 10px 10px 0 0;
 }
 
@@ -53,13 +53,21 @@ body {
   background: rgb(58, 58, 58);
   border-top: solid 3px #fff;
   border-bottom: solid 3px #fff;
-
-  box-shadow:  0px -2px 3px -1px rgba(0, 0, 0, 1);
-
 }
 
 .navigation li {
   float: left;
+}
+
+.upperMenu {
+  float: right;
+  display: block;
+  padding: 0 20px;
+  text-decoration: none;
+  margin-top: -60px;
+  line-height: 40px;
+  color: #fff;
+  background: rgb(58, 58, 58);
 }
 
 .welcome {
