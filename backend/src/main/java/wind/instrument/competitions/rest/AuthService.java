@@ -155,10 +155,6 @@ public class AuthService {
      */
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
     public AuthStatus restLogout(HttpServletRequest request, HttpServletResponse response) {
-        AuthStatus auth = this.checkAuth(request, response);
-        if (!auth.getAuth()) {
-            return auth;
-        }
         SecurityContextHolder.getContext().setAuthentication(null);
         httpSession.removeAttribute(SessionParameters.USERNAME.name());
         httpSession.removeAttribute(SessionParameters.USER_CREATED.name());

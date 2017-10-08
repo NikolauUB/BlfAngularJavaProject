@@ -82,7 +82,7 @@ export class VoteComponent implements OnInit {
 
   private saveInLocalStorageAndPrepare(voteInfo: CompetitionInfo): void {
     localStorage.setItem(
-        ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType,
+        ChangesController.VOTING_PREFIX + voteInfo.competitionData.type,
         JSON.stringify(voteInfo));
     this.prepareView(voteInfo);
   }

@@ -108,7 +108,7 @@ export class CompetitionComponent  implements  OnInit {
     this.competitionData = reply;
     this.competitionShortInfo.compId = this.competitionData.id;
     localStorage.setItem(
-      ChangesController.DESCRIPTION_PREFIX + this.competitionShortInfo.compType,
+      ChangesController.DESCRIPTION_PREFIX + this.competitionData.type,
       JSON.stringify(this.competitionData));
   }
 

@@ -1,9 +1,5 @@
 <vote-menu-app></vote-menu-app>
 <h2>Голосование начнется с {{this.convertTimeToDate(this.voteInfo.competitionData.start)}} и продлится до {{this.convertTimeToDate(this.voteInfo.competitionData.end)}}</h2>
-<div>
-<h3>Сейчас проводится тестирование. Пожалуйста, оцените, насколько удобно голосовать и оставлять отзывы.</h3>
-<small>После окончания тестирования, тестовые пользователи, тестовые результаты голосования и тестовые отзывы будут удалены</small>
-</div>
 <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>
 <small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button></small>
 <small *ngIf="!isAuthentificated()"><button class="btn btn-warning btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
