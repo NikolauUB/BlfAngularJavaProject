@@ -1,19 +1,19 @@
-<vote-menu-app></vote-menu-app>
-<h2>Голосование начнется с {{this.convertTimeToDate(this.voteInfo.competitionData.start)}} и продлится до {{this.convertTimeToDate(this.voteInfo.competitionData.end)}}</h2>
-<small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>
-<small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button></small>
-<small *ngIf="!isAuthentificated()"><button class="btn btn-warning btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
 <div style="margin-bottom: 20px;">
-  <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
-  <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
+    <small *ngIf="!isAuthentificated()"><button class="btn btn-danger btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
+    <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>
+    <small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button></small>
+
   <button *ngIf="isAuthentificated() && !voteInfo.voted && !opinionsMode" class="[ btn btn-success active ]" [class.disabled]="!anySelected()" (click)="sendResult(); $event.stopPropagation()">Сохранить результаты голосования</button>
   <button *ngIf="isAuthentificated() && voteInfo.voted && !opinionsMode" class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()">Изменить Ваш выбор</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
+<vote-menu-app *ngIf="!opinionsMode"></vote-menu-app>
 <h4 *ngIf="!opinionsMode">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов.</h4>
 <span  *ngFor="let voteItem of this.getVoteDataArray()">
   <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem)">
-    <div class="[ btn-group ]" class="voteItemHeader">
+    <div class="voteItemHeader btn-group" >
         <a *ngIf="voteItem.order && !isAllSelected"  class="circleBtn">
           <span class="numberCircle" *ngIf="selectedItem.has(voteItem)" title="Порядок выбора"><b>{{voteItem.order}}</b></span>
         </a>

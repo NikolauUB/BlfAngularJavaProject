@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { Router }            from '@angular/router';
+import { ActivatedRoute, Router }            from '@angular/router';
 
 import { VoteData }                from '../model/VoteData';
 import { VoteService }         from './vote.service';
@@ -40,7 +40,8 @@ export class VoteComponent implements OnInit {
     protected competitionShortInfo: CompetitionShortInfo,
     private router: Router,
     private detailsController: DetailsController,
-    private changesController: ChangesController) {
+    private changesController: ChangesController,
+    private route: ActivatedRoute) {
 
 
   }
@@ -77,6 +78,9 @@ export class VoteComponent implements OnInit {
   }
 
   public getVoteDataArray(): Array<VoteData>{
+    if (this.opinionsMode && this.competitionShortInfo.compType !== 0) {
+        this.router.navigate(["/voteBaroque"], { queryParams: { discuss: 1 }});
+    }
     return (this.opinionsMode) ? this.emptyVoteData : this.voteInfo.voteData;
   }
 
@@ -105,6 +109,9 @@ export class VoteComponent implements OnInit {
 
 
   ngOnInit(): void {
+    if(this.route.snapshot.queryParams['discuss'] != null) {
+        this.opinionsMode = true;
+    }
     this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
     if (!this.authService.getAuth()) {
       this.authService.init().then(e=>this.getVoteInfo());

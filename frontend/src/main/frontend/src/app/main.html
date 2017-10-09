@@ -23,7 +23,7 @@
             <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
           </div>
           <div  class ="upperMenu" *ngIf="isUsersAuthentificated()">
-            <li class="upperMenuLi"><a class="upperMenuButton" (click)="doLogout(); $event.stopPropagation()">Выйти</a></li>
+            <li class="upperMenuLi"><a class="upperMenuButton" (click)="doLogout(); $event.stopPropagation()" routerLinkActive="active">Выйти</a></li>
             <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/profile" routerLinkActive="active">Личный кабинет</a></li>
           </div>
           <div  class ="welcome" *ngIf="isUsersAuthentificated()">
