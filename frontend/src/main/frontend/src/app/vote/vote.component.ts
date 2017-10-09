@@ -159,6 +159,11 @@ export class VoteComponent implements OnInit {
   }
 
   protected deleteVoting(): void {
+    this.errorMsg = "";
+    if ( new Date(this.voteInfo.competitionData.end) < new Date()) {
+        this.errorMsg = "Извините, голосование закрыто!";
+        return;
+    }
     this.voteService
       .deleteVote(this.voteInfo.competitionData.id, this.authService.getAuth())
       .then(reply=>{
@@ -174,6 +179,10 @@ export class VoteComponent implements OnInit {
     this.errorMsg = "";
     if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
       return;
+    }
+    if ( new Date(this.voteInfo.competitionData.end) < new Date()) {
+        this.errorMsg = "Извините, голосование закрыто!";
+        return;
     }
     if (this.selectedItem.has(voteSelected)) {
       this.deselectItem(voteSelected);
