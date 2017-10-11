@@ -108,6 +108,7 @@ public class CompetitionService {
                         competitionMember.setmId(member.getUserId());
                         competitionMember.setmUsername(member.getUsername());
                         competitionMember.setCompType(item.getCompetitionType().getValue());
+                        //todo check theme msg count > 0
                         competitionMember.setThreadId(theme.getId());
                         result.add(competitionMember);
                     }

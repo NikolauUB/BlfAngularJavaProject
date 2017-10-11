@@ -37,6 +37,7 @@ export class EditModalComponent implements AfterViewInit{
                    modelForChange: DiscussionItem,
                    saver: EditInterface,
                    actionDesc: string): void {
+    this.adjustEdit();
     this.errorMsg = "";
     this.model = new DiscussionItem();
     this.modalName = name;
@@ -50,6 +51,13 @@ export class EditModalComponent implements AfterViewInit{
     this.whatToDo = actionDesc;
     window.scrollTo(0,0);
     this.modal.show();
+  }
+
+  public adjustEdit() {
+    var height = (window.innerHeight / 2.5) + "px";
+    var mainHeight = (window.innerHeight / 3) + "px";
+    $('#nickEdit').parent().height(height);
+    $('.nicEdit-main').height(mainHeight);
   }
 
 

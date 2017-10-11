@@ -19,7 +19,7 @@ body {
 }
 .wrapper {
   width: 90%;
-  min-width: 850px;
+  min-width: 600px;
   margin: 20px auto;
   border-radius: 10px;
   border: solid 3px #fff;
@@ -66,9 +66,8 @@ body {
   text-decoration: none;
   margin-top: -34px;
   line-height: 21px;
-
-
 }
+
 .upperMenuButton {
   background: rgb(115, 115, 115);
   height: 24px;

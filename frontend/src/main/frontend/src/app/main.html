@@ -5,26 +5,30 @@
     </div>
   </div>
         <ul class="navigation">
-          <li><a routerLink="/welcome" routerLinkActive="active">Главная</a></li>
+          <li><a routerLink="/welcome" routerLinkActive="active">Главная</a>
+            <ul *ngIf="!isUsersAuthentificated()">
+              <li><a routerLink="/login" routerLinkActive="active">Войти</a></li>
+              <li><a routerLink="/registration" routerLinkActive="active">Регистрация</a></li>
+            </ul>
+            <ul *ngIf="isUsersAuthentificated()">
+              <li><a (click)="doLogout(); $event.stopPropagation()" routerLinkActive="active">Выйти</a></li>
+            </ul>
+          </li>
           <li><a routerLink="/voteBaroque" routerLinkActive="active">Конкурсы</a></li>
           <li><a routerLink="/baroque" routerLinkActive="active">Заявки на участие</a></li>
-          <li><a routerLink="/rules" routerLinkActive="active">Правила</a></li>
           <li><a routerLink="/about" routerLinkActive="active">О сайте</a>
             <ul>
               <li><a routerLink="/about" routerLinkActive="active">Назначение сайта</a></li>
+              <li><a routerLink="/rules" routerLinkActive="active">Правила</a></li>
               <li><a routerLink="/history" routerLinkActive="active">История создания</a></li>
               <li><a routerLink="/blfRuStatistic" routerLinkActive="active">Статистика фестивалей</a></li>
+              <li><a (click)="cleanCache(); $event.stopPropagation()" routerLinkActive="active">Очистить кэш</a></li>
               <!--<li><a routerLink="/blfRuRecords" routerLinkActive="active">Записи участников конкурсов blf.ru</a></li>-->
             </ul>
           </li>
 
-          <div  class ="upperMenu" *ngIf="!isUsersAuthentificated()">
-            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/login" routerLinkActive="active">Войти</a></li>
-            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/registration" routerLinkActive="active">Зарегистрироваться</a></li>
-          </div>
-          <div  class ="upperMenu" *ngIf="isUsersAuthentificated()">
-            <li class="upperMenuLi"><a class="upperMenuButton" (click)="doLogout(); $event.stopPropagation()" routerLinkActive="active">Выйти</a></li>
-            <li class="upperMenuLi"><a class="upperMenuButton" routerLink="/profile" routerLinkActive="active">Личный кабинет</a></li>
+          <div  class ="welcome" *ngIf="!isUsersAuthentificated()">
+            <li><a routerLink="/login" routerLinkActive="active">Войти</a></li>
           </div>
           <div  class ="welcome" *ngIf="isUsersAuthentificated()">
             <li><a>Добро пожаловать, {{getUserName()}}</a>
@@ -32,7 +36,7 @@
                 <li><a routerLink="/profile" routerLinkActive="active">Сменить имя и фотографию</a></li>
                 <li><a routerLink="/changePassword" routerLinkActive="active">Сменить пароль</a></li>
                 <li><a routerLink="/changeEmail" routerLinkActive="active">Сменить электронный адрес</a></li>
-                <li><a (click)="doLogout(); $event.stopPropagation()">Выход&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
+                <li><a (click)="doLogout(); $event.stopPropagation()">Выйти&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></li>
               </ul>
             </li>
           </div>

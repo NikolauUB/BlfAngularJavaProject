@@ -29,7 +29,13 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getQuestion();
+    if ( this.authService.getAuth() && this.authService.getAuth().auth) {
+        this.authService
+          .logout()
+          .then(authData => this.getQuestion());
+    } else {
+        this.getQuestion();
+    }
   }
 
 

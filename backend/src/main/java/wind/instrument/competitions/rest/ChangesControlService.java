@@ -62,6 +62,9 @@ public class ChangesControlService {
             TypedQuery<CompetitionEntity> activeCompetitionQuery =
                     em.createQuery("select c from CompetitionEntity c where c.active = true",
                             CompetitionEntity.class);
+            TypedQuery<ThemeEntity> partakeThemeQuery =
+                    em.createQuery("select t from ThemeEntity t where t.competitionId = :compId and t.themeType = 1",
+                            ThemeEntity.class);
             try {
                 List<CompetitionEntity> competitionList = activeCompetitionQuery.getResultList();
                 this.compDescChanged = false;
@@ -73,7 +76,9 @@ public class ChangesControlService {
                         this.compDescChanged = true;
                     }
                     //check partake themes
-                    Collection<ThemeEntity> themeEntities = item.getThemesByMembers();
+                    Collection<ThemeEntity> themeEntities =
+                            partakeThemeQuery.setParameter("compId", item.getCompetitionId()).getResultList();
+
                     this.themeCounter += (themeEntities != null) ? themeEntities.size() : 0;
                     if (themeEntities != null && themeEntities.stream().anyMatch(
                             (theme) -> theme.getCreated().getTime() > previousTime.longValue())) {

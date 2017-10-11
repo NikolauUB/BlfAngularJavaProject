@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NavigationError, Router} from "@angular/router";
 import {AuthService} from "./auth/auth.service";
 import {AuthData} from "./model/auth/AuthData";
+import {ChangesController} from "./changescontrol/changes.controller";
 
 @Component({
   selector: 'app-root',
@@ -34,6 +35,11 @@ export class AppComponent{
     this.auth
       .logout()
       .then(authData => this.checkLogoutErrors(authData));
+  }
+
+  public cleanCache(): void {
+    localStorage.removeItem(ChangesController.PREVIOUS_TIME);
+    window.location.reload();
   }
 
   private checkLogoutErrors(authData: AuthData) {
