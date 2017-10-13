@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wind.instrument.competitions.data.MessageEntity;
 import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.middle.AdminInfo;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 
 import javax.persistence.EntityManager;
@@ -31,6 +32,15 @@ public class ServiceUtil {
         } else {
             return null;
         }
+    }
+
+    protected static boolean isAdmin(EntityManager em, HttpSession httpSession) {
+       UserEntity user =  ServiceUtil.findCurrentUser(em, httpSession);
+       return (user != null) && AdminInfo.ADMIN_USERNAME.equals(user.getUsername());
+    }
+
+    protected static boolean isAdmin(UserEntity user) {
+        return (user != null) && AdminInfo.ADMIN_USERNAME.equals(user.getUsername());
     }
 
     /**

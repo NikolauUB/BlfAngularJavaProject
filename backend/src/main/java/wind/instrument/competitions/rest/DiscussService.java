@@ -236,6 +236,11 @@ public class DiscussService {
         MessageEntity message = new MessageEntity();
         if (discussionItem.getMsgId() != null) {
             message = em.find(MessageEntity.class, discussionItem.getMsgId());
+            if ( message == null) {
+                LOG.error("ERROR: Message is not found: " + discussionItem.getMsgId());
+                ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Message is not found: " + discussionItem.getMsgId(), response);
+                return discussionItem;
+            }
             if (usersPartakeTheme != null && !message.getThemeId().equals(usersPartakeTheme.getId())) {
                 LOG.error("ERROR: Message " + message.getMsgId() + " doesn't belong to theme " + usersPartakeTheme.getId());
                 ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "\"Bad request! Message \" + message.getMsgId() + \" doesn't belong to theme \" + usersPartakeTheme.getId()", response);

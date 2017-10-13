@@ -39,12 +39,11 @@ public class CompetitionService {
     @RequestMapping(value = "/api/getActiveCompetitions", method = RequestMethod.GET)
     public ActiveCompetitions getActiveCompetitions(HttpServletResponse response) {
         ActiveCompetitions result = new ActiveCompetitions();
-        Date currentDate = new Date();
         TypedQuery<CompetitionEntity> activeCometQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionStart > :currentDate",
+                em.createQuery("select c from CompetitionEntity c where c.active = true",
                         CompetitionEntity.class);
         try {
-            List<CompetitionEntity> competList = activeCometQuery.setParameter("currentDate", currentDate).getResultList();
+            List<CompetitionEntity> competList = activeCometQuery.getResultList();
             ArrayList<Integer> list = new ArrayList<Integer>();
             competList.forEach((item) -> {
                 list.add(item.getCompetitionType().getValue());
@@ -61,14 +60,12 @@ public class CompetitionService {
     public CompetitionData getActiveCompetitionData(@RequestParam("tp") Integer competitionType,
                                                     HttpServletResponse response) {
         CompetitionData result = null;
-        Date currentDate = new Date();
         TypedQuery<CompetitionEntity> activeCometQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type and c.competitionStart > :currentDate",
+                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type",
                         CompetitionEntity.class);
         try {
             CompetitionEntity competitionEntity = activeCometQuery
                     .setParameter("type", competitionType)
-                    .setParameter("currentDate", currentDate)
                     .getSingleResult();
 
             result = new CompetitionData(
@@ -102,13 +99,12 @@ public class CompetitionService {
             List<CompetitionEntity> competitionList = activeCometQuery.getResultList();
             competitionList.forEach((item) -> {
                 item.getThemesByMembers().forEach((theme) -> {
-                    if (theme.getThemeType().equals(ThemeType.COMPETITION_REQUEST)) {
+                    if (theme.getThemeType().equals(ThemeType.COMPETITION_REQUEST) && theme.getMessages().size() > 0) {
                         CompetitionMember competitionMember = new CompetitionMember();
                         UserEntity member = theme.getOwner();
                         competitionMember.setmId(member.getUserId());
                         competitionMember.setmUsername(member.getUsername());
                         competitionMember.setCompType(item.getCompetitionType().getValue());
-                        //todo check theme msg count > 0
                         competitionMember.setThreadId(theme.getId());
                         result.add(competitionMember);
                     }

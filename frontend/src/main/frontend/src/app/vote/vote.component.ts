@@ -32,6 +32,9 @@ export class VoteComponent implements OnInit {
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
+  currentDate: Date = new Date();
+  startDate: Date;
+  endDate: Date;
 
   constructor(
     private voteService: VoteService,
@@ -56,7 +59,14 @@ export class VoteComponent implements OnInit {
           .getVoteItems(this.competitionShortInfo.compType)
           .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
     }
+  }
 
+  isVotingStarted() {
+    return this.startDate < this.currentDate;
+  }
+
+  isVotingEnded() {
+    return this.endDate < this.currentDate;
   }
 
   public loadUserAvatar(userId: number): string {
@@ -104,6 +114,8 @@ export class VoteComponent implements OnInit {
       this.isAllSelected = this.checkIsAllSelected();
       this.sortItems();
     }
+    this.startDate = new Date(this.voteInfo.competitionData.start);
+    this.endDate = new Date(this.voteInfo.competitionData.end);
   }
 
 
@@ -221,6 +233,7 @@ export class VoteComponent implements OnInit {
   }
 
   public goToLogin(): void {
+    this.changesController.init();
     this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
   }
 

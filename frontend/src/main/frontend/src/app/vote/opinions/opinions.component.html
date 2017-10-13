@@ -16,7 +16,7 @@
           <td style="vertical-align:top">
             <div *ngIf="!isItemEditting(item)" style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>
             <div *ngIf="isItemEditting(item)" style="overflow: scroll; height: 340px;">
-              <textarea id="nickEditE" style="height: 300px" cols="80"></textarea>
+              <textarea id="nickEditE" style="height: 300px; width:100%" cols="80"></textarea>
             </div>
             <div style="display: inline-block" class="alert alert-danger" *ngIf="isItemEditting(item) && editErrorMsg">{{editErrorMsg}}</div>
           </td></tr>
@@ -52,7 +52,7 @@
         <h3>Добавить новое сообщение:</h3>
         <div id="editor" style="overflow-y: scroll; height: 350px;">
           <div style="display: inline-block" class="alert alert-danger" *ngIf="(this.editItemId == -1) && editErrorMsg">{{editErrorMsg}}</div>
-          <textarea id="nickEdit" style="height: 300px;" cols="80"></textarea>
+          <textarea id="nickEdit" style="height: 300px; width: 100%" cols="80"></textarea>
         </div>
         <button  class="[ btn btn-success active ]"  (click)="createItem(this.newOpinionItem); $event.stopPropagation()">Сохранить</button>
         <button  class="[ btn btn-success active ]"  (click)="cancelChanges(this.newOpinionItem); $event.stopPropagation()">Отменить</button>

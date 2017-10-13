@@ -32,6 +32,8 @@ public class CompetitionItemEntity implements Serializable {
     private String cnItemEmbedVideo;
     @Column(name = "user_id")
     private Long userId;
+    @Column(name = "active")
+    private Boolean active;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
@@ -176,5 +178,13 @@ public class CompetitionItemEntity implements Serializable {
 
     public void setCompetitionItemUsers(Collection<CompetitionItemUsers> competitionItemUsers) {
         this.competitionItemUsers = competitionItemUsers;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

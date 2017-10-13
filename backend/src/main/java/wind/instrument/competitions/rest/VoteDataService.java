@@ -20,6 +20,7 @@ import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Transactional
@@ -188,7 +189,11 @@ public class VoteDataService {
                 competition.getCompetitionEnd()
         ));
         Collection<CompetitionItemEntity> competitionItemList = competition.getCompetitionItems();
-
+        if (!ServiceUtil.isAdmin(currentUser)) {
+            competitionItemList =
+                    competitionItemList.stream().filter(item -> (item.getActive() != null && item.getActive()))
+                        .collect(Collectors.toList());
+        }
         final Map<Long, Integer> votingOrderMap = new HashMap<Long, Integer>();
         if (currentUser != null) {
             List<CompetitionVotingEntity> votingList = this.getUserVotings(competition.getCompetitionId(), currentUser.getUserId(), response);

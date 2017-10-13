@@ -70,6 +70,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
   }
 
   public goToLogin(): void {
+    this.changesController.init();
     this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
   }
 

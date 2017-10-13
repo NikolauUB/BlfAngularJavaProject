@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Inject} from "@angular/core";
+import {OnInit, AfterViewInit, ChangeDetectorRef, Component, Inject} from "@angular/core";
 import {DiscussionItem} from "../../model/DiscussionItem";
 import {VotingThread} from "../../model/VotingThread";
 import {OpinionService} from "./opinion.service";
@@ -16,7 +16,7 @@ declare var $;
     templateUrl: './opinions.component.html',
     styleUrls: [ '../voting.component.css' ]
 })
-export class OpinionsComponent implements AfterViewInit {
+export class OpinionsComponent implements AfterViewInit, OnInit {
     nicEdit: any;
     nicEditE: any;
     newOpinionItem: DiscussionItem = new DiscussionItem();
@@ -95,6 +95,9 @@ export class OpinionsComponent implements AfterViewInit {
             return  " ( " + this.votingThread.yc + " )";
         }
     }
+    ngOnInit() {
+
+    }
 
     ngAfterViewInit() {
         if (this.isAutheticated()) {
@@ -104,7 +107,6 @@ export class OpinionsComponent implements AfterViewInit {
                     'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
                     'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
                 }).panelInstance('nickEdit');
-            this.adjustNicEdits();
         }
         this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
         this.loadOpinionsFirstPage();
@@ -176,7 +178,6 @@ export class OpinionsComponent implements AfterViewInit {
                 'indent', 'outdent', 'hr', 'image', 'forecolor', 'bgcolor', 'link', 'unlink',
                 'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
         }).panelInstance('nickEditE');
-        this.adjustNicEdits();
         this.nicEditE.instanceById('nickEditE').setContent(item.msgText);
     }
     public cancelEdit(): void {

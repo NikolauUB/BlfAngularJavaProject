@@ -21,6 +21,7 @@ import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Transactional
@@ -63,7 +64,8 @@ public class ChangesControlService {
                     em.createQuery("select c from CompetitionEntity c where c.active = true",
                             CompetitionEntity.class);
             TypedQuery<ThemeEntity> partakeThemeQuery =
-                    em.createQuery("select t from ThemeEntity t where t.competitionId = :compId and t.themeType = 1",
+                    em.createQuery("select t from ThemeEntity t where t.competitionId = :compId and t.themeType = 1 " +
+                                        "and exists (select m from MessageEntity m where m.themeId = t.id)",
                             ThemeEntity.class);
             try {
                 List<CompetitionEntity> competitionList = activeCompetitionQuery.getResultList();
@@ -88,6 +90,11 @@ public class ChangesControlService {
 
                     //check competition items
                     Collection<CompetitionItemEntity> competitionItems = item.getCompetitionItems();
+                    if (!ServiceUtil.isAdmin(em, httpSession)) {
+                        competitionItems =
+                                competitionItems.stream().filter(itm -> (itm.getActive() != null && itm.getActive()))
+                                        .collect(Collectors.toList());
+                    }
                     this.votingItemCounter += (competitionItems != null) ? competitionItems.size() : 0;
                     if (competitionItems != null && competitionItems.stream().anyMatch(
                             (compItem) -> compItem.getUpdated().getTime() > previousTime.longValue())) {

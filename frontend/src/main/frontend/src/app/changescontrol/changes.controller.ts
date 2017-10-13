@@ -172,10 +172,15 @@ export class ChangesController {
     var counter = 0;
     for (let i = 0; i < 4; i++) {
       let ls = localStorage.getItem(objectTypePrefix + i);
-      let acm:Array<any> = (ls) ? JSON.parse(ls) : new Array<any>();
-      counter += acm.length;
+      if (objectTypePrefix ===  ChangesController.VOTING_PREFIX) {
+        let acmObj = (ls) ? JSON.parse(ls) : null;
+        counter += (acmObj && acmObj.voteData) ? acmObj.voteData.length : 0;
+      } else {
+        let acm:Array<any> = (ls) ? JSON.parse(ls) : new Array<any>();
+        counter += acm.length;
+      }
     }
-    if (counter > +keyword.split(objectCountConst)[1]) {
+    if (counter !== +keyword.split(objectCountConst)[1]) {
       for (let n = 0; n < 4; n++) {
         localStorage.removeItem(objectTypePrefix + n);
       }
