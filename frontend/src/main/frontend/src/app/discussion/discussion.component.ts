@@ -9,6 +9,7 @@ import {ChangesController} from "../changescontrol/changes.controller";
 import {EditInterface} from "../modal/edit.interface";
 import {DetailsController} from "../auth/userdetails/details.controller";
 import {ThreadChanges} from "../changescontrol/ThreadChanges";
+import { UserData } from '../model/auth/UserData';
 
 
 @Component({
@@ -76,13 +77,10 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
 
   private getAuthorDetails(item: DiscussionItem): void {
-    item.authorUsername = "Пользователь " + item.authorId;
-    item.authorAvatar = DetailsController.defaultAvatar;
-    if (this.browserCanWorkWithIndexedDB) {
-        this.userDetailsController.loadUserDetails(item);
-    } else {
-        this.userDetailsController.loadUserDetailFromDBForDiscuss(item);
-    }
+    item.authorDetails = new UserData(); 
+    item.authorDetails.username = "Пользователь " + item.authorId;
+    item.authorDetails.previewImage = DetailsController.defaultAvatar;
+    this.userDetailsController.loadUserDetailsSingle(item.authorId, item.authorDetails, this.changesController);
   }
 
   public convertTimeToDate(time: any): string {

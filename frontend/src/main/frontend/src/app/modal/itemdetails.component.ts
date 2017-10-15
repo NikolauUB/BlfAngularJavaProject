@@ -57,9 +57,7 @@ export class ItemdetailsComponent implements OnInit{
     private loadUserData(): void {
         this.voteItem.userIds.forEach(id => {
             var userData = new UserData();
-            (this.browserCanWorkWithIndexedDB)
-                ? this.detailsController.loadUserDetailsById(id, userData)
-                : this.detailsController.loadUserDetailByIdFromDB(id, userData);
+            this.detailsController.loadUserDetailsSingle(id, userData, this.changesController);    
             this.userDataMap.set(id, userData);
         });
     }

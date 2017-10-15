@@ -74,9 +74,7 @@ export class VoteComponent implements OnInit {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
       this.currentUserData = new UserData();
-      (this.browserCanWorkWithIndexedDB)
-      ? this.detailsController.loadUserDetailsById(userId, this.currentUserData)
-      : this.detailsController.loadUserDetailByIdFromDB(userId, this.currentUserData);
+      this.detailsController.loadUserDetailsSingle(userId, this.currentUserData, this.changesController);
       this.userAvatarMap.set(userId, this.currentUserData);
     }
   }
