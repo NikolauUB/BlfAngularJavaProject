@@ -73,6 +73,7 @@ export class VoteComponent implements OnInit {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
       this.currentUserData = new UserData();
+      this.currentUserData.previewImage = DetailsController.defaultAvatar;
       this.detailsController.loadUserDetails(userId, this.currentUserData, this.changesController);
       this.userAvatarMap.set(userId, this.currentUserData);
     }

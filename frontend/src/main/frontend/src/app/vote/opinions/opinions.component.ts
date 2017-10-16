@@ -270,6 +270,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
         item.authorDetails = new UserData();
         item.authorDetails.username = "Пользователь " + item.authorId;
         item.authorDetails.previewImage = DetailsController.defaultAvatar;
+        alert(item.authorDetails.previewImage);
         this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
     }
 

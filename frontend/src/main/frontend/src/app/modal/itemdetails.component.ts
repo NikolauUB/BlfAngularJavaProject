@@ -55,6 +55,7 @@ export class ItemdetailsComponent implements OnInit{
     private loadUserData(): void {
         this.voteItem.userIds.forEach(id => {
             var userData = new UserData();
+            userData.previewImage = DetailsController.defaultAvatar;
             this.detailsController.loadUserDetails(id, userData, this.changesController);    
             this.userDataMap.set(id, userData);
         });

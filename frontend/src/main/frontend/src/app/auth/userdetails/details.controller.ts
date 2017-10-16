@@ -51,6 +51,7 @@ export class DetailsController {
                 console.info("from IndexedDB" + userId);
                 userData.username = details.username;
                 if(details.avatar) {
+                  alert(details.avatar);
                   userData.previewImage = details.avatar;
                 }
               }
