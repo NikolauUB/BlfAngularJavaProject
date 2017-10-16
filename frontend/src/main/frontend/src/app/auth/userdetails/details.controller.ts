@@ -38,15 +38,17 @@ export class DetailsController {
     }).then(e=>this.getMaxUpdatedDate());
   }
   
-  public loadUserDetailsSingle(userId: number, userData: UserData, changesController: ChangesController): void {
+  public loadUserDetails(userId: number, userData: UserData, changesController: ChangesController): void {
       if (changesController.isBrowserVersionFittable()) {
         this.db.getByKey('userdetails', userId)
             .then((details) => {
               if(details == null) {
+                console.info("from DB into indexedDB" + userId);
                 this.authService.getUserDetails(userId)
                   .then(reply => this.saveUserDetailsInDBbyId(reply, userId, userData))
                   .catch( e =>  console.log(e));
               } else {
+                console.info("from IndexedDB" + userId);
                 userData.username = details.username;
                 if(details.avatar) {
                   userData.previewImage = details.avatar;
@@ -56,9 +58,15 @@ export class DetailsController {
               console.log(error);
             });
       } else {
-        this.authService.getUserDetails(userId)
-          .then(reply => this.fillInUserDataById(reply, userData, userId))
-          .catch( e =>  console.log(e));
+        if (this.userAvatarMap.has(userId)) {
+          this.fillInUserData(this.userAvatarMap.get(userId), userData);
+          console.info("from Map" + userId);
+        } else {
+          console.info("from DB" + userId);
+          this.authService.getUserDetails(userId)
+            .then(reply => this.fillInUserDataInMap(reply, userData, userId))
+            .catch( e =>  console.log(e));
+        }
       }
   }
 
@@ -91,11 +99,8 @@ export class DetailsController {
     }
   }
   
-  private fillInUserDataById(reply: UserData, userData: UserData, userId: number) {
-    if (this.userAvatarMap.has(userId)) {
-      this.fillInUserData(this.userAvatarMap.get(userId), userData);
-      console.info("from Map" + userId);
-    } else if (userData) {
+  private fillInUserDataInMap(reply: UserData, userData: UserData, userId: number) {
+    if (userData) {
       this.fillInUserData(reply, userData);
       this.userAvatarMap.set(userId, userData);
     }

@@ -36,26 +36,21 @@ export class ChangesController {
   public static VOTING_ITEMS_COUNT: string = "VCNT_";
 
   changesKeywords: ChangesKeywords;
+  deviceInfo: any;
 
   constructor(private changesService: ChangesService,
               private userDetailsController: DetailsController,
               private deviceService: Ng2DeviceService) {
+    this.deviceInfo = this.deviceService.getDeviceInfo();
   }
 
   public isBrowserVersionFittable(): boolean {
-    var deviceInfo = this.deviceService.getDeviceInfo();
-
-    if (deviceInfo.browser === 'safari') {
-      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
-      return  (+deviceInfo.browser_version.split(".")[0] > 7);
-    } else if (deviceInfo.browser === 'ie') {
-      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
-      return  (+deviceInfo.browser_version.split(".")[0] > 9);
-    } else {
-      //alert(deviceInfo.browser + ":"  +  deviceInfo.browser_version.split(".")[0]);
-      return true;
-    }
-
+    if (this.deviceInfo.browser === 'safari') {
+      return  (+this.deviceInfo.browser_version.split(".")[0] > 7);
+    } else if (this.deviceInfo.browser === 'ie') {
+      return  (+this.deviceInfo.browser_version.split(".")[0] > 9);
+    } 
+    return true;
   }
 
   public checkChangesInThread( thDate: Date, threadId: number): Promise<ThreadChanges> {

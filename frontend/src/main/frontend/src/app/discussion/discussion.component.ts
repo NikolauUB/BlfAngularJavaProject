@@ -80,7 +80,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     item.authorDetails = new UserData(); 
     item.authorDetails.username = "Пользователь " + item.authorId;
     item.authorDetails.previewImage = DetailsController.defaultAvatar;
-    this.userDetailsController.loadUserDetailsSingle(item.authorId, item.authorDetails, this.changesController);
+    this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
   }
 
   public convertTimeToDate(time: any): string {
@@ -159,7 +159,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     this.newDiscussItem.competitionId = item.competitionId;
     this.newDiscussItem.parentMsgId = (item.parentMsgId == null)? item.msgId: item.parentMsgId;
     this.newDiscussItem.msgThreadId = item.msgThreadId;
-    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorUsername,
+    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorDetails.username,
       this.newDiscussItem,
       this,
       "Ваш комментарий:");

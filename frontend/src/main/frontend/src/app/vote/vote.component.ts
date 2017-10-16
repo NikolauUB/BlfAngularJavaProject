@@ -1,23 +1,23 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { ActivatedRoute, Router }            from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { VoteData }                from '../model/VoteData';
-import { VoteService }         from './vote.service';
+import {VoteData} from '../model/VoteData';
+import {VoteService} from './vote.service';
 import {CompetitionInfo} from "../model/CompetitionInfo";
 import {AuthData} from "../model/auth/AuthData";
 import {AuthService} from "../auth/auth.service";
-import { CompetitionShortInfo} from "../partaking/CompetitionShortInfo";
+import {CompetitionShortInfo} from "../partaking/CompetitionShortInfo";
 import {PartakingService} from "../partaking/partaking.service";
 import {ItemdetailsComponent} from "../modal/itemdetails.component";
-import { DetailsController } from '../auth/userdetails/details.controller';
+import {DetailsController} from '../auth/userdetails/details.controller';
 import {ChangesController} from "../changescontrol/changes.controller";
-import { UserData } from '../model/auth/UserData';
+import {UserData} from '../model/auth/UserData';
 
 
 @Component({
   selector: 'vote-app',
   templateUrl: './voting.component.html',
-  styleUrls: [ './voting.component.css' ]
+  styleUrls: ['./voting.component.css']
 })
 export class VoteComponent implements OnInit {
   @ViewChild(ItemdetailsComponent)
@@ -28,7 +28,6 @@ export class VoteComponent implements OnInit {
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
   opinionsMode: boolean = false;
-  browserCanWorkWithIndexedDB: boolean = false;
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
@@ -56,8 +55,8 @@ export class VoteComponent implements OnInit {
       this.prepareView(JSON.parse(voteInfoJson));
     } else {
       this.voteService
-          .getVoteItems(this.competitionShortInfo.compType)
-          .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
+        .getVoteItems(this.competitionShortInfo.compType)
+        .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
     }
   }
 
@@ -74,7 +73,7 @@ export class VoteComponent implements OnInit {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
       this.currentUserData = new UserData();
-      this.detailsController.loadUserDetailsSingle(userId, this.currentUserData, this.changesController);
+      this.detailsController.loadUserDetails(userId, this.currentUserData, this.changesController);
       this.userAvatarMap.set(userId, this.currentUserData);
     }
   }
@@ -85,17 +84,17 @@ export class VoteComponent implements OnInit {
       : "Для сохранения результатов голосования необходимо зайти на сайт";
   }
 
-  public getVoteDataArray(): Array<VoteData>{
+  public getVoteDataArray(): Array<VoteData> {
     if (this.opinionsMode && this.competitionShortInfo.compType !== 0) {
-        this.router.navigate(["/voteBaroque"], { queryParams: { discuss: 1 }});
+      this.router.navigate(["/voteBaroque"], {queryParams: {discuss: 1}});
     }
     return (this.opinionsMode) ? this.emptyVoteData : this.voteInfo.voteData;
   }
 
   private saveInLocalStorageAndPrepare(voteInfo: CompetitionInfo): void {
     localStorage.setItem(
-        ChangesController.VOTING_PREFIX + voteInfo.competitionData.type,
-        JSON.stringify(voteInfo));
+      ChangesController.VOTING_PREFIX + voteInfo.competitionData.type,
+      JSON.stringify(voteInfo));
     this.prepareView(voteInfo);
   }
 
@@ -119,12 +118,11 @@ export class VoteComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if(this.route.snapshot.queryParams['discuss'] != null) {
-        this.opinionsMode = true;
+    if (this.route.snapshot.queryParams['discuss'] != null) {
+      this.opinionsMode = true;
     }
-    this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
     if (!this.authService.getAuth()) {
-      this.authService.init().then(e=>this.getVoteInfo());
+      this.authService.init().then(e => this.getVoteInfo());
     } else {
       this.getVoteInfo();
     }
@@ -140,8 +138,8 @@ export class VoteComponent implements OnInit {
 
 
   protected sendResult(): void {
-    if(this.selectedItem.size > 0) {
-      var selected:Array<VoteData> = JSON.parse(JSON.stringify(Array.from(this.selectedItem)));
+    if (this.selectedItem.size > 0) {
+      var selected: Array<VoteData> = JSON.parse(JSON.stringify(Array.from(this.selectedItem)));
       //clean unneeded info
       selected.forEach(item => {
         item.audioUrl = "";
@@ -154,11 +152,11 @@ export class VoteComponent implements OnInit {
       });
       this.voteService
         .vote(selected, this.authService.getAuth())
-        .then(reply=>{
-            localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
-            this.getVoteInfo();
-          })
-        .catch(e=>this.handleError(e));
+        .then(reply => {
+          localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+          this.getVoteInfo();
+        })
+        .catch(e => this.handleError(e));
     } else {
       this.errorMsg = "Пожалуйста, выберите хотя бы одно исполнение!"
     }
@@ -170,17 +168,17 @@ export class VoteComponent implements OnInit {
 
   protected deleteVoting(): void {
     this.errorMsg = "";
-    if ( new Date(this.voteInfo.competitionData.end) < new Date()) {
-        this.errorMsg = "Извините, голосование закрыто!";
-        return;
+    if (new Date(this.voteInfo.competitionData.end) < new Date()) {
+      this.errorMsg = "Извините, голосование закрыто!";
+      return;
     }
     this.voteService
       .deleteVote(this.voteInfo.competitionData.id, this.authService.getAuth())
-      .then(reply=>{
-          localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
-          this.getVoteInfo();
-        })
-      .catch(e=>this.handleError(e));
+      .then(reply => {
+        localStorage.removeItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+        this.getVoteInfo();
+      })
+      .catch(e => this.handleError(e));
 
   }
 
@@ -190,9 +188,9 @@ export class VoteComponent implements OnInit {
     if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
       return;
     }
-    if ( new Date(this.voteInfo.competitionData.end) < new Date()) {
-        this.errorMsg = "Извините, голосование закрыто!";
-        return;
+    if (new Date(this.voteInfo.competitionData.end) < new Date()) {
+      this.errorMsg = "Извините, голосование закрыто!";
+      return;
     }
     if (this.selectedItem.has(voteSelected)) {
       this.deselectItem(voteSelected);
@@ -211,7 +209,7 @@ export class VoteComponent implements OnInit {
   }
 
   public getLastLetter(voteItem: VoteData): string {
-    return (voteItem.usernames.length > 1)? "ы":"";
+    return (voteItem.usernames.length > 1) ? "ы" : "";
   }
 
   private findUserItemId(): void {
@@ -227,17 +225,17 @@ export class VoteComponent implements OnInit {
 
   public convertTimeToDate(time: any): string {
     var d = new Date(time);
-    return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
+    return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
   }
 
   public goToLogin(): void {
     this.changesController.init();
-    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url }});
+    this.router.navigate(["/login"], {queryParams: {returnUrl: this.router.url}});
   }
 
   private checkIsAllSelected(): boolean {
     var result = true;
-    this.voteInfo.voteData.forEach( item => {
+    this.voteInfo.voteData.forEach(item => {
       if (!item.order) {
         result = false;
         return false; //exit from forEach
@@ -251,7 +249,7 @@ export class VoteComponent implements OnInit {
       if (item.id === voteSelected.id) {
         item.order = null;
         this.selectedItem.delete(item);
-      } else if(item.order && item.order > voteSelected.order) {
+      } else if (item.order && item.order > voteSelected.order) {
         item.order = item.order - 1;
       }
     });
@@ -276,8 +274,8 @@ export class VoteComponent implements OnInit {
     });
   }
 
-  protected handleError(e: any) : void {
-    if(e.status === 403) {
+  protected handleError(e: any): void {
+    if (e.status === 403) {
       alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт!");
       this.router.navigateByUrl("login");
     } else {

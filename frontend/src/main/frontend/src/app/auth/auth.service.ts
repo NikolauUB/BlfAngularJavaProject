@@ -1,5 +1,5 @@
-import { Injectable }    from '@angular/core';
-import { Headers, Http } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Headers, Http} from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -46,8 +46,8 @@ export class AuthService {
   }
 
   private refreshAuth(authData: AuthData): AuthData {
-      this.auth = authData;
-      return this.auth;
+    this.auth = authData;
+    return this.auth;
   }
 
 
@@ -76,9 +76,9 @@ export class AuthService {
    */
   public getProfile(): Promise<UserData> {
     return this.http.get(this.profileUrl)
-        .toPromise()
-        .then(response => response.json() as UserData)
-        .catch(this.handleErrorWithoutAlerts);
+      .toPromise()
+      .then(response => response.json() as UserData)
+      .catch(this.handleErrorWithoutAlerts);
   }
 
   /**
@@ -103,12 +103,12 @@ export class AuthService {
   public saveProfile(userData: UserData): Promise<ProfileChangedReply> {
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
-        .put(this.saveProfileUrl,
-        JSON.stringify(userData),
-        {headers: this.postHeaders})
-        .toPromise()
-        .then(response => response.json() as ProfileChangedReply)
-        .catch(this.handleErrorWithoutAlerts);
+      .put(this.saveProfileUrl,
+      JSON.stringify(userData),
+      {headers: this.postHeaders})
+      .toPromise()
+      .then(response => response.json() as ProfileChangedReply)
+      .catch(this.handleErrorWithoutAlerts);
   }
 
   /**
@@ -121,8 +121,8 @@ export class AuthService {
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .put((passwordData.token) ? this.changePasswordByTidUrl : this.changePasswordUrl,
-        JSON.stringify(passwordData),
-        {headers: this.postHeaders})
+      JSON.stringify(passwordData),
+      {headers: this.postHeaders})
       .toPromise()
       .catch(this.handleErrorWithoutAlerts);
   }
@@ -137,8 +137,8 @@ export class AuthService {
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .put(this.changeemailUrl,
-        JSON.stringify(emailData),
-        {headers: this.postHeaders})
+      JSON.stringify(emailData),
+      {headers: this.postHeaders})
       .toPromise()
       .catch(this.handleErrorWithoutAlerts);
   }
@@ -151,7 +151,7 @@ export class AuthService {
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .delete(this.deleteProfileImageUrl,
-        {headers: this.postHeaders})
+      {headers: this.postHeaders})
       .toPromise()
       .then(response => response.json() as ProfileChangedReply)
       .catch(this.handleErrorWithoutAlerts);
@@ -183,13 +183,13 @@ export class AuthService {
    * @param {AuthData} authInfo
    * @returns {Promise<RegistrationReply>}
    */
-  private doSafeRegistration(regData: RegistrationData,  authInfo: AuthData ): Promise<RegistrationReply> {
+  private doSafeRegistration(regData: RegistrationData, authInfo: AuthData): Promise<RegistrationReply> {
     this.auth = authInfo;
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .post(this.registrationUrl,
-        JSON.stringify(regData),
-        {headers: this.postHeaders})
+      JSON.stringify(regData),
+      {headers: this.postHeaders})
       .toPromise()
       .then(response => response.json() as RegistrationReply)
       .catch(this.handleError);
@@ -207,8 +207,8 @@ export class AuthService {
     this.setCSRFHeaders(this.auth.tkn);
     return this.http
       .post(this.loginUrl,
-        JSON.stringify(loginData),
-        {headers: this.postHeaders})
+      JSON.stringify(loginData),
+      {headers: this.postHeaders})
       .toPromise()
       .then(response => this.refreshAuth(response.json()))
       .catch(this.handleError);
@@ -236,7 +236,6 @@ export class AuthService {
    */
   private handleError(error: any): Promise<any> {
     console.error('An error occurred in Auth service', error);
-    alert(error.message || error);
     return Promise.reject(error.message || error);
   }
 

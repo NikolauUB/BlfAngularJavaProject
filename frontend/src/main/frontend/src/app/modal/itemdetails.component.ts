@@ -16,13 +16,11 @@ export class ItemdetailsComponent implements OnInit{
     modal:ModalComponent = new ModalComponent();
     voteItem: VoteData = new VoteData();
     userDataMap: Map<number, UserData> = new Map<number, UserData>();
-    browserCanWorkWithIndexedDB: boolean = true;
 
     constructor(private detailsController: DetailsController, private changesController: ChangesController) {
     }
 
     ngOnInit(): void {
-        this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
     }
 
     public showDetails(item: VoteData) {
@@ -57,7 +55,7 @@ export class ItemdetailsComponent implements OnInit{
     private loadUserData(): void {
         this.voteItem.userIds.forEach(id => {
             var userData = new UserData();
-            this.detailsController.loadUserDetailsSingle(id, userData, this.changesController);    
+            this.detailsController.loadUserDetails(id, userData, this.changesController);    
             this.userDataMap.set(id, userData);
         });
     }

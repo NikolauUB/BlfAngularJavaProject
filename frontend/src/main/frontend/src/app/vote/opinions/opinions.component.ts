@@ -23,7 +23,6 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
     newOpinionItem: DiscussionItem = new DiscussionItem();
     editItemId: number = -1;
     votingThread: VotingThread = new VotingThread();
-    browserCanWorkWithIndexedDB: boolean = false;
     idOfFirstPageItem: number = null;
     editErrorMsg: string;
 
@@ -109,7 +108,6 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
                     'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
                 }).panelInstance('nickEdit');
         }
-        this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
         this.loadOpinionsFirstPage();
     }
 
@@ -272,7 +270,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
         item.authorDetails = new UserData();
         item.authorDetails.username = "Пользователь " + item.authorId;
         item.authorDetails.previewImage = DetailsController.defaultAvatar;
-        this.userDetailsController.loadUserDetailsSingle(item.authorId, item.authorDetails, this.changesController);
+        this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
     }
 
 }

@@ -8,7 +8,5 @@ export class DiscussionItem {
     msgText: string;
     creationDate: Date;
     updateDate: Date;
-    authorUsername: string = "";
-    authorAvatar: string = "";
     authorDetails: UserData = new UserData();
 }
