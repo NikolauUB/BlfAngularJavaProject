@@ -280,6 +280,11 @@ public class VoteDataService {
         }
     }
 
+    @RequestMapping(value = "/api/votestatistic", method = RequestMethod.GET)
+    public void getVoteStatistic(@RequestParam("cid") Integer compId, HttpServletResponse response) {
+
+    }
+
     private boolean isAdmin(HttpServletResponse response) {
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
         if (!AdminInfo.ADMIN_USERNAME.equals(currentUser.getUsername())) {
@@ -303,8 +308,22 @@ public class VoteDataService {
         } catch (Exception ex) {
             LOG.error("Something wrong in vote when check previous votes", ex);
             ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in vote when check previous votes", response);
-            return new ArrayList<CompetitionVotingEntity>();
+            return new ArrayList<>();
         }
+    }
+
+    private List<CompetitionVotingEntity>  getAllVotingsForCompetition(Long compId, HttpServletResponse response) {
+        TypedQuery<CompetitionVotingEntity> voteQuery =
+                em.createQuery("select c from CompetitionVotingEntity c where c.competitionId = :compId order by c.created, c.userId",
+                        CompetitionVotingEntity.class);
+        try {
+             return voteQuery.setParameter("compId", compId).getResultList();
+        } catch (Exception ex) {
+            LOG.error("Something wrong in getting voting list", ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in getting voting list", response);
+            return new ArrayList<>();
+        }
+
     }
 
 
