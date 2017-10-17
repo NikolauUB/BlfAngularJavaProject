@@ -5,14 +5,17 @@
   <p *ngIf="isObEnded()">Голосование по обязательной классической программе закрыто.</p>
   <p *ngIf="isObEnded()">Голосование по обязательной джазовой программе закрыто.</p>
   <p *ngIf="isFreeEnded()">Голосование по обязательной свободной программе закрыто.</p>
+  <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто.</p>
 
-  <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной классической программе началось. Окончание голосования: 16 ноября 2017 <a routerLink="/voteBaroque" routerLinkActive="active">Голосовать</a></p>
-  <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной джазовой программе началось. Окончание голосования: 16 ноября 2017 <a routerLink="/voteJazz" routerLinkActive="active">Голосовать</a></p>
-  <p *ngIf="isFreeStarted() && !isFreeEnded()">Голосование по обязательной свободной программе началось. Окончание голосования: 30 ноября 2017 <a routerLink="/voteFree" routerLinkActive="active">Голосовать</a></p>
+  <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной классической программе началось. Окончание голосования: {{convertTimeToDate(this.obEndDate)}} <a routerLink="/voteBaroque" routerLinkActive="active">Голосовать</a></p>
+  <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной джазовой программе началось. Окончание голосования: {{convertTimeToDate(this.obEndDate)}} <a routerLink="/voteJazz" routerLinkActive="active">Голосовать</a></p>
+  <p *ngIf="isFreeStarted() && !isFreeEnded()">Голосование по обязательной свободной программе началось. Окончание голосования: {{convertTimeToDate(this.freeEndDate)}} <a routerLink="/voteFree" routerLinkActive="active">Голосовать</a></p>
+  <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
 
   <p *ngIf="!isObStarted()">Срок сдачи записей обязательной классической программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/baroque" routerLinkActive="active">Подать заявку</a></p>
   <p *ngIf="!isObStarted()">Срок сдачи записей обязательной джазовой программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/jazz" routerLinkActive="active">Подать заявку</a></p>
   <p *ngIf="!isFreeStarted()">Срок сдачи записей обязательной свободной программы: {{convertTimeToDate(this.freeStartDate)}} <a routerLink="/free" routerLinkActive="active">Подать заявку</a></p>
+  <p *ngIf="!isCompositionStarted()">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
 </div>
 <div style="display:inline-block; width:45%; vertical-align: top">
   <h2>Задача сайта</h2>
