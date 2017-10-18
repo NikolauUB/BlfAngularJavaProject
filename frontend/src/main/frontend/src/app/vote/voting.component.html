@@ -1,3 +1,4 @@
+<p *ngIf="notSaved">Вы не сохранили результаты голосования!</p>
 <div style="margin-bottom: 20px;">
     <small *ngIf="!isAuthentificated() && (opinionsMode || (isVotingStarted() && !isVotingEnded()))"><button class="btn btn-danger btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
     <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>

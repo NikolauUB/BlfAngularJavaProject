@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, HostListener} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {VoteData} from '../model/VoteData';
@@ -19,7 +19,7 @@ import {UserData} from '../model/auth/UserData';
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.css']
 })
-export class VoteComponent implements OnInit {
+export class VoteComponent implements OnInit,  OnDestroy {
   @ViewChild(ItemdetailsComponent)
   detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController, this.changesController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
@@ -34,6 +34,7 @@ export class VoteComponent implements OnInit {
   currentDate: Date = new Date();
   startDate: Date;
   endDate: Date;
+  notSaved:boolean = false;
 
   constructor(
     private voteService: VoteService,
@@ -45,8 +46,28 @@ export class VoteComponent implements OnInit {
     private changesController: ChangesController,
     private route: ActivatedRoute) {
 
-
   }
+  
+  ngOnDestroy() {
+    this.checkForUnsavedVoting();
+  }
+  
+  @HostListener('window:beforeunload', ['$event'])
+  beforeunloadHandler(event) {
+    if (this.selectedItem.size > 0 && !this.voteInfo.voted) {
+      this.notSaved = true;
+      return false;
+    }
+    return true;
+  }
+  
+  private checkForUnsavedVoting() {
+    if (this.selectedItem.size > 0 && !this.voteInfo.voted) {
+      this.notSaved = true;
+      alert("Вы не сохранили результаты голосования!")
+    }
+  }
+   
 
   getVoteInfo(): void {
     this.selectedItem = new Set<VoteData>();
@@ -139,6 +160,7 @@ export class VoteComponent implements OnInit {
 
 
   protected sendResult(): void {
+    this.notSaved = false;
     if (this.selectedItem.size > 0) {
       var selected: Array<VoteData> = JSON.parse(JSON.stringify(Array.from(this.selectedItem)));
       //clean unneeded info
@@ -185,6 +207,7 @@ export class VoteComponent implements OnInit {
 
 
   onSelect(voteSelected: VoteData): void {
+    this.notSaved = false;
     this.errorMsg = "";
     if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
       return;
