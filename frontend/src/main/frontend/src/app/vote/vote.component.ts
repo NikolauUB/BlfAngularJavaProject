@@ -35,6 +35,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   startDate: Date;
   endDate: Date;
   notSaved:boolean = false;
+  
 
   constructor(
     private voteService: VoteService,
@@ -49,23 +50,25 @@ export class VoteComponent implements OnInit,  OnDestroy {
   }
   
   ngOnDestroy() {
-    this.checkForUnsavedVoting();
+    if(this.isAuthentificated() && !this.isSavedVoting()) {
+      alert("Вы не сохранили результаты голосования!");
+    }
   }
   
   @HostListener('window:beforeunload', ['$event'])
   beforeunloadHandler(event) {
+    if (this.isAuthentificated()) {
+      return this.isSavedVoting(); 
+    }
+    return true;
+  }
+  
+  private isSavedVoting(): boolean {
     if (this.selectedItem.size > 0 && !this.voteInfo.voted) {
       this.notSaved = true;
       return false;
     }
     return true;
-  }
-  
-  private checkForUnsavedVoting() {
-    if (this.selectedItem.size > 0 && !this.voteInfo.voted) {
-      this.notSaved = true;
-      alert("Вы не сохранили результаты голосования!")
-    }
   }
    
 
@@ -222,6 +225,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
       this.selectItem(voteSelected);
     }
     this.isAllSelected = this.checkIsAllSelected();
+    this.isSavedVoting();
   }
 
   showDetails(voteItem: VoteData): void {
