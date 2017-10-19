@@ -8,6 +8,7 @@
   <button *ngIf="isAuthentificated() && voteInfo.voted && !opinionsMode && isVotingStarted() && !isVotingEnded()" class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()">Изменить Ваш выбор</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
     <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="showStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
 <vote-menu-app *ngIf="!opinionsMode"></vote-menu-app>

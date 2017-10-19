@@ -11,6 +11,7 @@ import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionInfo;
 import wind.instrument.competitions.rest.model.CompetitionItem;
 import wind.instrument.competitions.rest.model.VoteData;
+import wind.instrument.competitions.rest.model.votestatistic.VoteStatistic;
 import wind.instrument.competitions.rest.model.votestatistic.VoterRecord;
 
 import javax.persistence.*;
@@ -282,15 +283,15 @@ public class VoteDataService {
     }
 
     @RequestMapping(value = "/api/votestatistic", method = RequestMethod.GET)
-    public ArrayList<VoterRecord> getVoteStatistic(@RequestParam("cid") Long compId, HttpServletResponse response) {
-        ArrayList<VoterRecord> voters = new  ArrayList<VoterRecord>();
+    public VoteStatistic getVoteStatistic(@RequestParam("cid") Long compId, HttpServletResponse response) {
+        VoteStatistic result = new VoteStatistic();
 
         TypedQuery<Long> voteItemQuery =
                 em.createQuery("select c.id from CompetitionItemEntity c where c.competitionId = :compId and c.active = true order by c.created",
                         Long.class);
         try {
-
-            List<Long> voteItemList = voteItemQuery.setParameter("compId", compId).getResultList();
+            //all items ids
+            result.setAllVoteItemIdList(voteItemQuery.setParameter("compId", compId).getResultList());
             List<CompetitionVotingEntity>  votingList= this.getAllVotingsForCompetition(compId, response);
             ListIterator<CompetitionVotingEntity> votingIterator = votingList.listIterator();
             Long currentUserId = null;
@@ -305,9 +306,8 @@ public class VoteDataService {
                         currentPlace = 3;
                     }
                     voterRecord = new VoterRecord();
-                    voters.add(voterRecord);
+                    result.getVoters().add(voterRecord);
                     voterRecord.setVoterId(currentUserId);
-                    voterRecord.setCountAll(voteItemList.size());
                 }
                 //raw voting result
                 voterRecord.getVoterRawMap().put(voting.getCompetitionItemId(), voting.getVotingOrder());
@@ -328,12 +328,12 @@ public class VoteDataService {
                     }
                 }
             }
-            return voters;
+            return result;
 
         } catch (Exception ex) {
             LOG.error("Something wrong in getting voting statistic", ex);
             ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in getting voting statistic", response);
-            return voters;
+            return result;
         }
 
 
