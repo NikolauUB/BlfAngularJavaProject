@@ -12,6 +12,8 @@ import {ItemdetailsComponent} from "../modal/itemdetails.component";
 import {DetailsController} from '../auth/userdetails/details.controller';
 import {ChangesController} from "../changescontrol/changes.controller";
 import {UserData} from '../model/auth/UserData';
+import { VoteStatistic } from '../model/votestatistic/VoteStatistic';
+import { VoterRecord } from '../model/votestatistic/VoterRecord';
 
 
 @Component({
@@ -24,6 +26,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   detailsmodal: ItemdetailsComponent = new ItemdetailsComponent(this.detailsController, this.changesController);
   voteInfo: CompetitionInfo = new CompetitionInfo;
   emptyVoteData: Array<VoteData> = new Array<VoteData>();
+  voteStatistic: VoteStatistic = new VoteStatistic();
   selectedItem: Set<VoteData> = new Set<VoteData>();
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
@@ -70,6 +73,67 @@ export class VoteComponent implements OnInit,  OnDestroy {
     }
     return true;
   }
+  
+  public prepareStatistic(item: VoteData): string {
+    var result = ''; 
+    var  votes: Array<VoterRecord> = this.voteStatistic.voters;
+    //console.log(votes);
+    if (votes) {
+      result = '<ul>';
+      votes.forEach( (voterRecord) => {
+        result += "<li>" + voterRecord.voterId + ":" + voterRecord.voterRawMap[item.id] + ":" + voterRecord.voterPlaceMap[item.id] + "</li>"
+      });
+      result += '</ul>';
+    }
+    
+    return result;
+  }
+  
+  public placeFromUser(item: VoteData, voterRecord: VoterRecord): number {
+    if (item && voterRecord && voterRecord.voterRawMap && voterRecord.voterRawMap[item.id]) {
+      return voterRecord.voterRawMap[item.id];
+    }
+    return 0;
+  }
+  
+  public placeForLeafsCount(item: VoteData, voterRecord: VoterRecord): any {
+    if (this.isAllRecordsSelected(voterRecord)) {
+      return "-";
+    } 
+    if (voterRecord && voterRecord.voterPlaceMap && voterRecord.voterPlaceMap[item.id]) {
+      return voterRecord.voterPlaceMap[item.id];
+    }
+    return 0;
+  } 
+  private isAllRecordsSelected(voterRecord: VoterRecord): boolean {
+    if (voterRecord && voterRecord.voterRawMap && this.voteStatistic) {
+      return this.voteStatistic.allVoteItemIdList.length == Object.keys(voterRecord.voterRawMap).length;
+    }
+    return false;
+  }
+  
+  public leafCount(item: VoteData, voterRecord: VoterRecord): number {
+    var result = 1;
+    if (this.isAllRecordsSelected(voterRecord)) {
+      return 2;
+    }
+    var place2 = this.placeForLeafsCount(item, voterRecord);
+    if (place2 > 0) { 
+      result = (5 - place2);
+    } 
+    return result;
+    
+  }
+  
+  public allLeafCount(item: VoteData): number {
+    var result = 0;
+    if (this.voteStatistic && this.voteStatistic.voters) {
+       this.voteStatistic.voters.forEach( (voterRecord) => {
+        result += this.leafCount(item, voterRecord);
+      });
+    }
+    return result;
+  }
    
 
   getVoteInfo(): void {
@@ -96,11 +160,30 @@ export class VoteComponent implements OnInit,  OnDestroy {
     if (this.userAvatarMap.has(userId)) {
       return this.userAvatarMap.get(userId).previewImage;
     } else {
-      this.currentUserData = new UserData();
-      this.currentUserData.previewImage = DetailsController.defaultAvatar;
-      this.detailsController.loadUserDetails(userId, this.currentUserData, this.changesController);
-      this.userAvatarMap.set(userId, this.currentUserData);
+      this.loadUsersData(userId);
     }
+  }
+  
+  public loadUsername(userId: number): string {
+    if (this.userAvatarMap.has(userId)) {
+      return this.userAvatarMap.get(userId).username;
+    } else {
+      this.loadUsersData(userId);
+    }
+  }
+  
+  private loadUsersData(userId: number): void {
+    this.currentUserData = new UserData();
+    this.currentUserData.previewImage = DetailsController.defaultAvatar;
+    this.detailsController.loadUserDetails(userId, this.currentUserData, this.changesController);
+    this.userAvatarMap.set(userId, this.currentUserData);
+  }
+  
+  public loadStatistic(): void {
+    this.voteService
+      .getVoteStatistic(this.competitionShortInfo.compId)
+      .then(reply => this.voteStatistic = reply)
+      .catch(ex => this.handleError(ex));
   }
 
   public getGoToLoginBtnTitle(): string {
@@ -302,12 +385,12 @@ export class VoteComponent implements OnInit,  OnDestroy {
     });
   }
 
-  protected handleError(e: any): void {
-    if (e.status === 403) {
+  protected handleError(ex: any): void {
+    if (ex.status === 403) {
       alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт!");
       this.router.navigateByUrl("login");
     } else {
-      this.errorMsg = e.json().message || e.toString();
+      this.errorMsg = (ex.json()) ? ex.json().message : ex.toString();
     }
   }
 

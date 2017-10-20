@@ -8,7 +8,8 @@
   <button *ngIf="isAuthentificated() && voteInfo.voted && !opinionsMode && isVotingStarted() && !isVotingEnded()" class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()">Изменить Ваш выбор</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
     <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
-    <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="showStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode&&!statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = true; loadStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode&&statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = false; $event.stopPropagation()">&nbsp;Скрыть Результаты Голосования&nbsp;</button>
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
 <vote-menu-app *ngIf="!opinionsMode"></vote-menu-app>
@@ -16,15 +17,15 @@
 <h4 *ngIf="!opinionsMode && !isVotingStarted()">Голосование начнется после {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="!opinionsMode && isVotingEnded()">Голосование закрыто! А обсуждение продолжается!</h4>
 <span  *ngFor="let voteItem of this.getVoteDataArray()">
-  <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem)">
+  <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem) && !statisticMode">
     <div class="voteItemHeader btn-group" >
         <a *ngIf="voteItem.order && !isAllSelected"  class="circleBtn">
           <span class="numberCircle" *ngIf="selectedItem.has(voteItem)" title="Порядок выбора"><b>{{voteItem.order}}</b></span>
         </a>
-        <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem)" (click)="showDetails(voteItem); $event.stopPropagation();">
+        <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" (click)="showDetails(voteItem); $event.stopPropagation();">
           <small>Музыкант{{getLastLetter(voteItem)}}:&nbsp;</small><b>{{voteItem.usernames.join(', ')}}</b>
         </a>
-        <a style="float:right" class="[ btn ]"  [class.linkselected]="selectedItem.has(voteItem)" *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
+        <a style="float:right" class="[ btn ]"  [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
           <span aria-hidden="true" title="Отменить">&#10006;</span>
         </a>
         <a style="float:right" *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem) && isVotingStarted() && !isVotingEnded()" class="[  img-rounded ]" (click)="onSelect(voteItem); $event.stopPropagation();">
@@ -34,13 +35,33 @@
           <span aria-hidden="true" title="Вы участвуете в этом номере">&#9995;</span>
         </a>
     </div>
-    <div  *ngIf="voteItem.videoEmbedUrl" class="videoDiv">
+    <div *ngIf="statisticMode" style="width: 100%; height: 465px; overflow-y: auto;">
+     <table style="width:100%">
+     <thead>
+     	<th>Голосующий</th>
+     	<th>Выбор</th>
+     	<th>Место</th>
+     	<th>Листки</th>
+     </thead>
+     	<tr *ngFor="let voter of this.voteStatistic.voters">
+	     	<td>{{this.loadUsername(voter.voterId)}}</td>
+	     	<td>{{this.placeFromUser(voteItem, voter)}}</td>
+	     	<td>{{this.placeForLeafsCount(voteItem, voter)}}</td>
+	     	<td>{{this.leafCount(voteItem, voter)}}</td>
+     	</tr>
+     	<tr>
+     		<td colspan="4"><strong>Итого:</strong> {{this.allLeafCount(voteItem)}} (лавровых листочков)</td>
+     	</tr>
+     </table>
+    </div>
+    
+    <div *ngIf="voteItem.videoEmbedUrl && !statisticMode" class="videoDiv">
       <iframe width="370" height="300"
           [src]="voteItem.videoEmbedUrl | safe"
           allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
       </iframe>
     </div>
-    <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl" class="videoDiv">
+    <div  *ngIf="!voteItem.videoEmbedUrl && voteItem.videoUrl && !statisticMode" class="videoDiv">
       <small>Видео доступно для просмотра в <a href="{{voteItem.videoUrl}}" [class.linkselected]="selectedItem.has(voteItem)" target="_blank">новом окне</a></small>
       <span  *ngFor="let userId of voteItem.userIds">
         <a href="{{voteItem.videoUrl}}" target="_blank">
@@ -49,13 +70,13 @@
         <br/>
       </span>
     </div>
-    <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl" class="videoDiv">
+    <div  *ngIf="!voteItem.videoEmbedUrl && !voteItem.videoUrl  && !statisticMode" class="videoDiv">
       <span  *ngFor="let userId of voteItem.userIds">
         <img  class="avatarInsteadVideo" *ngIf="loadUserAvatar(userId)" [src]="loadUserAvatar(userId)" title="Видео отсутствует"/>
         <br/>
       </span>
     </div>
-    <div *ngIf="voteItem.audioEmbedUrl" class="audioDiv">
+    <div *ngIf="voteItem.audioEmbedUrl  && !statisticMode" class="audioDiv">
       <small>Послушать запись в <a href="{{voteItem.audioUrl}}" target="_blank" [class.linkselected]="selectedItem.has(voteItem)">новом окне</a></small>
       <iframe width="358" height="134"
               [src]="voteItem.audioEmbedUrl | safe"
@@ -63,7 +84,7 @@
       </iframe>
       <div style="z-index: 1; height: 12px; width: 357.5px; background: #EEE; position: relative; top: -18px; left:6px;"></div>
     </div>
-    <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl" class="audioDiv">
+    <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl && !statisticMode" class="audioDiv">
       <small>Запись доступна для прослушивания в <a href="{{voteItem.audioUrl}}" target="_blank" [class.linkselected]="selectedItem.has(voteItem)">новом окне</a></small>
       <iframe width="358" height="134" frameborder="0" scrolling="no" marginwidth="0" marginheight="0" hspace="0" vspace="0"
               srcdoc="<a href='{{voteItem.audioUrl}}' target='_blank'><img  src='assets/images/AudioDefault.jpg'   title='Послушать запись в новом окне'/></a>">

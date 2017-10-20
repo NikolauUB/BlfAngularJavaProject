@@ -30,7 +30,7 @@ export class VoteService {
   }
   
   getVoteStatistic(compId): Promise<VoteStatistic> {
-    return this.http.get(this.voteDataUrl + compId)
+    return this.http.get(this.voteStatisticUrl + compId)
       .toPromise()
       .then(response => response.json() as VoteStatistic)
       .catch(this.handleError);
