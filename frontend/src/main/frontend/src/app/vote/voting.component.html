@@ -45,12 +45,12 @@
      </thead>
      	<tr *ngFor="let voter of this.voteStatistic.voters">
 	     	<td>{{this.loadUsername(voter.voterId)}}</td>
-	     	<td>{{this.placeFromUser(voteItem, voter)}}</td>
-	     	<td>{{this.placeForLeafsCount(voteItem, voter)}}</td>
+	     	<td>{{(this.placeFromUser(voteItem, voter) > 0) ? this.placeFromUser(voteItem, voter):"-"}}</td>
+	     	<td>{{(this.placeForLeafsCount(voteItem, voter) > 0) ? this.placeForLeafsCount(voteItem, voter):"-"}}</td>
 	     	<td>{{this.leafCount(voteItem, voter)}}</td>
      	</tr>
      	<tr>
-     		<td colspan="4"><strong>Итого:</strong> {{this.allLeafCount(voteItem)}} (лавровых листочков)</td>
+     		<td colspan="3"><strong>Итого лавровых листочков:</strong></td><td>{{this.allLeafCount(voteItem)}}</td>
      	</tr>
      </table>
     </div>
