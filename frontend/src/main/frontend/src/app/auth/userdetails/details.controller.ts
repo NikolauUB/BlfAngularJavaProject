@@ -43,12 +43,12 @@ export class DetailsController {
         this.db.getByKey('userdetails', userId)
             .then((details) => {
               if(details == null) {
-                console.info("from DB into indexedDB" + userId);
+                //console.info("from DB into indexedDB" + userId);
                 this.authService.getUserDetails(userId)
                   .then(reply => this.saveUserDetailsInDBbyId(reply, userId, userData))
                   .catch( e =>  console.log(e));
               } else {
-                console.info("from IndexedDB" + userId);
+                //console.info("from IndexedDB" + userId);
                 userData.username = details.username;
                 if(details.avatar) {
                   userData.previewImage = details.avatar;
@@ -60,9 +60,9 @@ export class DetailsController {
       } else {
         if (this.userAvatarMap.has(userId)) {
           this.fillInUserData(this.userAvatarMap.get(userId), userData);
-          console.info("from Map" + userId);
+          //console.info("from Map" + userId);
         } else {
-          console.info("from DB" + userId);
+          //console.info("from DB" + userId);
           this.authService.getUserDetails(userId)
             .then(reply => this.fillInUserDataInMap(reply, userData, userId))
             .catch( e =>  console.log(e));
