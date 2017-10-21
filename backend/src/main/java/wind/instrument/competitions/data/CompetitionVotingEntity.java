@@ -36,7 +36,7 @@ public class CompetitionVotingEntity implements Serializable {
 
     @PrePersist
     protected void onCreate() {
-        this.created = new Date();
+        this.setCreated(new Date());
     }
 
     @PreUpdate
@@ -106,5 +106,13 @@ public class CompetitionVotingEntity implements Serializable {
 
     public void setCompetitionItem(CompetitionItemEntity competitionItem) {
         this.competitionItem = competitionItem;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

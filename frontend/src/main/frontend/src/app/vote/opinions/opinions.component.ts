@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {CompetitionShortInfo} from "../../partaking/CompetitionShortInfo";
 import {ChangesController} from "../../changescontrol/changes.controller";
 import {DetailsController} from "../../auth/userdetails/details.controller";
+import { UserData } from '../../model/auth/UserData';
 
 declare var nicEditor: any;
 declare var $;
@@ -22,7 +23,6 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
     newOpinionItem: DiscussionItem = new DiscussionItem();
     editItemId: number = -1;
     votingThread: VotingThread = new VotingThread();
-    browserCanWorkWithIndexedDB: boolean = false;
     idOfFirstPageItem: number = null;
     editErrorMsg: string;
 
@@ -69,7 +69,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
         }
         var shortText = (quotaText.length > 500) ? quotaText.substring(0, 497) + "..." : quotaText;
         var quota = "<div><small><b>Ответ на сообщение:</b></small><br/><table border='1' cellpadding='10' cellpadding='10' style='width:90%'>"
-            + "<tr><td><b>&nbsp;Автор:&nbsp;</b>" + item.authorUsername + "&nbsp;</td><td><b>&nbsp;Сообщение от:&nbsp;</b>" + this.convertTimeToDate(item.creationDate) + "&nbsp;</td></tr>"
+            + "<tr><td><b>&nbsp;Автор:&nbsp;</b>" + item.authorDetails.username + "&nbsp;</td><td><b>&nbsp;Сообщение от:&nbsp;</b>" + this.convertTimeToDate(item.creationDate) + "&nbsp;</td></tr>"
             + "<tr><td colspan='2'>" + shortText + "</td></tr></table></div data=1><br>";
         this.nicEdit.instanceById('nickEdit').setContent(quota);
         this.editItemId = -1;
@@ -108,7 +108,6 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
                     'fontSize', 'fontFamily', 'fontFormat', 'xhtml']
                 }).panelInstance('nickEdit');
         }
-        this.browserCanWorkWithIndexedDB = this.changesController.isBrowserVersionFittable();
         this.loadOpinionsFirstPage();
     }
 
@@ -268,14 +267,10 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
     }
 
     private getAuthorDetails(item: DiscussionItem): void {
-        item.authorUsername = "Пользователь " + item.authorId;
-        item.authorAvatar = DetailsController.defaultAvatar;
-        if (this.browserCanWorkWithIndexedDB) {
-            this.userDetailsController.loadUserDetails(item);
-        } else {
-            this.userDetailsController
-                    .loadUserDetailInItemAndUserDataByIdFromDB(item);
-        }
+        item.authorDetails = new UserData();
+        item.authorDetails.username = "Пользователь " + item.authorId;
+        item.authorDetails.previewImage = DetailsController.defaultAvatar;
+        this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
     }
 
 }

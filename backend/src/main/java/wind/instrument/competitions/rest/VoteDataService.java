@@ -11,6 +11,8 @@ import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionInfo;
 import wind.instrument.competitions.rest.model.CompetitionItem;
 import wind.instrument.competitions.rest.model.VoteData;
+import wind.instrument.competitions.rest.model.votestatistic.VoteStatistic;
+import wind.instrument.competitions.rest.model.votestatistic.VoterRecord;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -280,6 +282,63 @@ public class VoteDataService {
         }
     }
 
+    @RequestMapping(value = "/api/votestatistic", method = RequestMethod.GET)
+    public VoteStatistic getVoteStatistic(@RequestParam("cid") Long compId, HttpServletResponse response) {
+        VoteStatistic result = new VoteStatistic();
+
+        TypedQuery<Long> voteItemQuery =
+                em.createQuery("select c.id from CompetitionItemEntity c where c.competitionId = :compId and c.active = true order by c.created",
+                        Long.class);
+        try {
+            //all items ids
+            result.setAllVoteItemIdList(voteItemQuery.setParameter("compId", compId).getResultList());
+            List<CompetitionVotingEntity>  votingList= this.getAllVotingsForCompetition(compId, response);
+            ListIterator<CompetitionVotingEntity> votingIterator = votingList.listIterator();
+            Long currentUserId = null;
+            VoterRecord voterRecord = null;
+            int countWinners = 0;
+            int currentPlace = 3;
+            while (votingIterator.hasNext()) {
+                CompetitionVotingEntity voting = votingIterator.next();
+                if (currentUserId == null || !currentUserId.equals(voting.getUserId())) {
+                    currentUserId = voting.getUserId();
+                    if (voterRecord != null) {
+                        currentPlace = 3;
+                    }
+                    voterRecord = new VoterRecord();
+                    result.getVoters().add(voterRecord);
+                    voterRecord.setVoterId(currentUserId);
+                }
+                //raw voting result
+                voterRecord.getVoterRawMap().put(voting.getCompetitionItemId(), voting.getVotingOrder());
+                for (int i = currentPlace; i > 0 && countWinners == 0; i--) {
+                    int count = voting.getVotingOrder().intValue()/i;
+                    if ( count > 0) {
+                        countWinners = count;
+                        break;
+                    }
+                    currentPlace--;
+                }
+
+                if (countWinners > 0) {
+                    voterRecord.getVoterPlaceMap().put(voting.getCompetitionItemId(), currentPlace);
+                    countWinners--;
+                    if (countWinners == 0) {
+                        currentPlace--;
+                    }
+                }
+            }
+            return result;
+
+        } catch (Exception ex) {
+            LOG.error("Something wrong in getting voting statistic", ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in getting voting statistic", response);
+            return result;
+        }
+
+
+    }
+
     private boolean isAdmin(HttpServletResponse response) {
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
         if (!AdminInfo.ADMIN_USERNAME.equals(currentUser.getUsername())) {
@@ -303,8 +362,22 @@ public class VoteDataService {
         } catch (Exception ex) {
             LOG.error("Something wrong in vote when check previous votes", ex);
             ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in vote when check previous votes", response);
-            return new ArrayList<CompetitionVotingEntity>();
+            return new ArrayList<>();
         }
+    }
+
+    private List<CompetitionVotingEntity>  getAllVotingsForCompetition(Long compId, HttpServletResponse response) {
+        TypedQuery<CompetitionVotingEntity> voteQuery =
+                em.createQuery("select c from CompetitionVotingEntity c where c.competitionId = :compId order by c.userId, c.votingOrder DESC, c.created",
+                        CompetitionVotingEntity.class);
+        try {
+             return voteQuery.setParameter("compId", compId).getResultList();
+        } catch (Exception ex) {
+            LOG.error("Something wrong in getting voting list", ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something wrong in getting voting list", response);
+            return new ArrayList<>();
+        }
+
     }
 
 

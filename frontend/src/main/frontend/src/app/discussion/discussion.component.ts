@@ -9,6 +9,7 @@ import {ChangesController} from "../changescontrol/changes.controller";
 import {EditInterface} from "../modal/edit.interface";
 import {DetailsController} from "../auth/userdetails/details.controller";
 import {ThreadChanges} from "../changescontrol/ThreadChanges";
+import { UserData } from '../model/auth/UserData';
 
 
 @Component({
@@ -76,13 +77,10 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
 
   private getAuthorDetails(item: DiscussionItem): void {
-    item.authorUsername = "Пользователь " + item.authorId;
-    item.authorAvatar = DetailsController.defaultAvatar;
-    if (this.browserCanWorkWithIndexedDB) {
-        this.userDetailsController.loadUserDetails(item);
-    } else {
-        this.userDetailsController.loadUserDetailFromDBForDiscuss(item);
-    }
+    item.authorDetails = new UserData(); 
+    item.authorDetails.username = "Пользователь " + item.authorId;
+    item.authorDetails.previewImage = DetailsController.defaultAvatar;
+    this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
   }
 
   public convertTimeToDate(time: any): string {
@@ -161,7 +159,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
     this.newDiscussItem.competitionId = item.competitionId;
     this.newDiscussItem.parentMsgId = (item.parentMsgId == null)? item.msgId: item.parentMsgId;
     this.newDiscussItem.msgThreadId = item.msgThreadId;
-    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorUsername,
+    this.editModal.showModal("Ответ на сообщение пользователя " + item.authorDetails.username,
       this.newDiscussItem,
       this,
       "Ваш комментарий:");

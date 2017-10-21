@@ -6,12 +6,12 @@
   <div style="width:85%; min-height: 200px; margin-left:5%">
     <hr  style="height: 12px;border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5);"/>
     <div class="header">
-      <b>{{item.authorUsername}}</b>&nbsp;&nbsp;&nbsp;{{this.convertTimeToDate(item.creationDate)}}
+      <b>{{item.authorDetails.username}}</b>&nbsp;&nbsp;&nbsp;{{this.convertTimeToDate(item.creationDate)}}
     </div>
     <div class="body">
       <table>
         <tr><td style="text-align:center; vertical-align:top">
-          <div style="display: inline-block; vertical-align: top; height:200px; width:200px; margin-right: 10px"><img  src="{{item.authorAvatar}}"/></div>
+          <div style="display: inline-block; vertical-align: top; height:200px; width:200px; margin-right: 10px"><img  src="{{item.authorDetails.previewImage}}"/></div>
         </td>
           <td style="vertical-align:top">
             <div *ngIf="!isItemEditting(item)" style="display: inline-block; word-wrap: break-word" [innerHTML]="item.msgText"></div>

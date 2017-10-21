@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { VoteData } from '../model/VoteData';
 import {CompetitionInfo} from "../model/CompetitionInfo";
 import {AuthData} from "../model/auth/AuthData";
+import { VoteStatistic } from '../model/votestatistic/VoteStatistic';
 
 @Injectable()
 export class VoteService {
@@ -13,6 +14,7 @@ export class VoteService {
   private voteDataUrl = 'api/votedata?type=';
   private voteUrl = 'api/vote';
   private deleteVoteUrl = 'api/deleteVote?cid=';
+  private voteStatisticUrl = 'api/votestatistic?cid=';
 
   constructor(private http: Http) { }
 
@@ -24,6 +26,13 @@ export class VoteService {
     return this.http.get(this.voteDataUrl + type)
       .toPromise()
       .then(response => response.json() as CompetitionInfo)
+      .catch(this.handleError);
+  }
+  
+  getVoteStatistic(compId): Promise<VoteStatistic> {
+    return this.http.get(this.voteStatisticUrl + compId)
+      .toPromise()
+      .then(response => response.json() as VoteStatistic)
       .catch(this.handleError);
   }
 

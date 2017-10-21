@@ -1,3 +1,4 @@
+import { UserData } from './auth/UserData';
 export class DiscussionItem {
     competitionId: number;
     msgThreadId: number;
@@ -7,6 +8,5 @@ export class DiscussionItem {
     msgText: string;
     creationDate: Date;
     updateDate: Date;
-    authorUsername: string = "";
-    authorAvatar: string = "";
+    authorDetails: UserData = new UserData();
 }

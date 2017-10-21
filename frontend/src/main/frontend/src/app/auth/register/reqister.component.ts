@@ -1,3 +1,4 @@
+import { ChangesController } from '../../changescontrol/changes.controller';
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {Router} from "@angular/router";
 import {AuthData} from "../../model/auth/AuthData";
@@ -72,6 +73,11 @@ export class RegisterComponent implements OnInit {
     } else {
       this.doLogin();
       this.router.navigateByUrl("welcome");
+      //clean vote cache
+      localStorage.removeItem(ChangesController.VOTING_CLASSIC);
+      localStorage.removeItem(ChangesController.VOTING_JAZZ);
+      localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
+      localStorage.removeItem(ChangesController.VOTING_FREE);
     }
     this.selectedAnswers = new Set<string>();
   }
