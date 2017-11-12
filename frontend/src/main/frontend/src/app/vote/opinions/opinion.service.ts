@@ -25,6 +25,7 @@ export class OpinionService {
                              msgStartAfterId: number,
                              controlDate: number): Promise<VotingThread> {
         var additionalParams = "";
+        competitionId = 2;//temp fix
         additionalParams+= (msgStartAfterId !== null) ? "&saId=" + msgStartAfterId: "";
         additionalParams+= (controlDate !== null) ? "&cd=" + controlDate : "";
         return this.http

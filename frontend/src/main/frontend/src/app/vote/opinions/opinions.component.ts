@@ -156,7 +156,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
     public createItem(item: DiscussionItem): void {
         if (this.isAutheticated()) {
             item.authorId = this.authService.getAuth().uId;
-            item.competitionId = this.competitionShortInfo.compId;
+            item.competitionId = 2; // temp fix this.competitionShortInfo.compId;
             if (this.saveItem(item, this.nicEdit.instanceById('nickEdit').getContent())) {
                 this.nicEdit.instanceById('nickEdit').setContent("");
                 this.editErrorMsg = null;

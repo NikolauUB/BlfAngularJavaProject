@@ -31,6 +31,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   userAvatarMap: Map<number, UserData> = new Map<number, UserData>();
   currentUserData: UserData;
   opinionsMode: boolean = false;
+  statisticMode: boolean = false;
   isAllSelected: boolean = false;
   userItemId: number;
   errorMsg: string;
@@ -193,9 +194,6 @@ export class VoteComponent implements OnInit,  OnDestroy {
   }
 
   public getVoteDataArray(): Array<VoteData> {
-    if (this.opinionsMode && this.competitionShortInfo.compType !== 0) {
-      this.router.navigate(["/voteBaroque"], {queryParams: {discuss: 1}});
-    }
     return (this.opinionsMode) ? this.emptyVoteData : this.voteInfo.voteData;
   }
 
@@ -226,9 +224,6 @@ export class VoteComponent implements OnInit,  OnDestroy {
 
 
   ngOnInit(): void {
-    if (this.route.snapshot.queryParams['discuss'] != null) {
-      this.opinionsMode = true;
-    }
     if (!this.authService.getAuth()) {
       this.authService.init().then(e => this.getVoteInfo());
     } else {

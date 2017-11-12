@@ -28,7 +28,7 @@ import {VoteCompositionComponent} from "./vote/composition/vote.composition.comp
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: '',     component: WelcomeComponent },
+  { path: '',     component: VoteFreeComponent },
   { path: 'about',     component: AboutComponent },
   { path: 'history',     component: HistoryComponent },
   { path: 'voting',     component: VoteComponent },
