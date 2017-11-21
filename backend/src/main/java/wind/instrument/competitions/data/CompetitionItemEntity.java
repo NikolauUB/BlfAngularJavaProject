@@ -1,5 +1,8 @@
 package wind.instrument.competitions.data;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
@@ -35,11 +38,11 @@ public class CompetitionItemEntity implements Serializable {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
     private CompetitionEntity competition;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
 

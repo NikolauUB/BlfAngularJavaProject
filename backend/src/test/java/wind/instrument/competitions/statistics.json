@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "allstatistic",
+  "description": "Voting statistic for all users",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "userId": {
+        "description": "Unique user identifier - one record for one user",
+        "type": "integer"
+      },
+      "leaves": {
+        "description": "Summary of all user's leaves",
+        "type": "integer",
+        "minimum": 1
+      },
+      "broomType": {
+        "description": "Type of regard",
+        "type": "integer",
+        "enum": [0,110,220,440,880]
+      },
+      "compIds": {
+        "description": "Array of competitions",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "Id of competition user took part",
+              "type": "integer"
+            },
+            "name": {
+              "description": "Name of competition",
+              "type": "string"
+            },
+            "start": {
+              "description": "Competition start time in milliseconds",
+              "type": "integer"
+            }
+          },
+          "required": ["id", "name", "start"]
+        },
+        "minItems": 1,
+        "uniqueItems": true
+      }
+    },
+    "required": ["userId", "leaves", "broomType", "compIds"]
+  }
+}
