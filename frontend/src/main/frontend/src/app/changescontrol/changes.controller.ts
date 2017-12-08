@@ -49,7 +49,9 @@ export class ChangesController {
       return  (+this.deviceInfo.browser_version.split(".")[0] > 7);
     } else if (this.deviceInfo.browser === 'ie') {
       return  (+this.deviceInfo.browser_version.split(".")[0] > 9);
-    } 
+    } else if (this.deviceInfo.browser === 'opera') {
+      return  (+this.deviceInfo.browser_version.split(".")[0] > 47);
+    }
     return true;
   }
 

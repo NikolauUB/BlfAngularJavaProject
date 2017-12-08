@@ -48,12 +48,14 @@ import {Error403Component} from "./errorpages/error403.component";
 import {VoteMenuComponent} from "./vote/menu/vote.menu.component";
 import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
 import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
+import {ShowByidComponent} from "./vote/byid/show.byid.component";
 import {VoteFreeComponent} from "./vote/free/vote.free.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import {OpinionsComponent} from "./vote/opinions/opinions.component";
 import { OpinionService } from "./vote/opinions/opinion.service";
-
+import {NewstatisticComponent} from "./statistic/newstatistic.component";
+import {NewstatisticService} from "./statistic/newstatistic.service";
 
 
 
@@ -82,6 +84,7 @@ export function runChangesController(changesService: ChangesController): () => P
     VoteBaroqueComponent,
     VoteJazzComponent,
     VoteFreeComponent,
+    ShowByidComponent,
     OpinionsComponent,
     VoteCompositionComponent,
     RulesComponent,
@@ -104,6 +107,7 @@ export function runChangesController(changesService: ChangesController): () => P
     ShowpictureComponent,
     WelcomeComponent,
     StatisticComponent,
+    NewstatisticComponent,
     Error403Component
   ],
   imports: [
@@ -124,6 +128,7 @@ export function runChangesController(changesService: ChangesController): () => P
     ChangesService,
     ChangesController,
     ThemeController,
+    NewstatisticService,
     {
       provide: APP_INITIALIZER,
       useFactory: runChangesController,

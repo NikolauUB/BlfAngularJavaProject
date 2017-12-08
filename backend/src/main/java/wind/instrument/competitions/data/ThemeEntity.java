@@ -22,7 +22,7 @@ public class ThemeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     private UserEntity owner;
-    @OneToMany(mappedBy = "theme", targetEntity = MessageEntity.class, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "theme", targetEntity = MessageEntity.class, fetch = FetchType.LAZY)
     private Collection<MessageEntity> messages;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)

@@ -3,6 +3,7 @@ package wind.instrument.competitions.rest.model;
 import java.util.ArrayList;
 
 public class ActiveCompetitions {
+
     private ArrayList<Integer> types;
 
     public ArrayList<Integer> getTypes() {
