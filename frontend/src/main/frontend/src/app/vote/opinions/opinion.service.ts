@@ -22,11 +22,11 @@ export class OpinionService {
     }
 
     public getVotingOpinions(competitionId: number,
-                             msgStartAfterId: number,
+                             msgStartAfterTime: Date,
                              controlDate: number): Promise<VotingThread> {
         var additionalParams = "";
         competitionId = 2;//temp fix
-        additionalParams+= (msgStartAfterId !== null) ? "&saId=" + msgStartAfterId: "";
+        additionalParams+= (msgStartAfterTime !== null) ? "&saId=" + msgStartAfterTime : "";
         additionalParams+= (controlDate !== null) ? "&cd=" + controlDate : "";
         return this.http
             .get(this.getVotingOpinionsUrl + competitionId + additionalParams)

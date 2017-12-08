@@ -39,7 +39,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   startDate: Date;
   endDate: Date;
   notSaved:boolean = false;
-  
+
 
   constructor(
     private voteService: VoteService,
@@ -49,24 +49,24 @@ export class VoteComponent implements OnInit,  OnDestroy {
     private router: Router,
     private detailsController: DetailsController,
     private changesController: ChangesController,
-    private route: ActivatedRoute) {
+    public route: ActivatedRoute) {
 
   }
-  
+
   ngOnDestroy() {
     if(this.isAuthentificated() && !this.isSavedVoting()) {
       alert("Вы не сохранили результаты голосования!");
     }
   }
-  
+
   @HostListener('window:beforeunload', ['$event'])
   beforeunloadHandler(event) {
     if (this.isAuthentificated()) {
-      return this.isSavedVoting(); 
+      return this.isSavedVoting();
     }
     return true;
   }
-  
+
   private isSavedVoting(): boolean {
     if (this.selectedItem.size > 0 && !this.voteInfo.voted) {
       this.notSaved = true;
@@ -74,9 +74,9 @@ export class VoteComponent implements OnInit,  OnDestroy {
     }
     return true;
   }
-  
+
   public prepareStatistic(item: VoteData): string {
-    var result = ''; 
+    var result = '';
     var  votes: Array<VoterRecord> = this.voteStatistic.voters;
     //console.log(votes);
     if (votes) {
@@ -86,46 +86,46 @@ export class VoteComponent implements OnInit,  OnDestroy {
       });
       result += '</ul>';
     }
-    
+
     return result;
   }
-  
+
   public placeFromUser(item: VoteData, voterRecord: VoterRecord): number {
     if (item && voterRecord && voterRecord.voterRawMap && voterRecord.voterRawMap[item.id]) {
       return voterRecord.voterRawMap[item.id];
     }
     return 0;
   }
-  
+
   public placeForLeafsCount(item: VoteData, voterRecord: VoterRecord): any {
     if (this.isAllRecordsSelected(voterRecord)) {
       return "-";
-    } 
+    }
     if (voterRecord && voterRecord.voterPlaceMap && voterRecord.voterPlaceMap[item.id]) {
       return voterRecord.voterPlaceMap[item.id];
     }
     return 0;
-  } 
+  }
   private isAllRecordsSelected(voterRecord: VoterRecord): boolean {
     if (voterRecord && voterRecord.voterRawMap && this.voteStatistic) {
       return this.voteStatistic.allVoteItemIdList.length == Object.keys(voterRecord.voterRawMap).length;
     }
     return false;
   }
-  
+
   public leafCount(item: VoteData, voterRecord: VoterRecord): number {
     var result = 1;
     if (this.isAllRecordsSelected(voterRecord)) {
       return 2;
     }
     var place2 = this.placeForLeafsCount(item, voterRecord);
-    if (place2 > 0) { 
+    if (place2 > 0) {
       result = (5 - place2);
-    } 
+    }
     return result;
-    
+
   }
-  
+
   public allLeafCount(item: VoteData): number {
     var result = 0;
     if (this.voteStatistic && this.voteStatistic.voters) {
@@ -135,17 +135,24 @@ export class VoteComponent implements OnInit,  OnDestroy {
     }
     return result;
   }
-   
+
 
   getVoteInfo(): void {
-    this.selectedItem = new Set<VoteData>();
-    var voteInfoJson: string = localStorage.getItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
-    if (voteInfoJson != null) {
-      this.prepareView(JSON.parse(voteInfoJson));
+    if ( this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY ) {
+      this.selectedItem = new Set<VoteData>();
+      var voteInfoJson: string = localStorage.getItem(ChangesController.VOTING_PREFIX + this.competitionShortInfo.compType);
+      if (voteInfoJson != null) {
+        this.prepareView(JSON.parse(voteInfoJson));
+      } else {
+        this.voteService
+          .getVoteItems(this.competitionShortInfo.compType)
+          .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
+      }
     } else {
       this.voteService
-        .getVoteItems(this.competitionShortInfo.compType)
-        .then(voteInfo => this.saveInLocalStorageAndPrepare(voteInfo));
+                .getVoteItemsByCompId(this.competitionShortInfo.compId)
+                .then(voteInfo => this.prepareView(voteInfo));
+
     }
   }
 
@@ -164,7 +171,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
       this.loadUsersData(userId);
     }
   }
-  
+
   public loadUsername(userId: number): string {
     if (this.userAvatarMap.has(userId)) {
       return this.userAvatarMap.get(userId).username;
@@ -172,14 +179,14 @@ export class VoteComponent implements OnInit,  OnDestroy {
       this.loadUsersData(userId);
     }
   }
-  
+
   private loadUsersData(userId: number): void {
     this.currentUserData = new UserData();
     this.currentUserData.previewImage = DetailsController.defaultAvatar;
     this.detailsController.loadUserDetails(userId, this.currentUserData, this.changesController);
     this.userAvatarMap.set(userId, this.currentUserData);
   }
-  
+
   public loadStatistic(): void {
     this.voteService
       .getVoteStatistic(this.competitionShortInfo.compId)
@@ -237,6 +244,14 @@ export class VoteComponent implements OnInit,  OnDestroy {
     } else {
       return this.authService.getAuth().auth;
     }
+  }
+
+  public isHistoryView(): boolean {
+    return this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_SHOW_HISTORY;
+  }
+
+  public goToStatistic(): void {
+    this.router.navigateByUrl("newstatistic");
   }
 
 

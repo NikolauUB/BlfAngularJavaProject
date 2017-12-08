@@ -23,7 +23,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
     newOpinionItem: DiscussionItem = new DiscussionItem();
     editItemId: number = -1;
     votingThread: VotingThread = new VotingThread();
-    idOfFirstPageItem: number = null;
+    timeOfFirstPageItem: Date = null;
     editErrorMsg: string;
 
 
@@ -44,7 +44,7 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
 
     public viewPreviousPage(): void {
         this.opinionService
-            .getVotingOpinions(this.competitionShortInfo.compId, this.idOfFirstPageItem, null)
+            .getVotingOpinions(this.competitionShortInfo.compId, this.timeOfFirstPageItem, null)
             .then(reply => this.sortThread(reply))
             .catch(e => this.handleError(e));
 
@@ -122,17 +122,17 @@ export class OpinionsComponent implements AfterViewInit, OnInit {
         this.votingThread = reply;
         if (this.votingThread.oi.length > 0) {
             this.votingThread.oi.sort((i1, i2) => {
-               if (i1.msgId > i2.msgId) {
+               if (i1.creationDate > i2.creationDate) {
                    return 1;
                }
-               if (i1.msgId < i2.msgId) {
+               if (i1.creationDate < i2.creationDate) {
                    return -1;
                }
                return 0;
             });
             this.votingThread.oi.forEach((item, i) => {
                 if (i === 0) {
-                    this.idOfFirstPageItem = item.msgId;
+                   this.timeOfFirstPageItem = item.creationDate;
                 }
                 this.getAuthorDetails(item);
             });

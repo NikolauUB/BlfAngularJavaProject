@@ -1,0 +1,69 @@
+<div>
+  <h2>Статистика фестивалей</h2>
+  <p>В результате голосования каждому участнику начисляются лавровые листочки и запоминаются в статистике. Результаты следующего фестиваля суммируются с
+    предыдущими. Количество листочков, равное разным "Ля" в Гц, конвертируется в лавровые венки. Листочки, используемые для венка, вычитаются из общей статистики участника.</p>
+  <ul>
+    <li>110 листочков - первый венок</li>
+    <li>220 листочков - второй венок</li>
+    <li>440 листочков - третий венок</li>
+    <li>880 листочков - четвертый венок</li>
+  </ul>
+  <p>Геометрическая прогрессия потому, что количество усилий на дальнейший рост мастерства растет не линейно, а как раз в геометрической прогрессии(если не хуже).</p>
+  <h3>Новая Статистика</h3>
+  <table cellspacing="10" cellpadding="10" border="1">
+    <tbody>
+    <tr>
+      <th style="text-align:center">&nbsp;&nbsp;<b>Имя</b>&nbsp;&nbsp;</th>
+      <th style="text-align:center">&nbsp;&nbsp;<b>Лавровые листочки</b>&nbsp;&nbsp;</th>
+      <th style="text-align:center">&nbsp;&nbsp;<b>Лавровые венки</b>&nbsp;&nbsp;</th>
+      <th style="text-align:center">&nbsp;<b>Конкурсы</b>&nbsp;&nbsp;<button class="[ btn btn-small btn-success active ]" [class.disabled]="selectedCompId == null" (click)="showCompetition(); $event.stopPropagation()">Посмотреть выбранный конкурс</button>&nbsp;</th>
+    </tr>
+    <tr *ngFor="let statItem of this.statistic">
+      <td>&nbsp;&nbsp;<b>{{statItem.username}}</b>&nbsp;&nbsp;</td>
+      <td style="text-align:center">{{statItem.leaves}}</td>
+      <td>
+        <p *ngIf="statItem.broomType === 0">
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok110_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok110BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok220_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok220BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok440_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok440BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok880_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok880BigDisabled.png');$event.stopPropagation();"/>
+        </p>
+        <p *ngIf="statItem.broomType === 110">
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok110_100Active.png" (click)="showVenok('assets/images/venki/big/Venok110BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok220_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok220BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok440_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok440BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok880_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok880BigDisabled.png');$event.stopPropagation();"/>
+        </p>
+        <p *ngIf="statItem.broomType === 220">
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok110_100Active.png" (click)="showVenok('assets/images/venki/big/Venok110BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok220_100Active.png" (click)="showVenok('assets/images/venki/big/Venok220BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok440_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok440BigDisabled.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok880_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok880BigDisabled.png');$event.stopPropagation();"/>
+        </p>
+        <p *ngIf="statItem.broomType === 440">
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok110_100Active.png" (click)="showVenok('assets/images/venki/big/Venok110BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok220_100Active.png" (click)="showVenok('assets/images/venki/big/Venok220BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok440_100Active.png" (click)="showVenok('assets/images/venki/big/Venok440BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok880_100Disabled.png" (click)="showVenok('assets/images/venki/big/Venok880BigDisabled.png');$event.stopPropagation();"/>
+        </p>
+        <p *ngIf="statItem.broomType === 880">
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok110_100Active.png" (click)="showVenok('assets/images/venki/big/Venok110BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok220_100Active.png" (click)="showVenok('assets/images/venki/big/Venok220BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok440_100Active.png" (click)="showVenok('assets/images/venki/big/Venok440BigActive.png');$event.stopPropagation();"/>
+          <img style="cursor:pointer" title="Венок крупным планом" src="assets/images/venki/small/Venok880_100Active.png" (click)="showVenok('assets/images/venki/big/Venok880BigActive.png');$event.stopPropagation();"/>
+        </p>
+      </td>
+      <td>
+        &nbsp;
+        <select [(ngModel)]="this.selectedCompId">
+          <option [ngValue]="undefined">------------------- Участие в конкурсах -------------------</option>
+          <option *ngFor="let competition of statItem.compIds"  [ngValue]="competition.id" >{{this.getCompetitionName(competition)}}</option>
+        </select>
+        &nbsp;
+      </td>
+
+    </tr>
+    </tbody>
+  </table>
+  <picture-modal-component></picture-modal-component>
+</div>

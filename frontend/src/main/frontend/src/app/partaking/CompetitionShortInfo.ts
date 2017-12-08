@@ -3,6 +3,7 @@ import {CompetitionMember} from "../model/CompetitionMember";
 
 @Injectable()
 export class CompetitionShortInfo {
+  public static TYPE_SHOW_HISTORY: number = -1;
   public static TYPE_PRESCRIBED_BAROQUE: number = 0;
   public static TYPE_PRESCRIBED_JAZZ: number = 1;
   public static TYPE_FREE: number = 2;

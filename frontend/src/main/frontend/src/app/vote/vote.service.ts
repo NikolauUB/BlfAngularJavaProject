@@ -12,6 +12,7 @@ import { VoteStatistic } from '../model/votestatistic/VoteStatistic';
 export class VoteService {
   private postHeaders: Headers;
   private voteDataUrl = 'api/votedata?type=';
+  private voteDataByIdUrl = 'api/votedata?type=-1&cid=';
   private voteUrl = 'api/vote';
   private deleteVoteUrl = 'api/deleteVote?cid=';
   private voteStatisticUrl = 'api/votestatistic?cid=';
@@ -28,7 +29,13 @@ export class VoteService {
       .then(response => response.json() as CompetitionInfo)
       .catch(this.handleError);
   }
-  
+  getVoteItemsByCompId(compId): Promise<CompetitionInfo> {
+      return this.http.get(this.voteDataByIdUrl + compId)
+        .toPromise()
+        .then(response => response.json() as CompetitionInfo)
+        .catch(this.handleError);
+    }
+
   getVoteStatistic(compId): Promise<VoteStatistic> {
     return this.http.get(this.voteStatisticUrl + compId)
       .toPromise()

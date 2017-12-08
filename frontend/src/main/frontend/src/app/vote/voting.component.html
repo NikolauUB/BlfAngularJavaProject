@@ -10,9 +10,10 @@
     <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode&&!statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = true; loadStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode&&statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = false; $event.stopPropagation()">&nbsp;Скрыть Результаты Голосования&nbsp;</button>
+  <button *ngIf="isHistoryView()" class="[ btn btn-success active ]" (click)="goToStatistic(); $event.stopPropagation()">&nbsp;Вернуться к статистике&nbsp;</button>
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
-<vote-menu-app *ngIf="!opinionsMode"></vote-menu-app>
+<vote-menu-app *ngIf="!opinionsMode && this.competitionShortInfo.compType > -1"></vote-menu-app>
 <h4 *ngIf="!opinionsMode && isVotingStarted() && !isVotingEnded()">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов. Голосование закончится {{convertTimeToDate(this.endDate)}}</h4>
 <h4 *ngIf="!opinionsMode && !isVotingStarted()">Голосование начнется после {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="!opinionsMode && isVotingEnded()">Голосование закрыто! А обсуждение продолжается!</h4>
@@ -54,7 +55,7 @@
      	</tr>
      </table>
     </div>
-    
+
     <div *ngIf="voteItem.videoEmbedUrl && !statisticMode" class="videoDiv">
       <iframe width="370" height="300"
           [src]="voteItem.videoEmbedUrl | safe"

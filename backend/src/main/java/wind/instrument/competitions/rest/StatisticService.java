@@ -42,65 +42,80 @@ public class StatisticService {
     @RequestMapping(value = "/api/allstatistic", method = RequestMethod.GET)
     public List<UserStatisticHistory> getAllStatistic(HttpServletResponse response) {
         List<UserStatisticHistory> result = new ArrayList<>();
-        UserStatisticHistory userStatisticHistory = new UserStatisticHistory();
-        userStatisticHistory.setUserId(1l);
-        userStatisticHistory.setBroomType(BroomType.NONE.getValue());
-        userStatisticHistory.setLeaves(20);
-        List<UserCompetition> compIds = new ArrayList<UserCompetition>();
-        compIds.add(new UserCompetition(2l, "Обязательная классическая программа. Октябрь 2017", new Date()));
-        compIds.add(new UserCompetition(4l, "Свободная программа. Октябрь 2017", new Date()));
-        userStatisticHistory.setCompIds(compIds);
-        result.add(userStatisticHistory);
 
-        userStatisticHistory = new UserStatisticHistory();
-        userStatisticHistory.setUserId(35l);
-        userStatisticHistory.setBroomType(BroomType.NONE.getValue());
-        userStatisticHistory.setLeaves(34);
-        compIds = new ArrayList<UserCompetition>();
-        compIds.add(new UserCompetition(3l, "Обязательная джазовая программа. Октябрь 2017", new Date()));
-        compIds.add(new UserCompetition(4l, "Свободная программа. Октябрь 2017", new Date()));
-        userStatisticHistory.setCompIds(compIds);
-        result.add(userStatisticHistory);
-
-        /*CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<CompetitionItemUsers> query = cb.createQuery(CompetitionItemUsers.class);
-        Root<CompetitionItemEntity> compItem = query.from(CompetitionItemEntity.class);
-        Join<CompetitionItemEntity, CompetitionItemUsers> competitions= compItem.join("competitionItemId", JoinType.LEFT);
-        query.select(competitions).where(cb.equal(compItem.get("userId"), 1), cb.or(cb.equal(competitions.get("userId"), 1)));*/
-        //TypedQuery<CompetitionEntity> activeCompetitionQuery =
-        //        em.createQuery("select c from CompetitionEntity c where c.active = true",
-        //                CompetitionEntity.class);
-
-        //List<CompetitionItemUsers> result1 = em.createQuery(query).getResultList();
+        TypedQuery<Object[]> userSummary =
+                em.createQuery("select c, u.username from CompetitionVotingSummary c, UserEntity u WHERE c.userId = u.userId order by c.leafSummary desc, u.username", Object[].class);
+        TypedQuery<CompetitionEntity> userCompetions =
+                em.createQuery("select c from CompetitionEntity c where " +
+                        "exists (select i from CompetitionItemEntity i " +
+                        "LEFT JOIN i.competitionItemUsers u " +
+                        "where i.competitionId = c.competitionId " +
+                        "and (i.userId = :userId or u.userId = :userId)) order by c.created DESC" , CompetitionEntity.class);
+        List<Object[]> summaries = userSummary.getResultList();
+        for (Object[] summaryItemArr : summaries) {
+            CompetitionVotingSummary summaryItem = (CompetitionVotingSummary) summaryItemArr[0];
+            String username =(String) summaryItemArr[1];
+            UserStatisticHistory userStatistic = new UserStatisticHistory();
+            userStatistic.setUserId(summaryItem.getUserId());
+            userStatistic.setUsername(username);
+            userStatistic.setBroomType(summaryItem.getBroomType().getValue());
+            userStatistic.setLeaves(summaryItem.getLeafSummary());
+            List<CompetitionEntity>  compList =
+                    userCompetions.setParameter("userId", summaryItem.getUserId()).getResultList();
+            List<UserCompetition> userComps = new ArrayList<UserCompetition>();
+            for(CompetitionEntity competition : compList) {
+                userComps.add(new UserCompetition(competition.getCompetitionId(),
+                        competition.getCompetitionName(),
+                        competition.getCompetitionStart()));
+            }
+            userStatistic.setCompIds(userComps);
+            result.add(userStatistic);
+        }
 
         return result;
     }
     @RequestMapping(value = "/api/updatestatistic", method = RequestMethod.GET)
     @Transactional(propagation =  Propagation.REQUIRED, readOnly = false)
     public void updateStatistic(HttpServletResponse response) throws Exception{
-        //todo admin access
+        if (!ServiceUtil.isAdmin(em, httpSession)) {
+            try {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not administrator");
+            } catch (Exception ex) {}
+            return;
+        }
         Map<Long,Integer> readyToSave = this.calculateUsersStatistic(response);
         Iterator<Long> userIds = readyToSave.keySet().iterator();
         while (userIds.hasNext()) {
             Long userId = userIds.next();
             Session session = (Session) em.getDelegate();
             CompetitionVotingSummary userSummary = em.find(CompetitionVotingSummary.class, userId);
+            BroomType previousBroom = BroomType.NONE;
             if (userSummary == null) {
                 userSummary = new CompetitionVotingSummary();
+            } else {
+                previousBroom = userSummary.getBroomType();
             }
             userSummary.setUserId(userId);
             Integer summ = readyToSave.get(userId);
-            userSummary.setLeafSummary(summ);
-            if (summ.intValue() >= BroomType.FORTH_BROOM.getValue()) {
+            if (summ.intValue() >= BroomType.FORTH_BROOM.getValue()
+                    && previousBroom.getValue() < BroomType.FORTH_BROOM.getValue()) {
                 userSummary.setBroomType(BroomType.FORTH_BROOM);
-            } else if (summ.intValue() >= BroomType.THIRD_BROOM.getValue()) {
+                userSummary.setLeafSummary(summ - BroomType.FORTH_BROOM.getValue());
+            } else if (summ.intValue() >= BroomType.THIRD_BROOM.getValue()
+                    && previousBroom.getValue() < BroomType.THIRD_BROOM.getValue()) {
                 userSummary.setBroomType(BroomType.THIRD_BROOM);
-            } else if (summ.intValue() >= BroomType.SECOND_BROOM.getValue()) {
+                userSummary.setLeafSummary(summ - BroomType.THIRD_BROOM.getValue());
+            } else if (summ.intValue() >= BroomType.SECOND_BROOM.getValue()
+                    && previousBroom.getValue() < BroomType.SECOND_BROOM.getValue()) {
                 userSummary.setBroomType(BroomType.SECOND_BROOM);
-            } else if (summ.intValue() >= BroomType.FIRST_BROOM.getValue()) {
+                userSummary.setLeafSummary(summ - BroomType.SECOND_BROOM.getValue());
+            } else if (summ.intValue() >= BroomType.FIRST_BROOM.getValue()
+                    && previousBroom.getValue() < BroomType.FIRST_BROOM.getValue()) {
                 userSummary.setBroomType(BroomType.FIRST_BROOM);
+                userSummary.setLeafSummary(summ - BroomType.FIRST_BROOM.getValue());
             } else {
-                userSummary.setBroomType(BroomType.NONE);
+                userSummary.setBroomType(previousBroom);
+                userSummary.setLeafSummary(summ);
             }
             em.persist(userSummary);
         }

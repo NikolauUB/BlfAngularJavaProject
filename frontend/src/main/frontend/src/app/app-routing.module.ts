@@ -25,6 +25,8 @@ import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
 import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
 import {VoteFreeComponent} from "./vote/free/vote.free.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
+import {NewstatisticComponent} from "./statistic/newstatistic.component";
+import {ShowByidComponent} from "./vote/byid/show.byid.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -52,6 +54,8 @@ const routes: Routes = [
   { path: 'voteJazz', component: VoteJazzComponent},
   { path: 'voteFree', component: VoteFreeComponent},
   { path: 'voteComposition', component: VoteCompositionComponent},
+  { path: 'showByid/:id', component: ShowByidComponent},
+  { path: 'newstatistic', component: NewstatisticComponent},
   { path: 'error403', component: Error403Component},
 
 ];

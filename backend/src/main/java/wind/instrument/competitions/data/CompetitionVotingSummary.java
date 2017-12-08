@@ -1,9 +1,6 @@
 package wind.instrument.competitions.data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(name = "CompetitionVotingSummary")
 @Table(name = "competition_voting_summary", schema = "forumdata")
@@ -39,5 +36,6 @@ public class CompetitionVotingSummary {
     public void setBroomType(BroomType broomType) {
         this.broomType = broomType.getValue();
     }
+
 }
 

@@ -42,17 +42,17 @@ public class OpinionService {
     /**
      *
      * @param competitionId
-     * @param msgStartAfterId if = -1 get first page without check on updates
+     * @param msgStartAfterTime if = -1 get first page without check on updates
      * @param controlDate
      * @param response
      * @return
      */
     @RequestMapping(value = "/api/getVotingOpinions", method = RequestMethod.GET)
-    public VotingThread getVotingOpinions(@RequestParam("cId") Long competitionId, @RequestParam(value= "saId", required = false) Long msgStartAfterId,
+    public VotingThread getVotingOpinions(@RequestParam("cId") Long competitionId, @RequestParam(value= "saId", required = false) Long msgStartAfterTime,
                                           @RequestParam(value="cd", required = false) Long controlDate, HttpServletResponse response) {
         VotingThread result = new VotingThread();
-        //if controlDate not null and msgStartAfterId = null do  check for updates
-        if (controlDate != null && msgStartAfterId == null) {
+        //if controlDate not null and msgStartAfterTime = null do  check for updates
+        if (controlDate != null && msgStartAfterTime == null) {
             if (!this.themeHasChanges(competitionId, controlDate)) {
                 result.setC(false);
                 return result;
@@ -60,18 +60,19 @@ public class OpinionService {
         }
 
         ThemeEntity opinionTheme = this.getVotingThemeByCompetitionId(competitionId);
-        boolean isFirstPage =  (msgStartAfterId == null || msgStartAfterId.longValue() == -1l);
+        boolean isFirstPage =  (msgStartAfterTime == null || msgStartAfterTime.longValue() == -1l);
+        Date msgStartAfterDateTime = (msgStartAfterTime != null && msgStartAfterTime.longValue() != -1l) ? new Date(msgStartAfterTime.longValue()) : null;
 
         //find messages in the theme
         if (opinionTheme != null) {
             result.setId(opinionTheme.getId());
             TypedQuery<MessageEntity> msgQuery = ( isFirstPage )
-                    ? em.createQuery("select m from MessageEntity m where  m.themeId = :threadId order by m.created desc, m.msgId desc",
+                    ? em.createQuery("select m from MessageEntity m where  m.themeId = :threadId order by m.created desc",
                             MessageEntity.class)
-                    : em.createQuery("select m from MessageEntity m where m.themeId = :threadId and m.msgId < :msgStartAfterId order by m.created desc, m.msgId desc",
+                    : em.createQuery("select m from MessageEntity m where m.themeId = :threadId and m.created <= :msgStartAfterTime order by m.created desc",
                             MessageEntity.class);
             TypedQuery<Long> allMsgCountQuery = em.createQuery("select count(*) from  MessageEntity m where m.themeId = :threadId", Long.class);
-            TypedQuery<Long> youngerMsgCountQuery = em.createQuery("select count(*) from  MessageEntity m where m.themeId = :threadId and m.msgId < :youngestId", Long.class);
+            TypedQuery<Long> youngerMsgCountQuery = em.createQuery("select count(*) from  MessageEntity m where m.themeId = :threadId and m.created < :youngestTime", Long.class);
             try {
                 List<MessageEntity> msgList = (isFirstPage)
                     ? msgQuery
@@ -80,7 +81,7 @@ public class OpinionService {
                         .getResultList()
                     : msgQuery
                         .setParameter("threadId", opinionTheme.getId())
-                        .setParameter("msgStartAfterId", msgStartAfterId)
+                        .setParameter("msgStartAfterTime", msgStartAfterDateTime)
                         .setMaxResults(PAGE_SIZE)
                         .getResultList();
                 Long allMsgCount = allMsgCountQuery.setParameter("threadId", opinionTheme.getId()).getSingleResult();
@@ -88,10 +89,10 @@ public class OpinionService {
                     result.setAc(allMsgCount);
                 }
                 if (!isFirstPage) {
-                    Long youngestId = (msgList.size() > 0) ? msgList.get(msgList.size() - 1).getMsgId() : msgStartAfterId;
+                    Date youngestDateTime = (msgList.size() > 0) ? msgList.get(msgList.size() - 1).getCreated() : msgStartAfterDateTime;
                     Long youngerMsgCount = youngerMsgCountQuery
                             .setParameter("threadId", opinionTheme.getId())
-                            .setParameter("youngestId", youngestId)
+                            .setParameter("youngestTime", youngestDateTime)
                             .getSingleResult();
                     if (youngerMsgCount != null) {
                         result.setYc(youngerMsgCount);

@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class WelcomeComponent implements OnInit {
 
-  competitionList: CompetitionList;
+  competitionList: CompetitionList = new CompetitionList();
 
   obStartDate: Date;
   obEndDate: Date;
@@ -45,8 +45,8 @@ export class WelcomeComponent implements OnInit {
     var compDesc: string;
     if (this.competitionList.hasBaroque || this.competitionList.hasJazz) {
       compDesc = (this.competitionList.hasBaroque) ? localStorage.getItem(ChangesController.DESCRIPTION_CLASSIC) : localStorage.getItem(ChangesController.DESCRIPTION_JAZZ);
-      (compDesc != null) 
-        ? this.setDates(JSON.parse(compDesc)) 
+      (compDesc != null)
+        ? this.setDates(JSON.parse(compDesc))
         : ((this.competitionList.hasBaroque) ? this.loadCompetition(CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE) : this.loadCompetition(CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ));
     }
     if (this.competitionList.hasFree) {

@@ -156,30 +156,41 @@ public class VoteDataService {
 
 
     @RequestMapping("/api/votedata")
-    public CompetitionInfo getActiveVoteData(@RequestParam("type") Integer type, HttpServletResponse response) {
+    public CompetitionInfo getActiveVoteData(@RequestParam("type") Integer type, @RequestParam(name="cid", required = false) Long compId, HttpServletResponse response) {
         CompetitionInfo result = new CompetitionInfo();
         UserEntity currentUser = ServiceUtil.findCurrentUser(em, httpSession);
 
-        if (!CompetitionType.hasType(type)) {
+        if (type.intValue() != -1 && !CompetitionType.hasType(type) ) {
             ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST, "Type not found in request", response);
             return result;
         }
 
         CompetitionType competitionType = CompetitionType.valueOf(type);
-        //todo select in period of activity
-        TypedQuery<CompetitionEntity> competitionQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType = :type",
-                        CompetitionEntity.class);
+        TypedQuery<CompetitionEntity> competitionQuery = null;
+        if (type.intValue() > -1) {
+            competitionQuery =
+                    em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType = :type",
+                            CompetitionEntity.class);
+        } else {
+            competitionQuery =
+                    em.createQuery("select c from CompetitionEntity c where c.competitionId = :compId",
+                            CompetitionEntity.class);
+        }
         CompetitionEntity competition = null;
         try {
-            competition =
-                    competitionQuery.setParameter("type", competitionType.getValue()).getSingleResult();
+            if (type.intValue() > -1) {
+                competition =
+                        competitionQuery.setParameter("type", competitionType.getValue()).getSingleResult();
+            } else {
+                competition =
+                        competitionQuery.setParameter("compId", compId).getSingleResult();
+            }
         } catch (NoResultException ex) {
             LOG.error("Error getting competition: ", ex);
             ServiceUtil.sendResponseError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error getting competition", response);
         }
         if (competition == null) {
-            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Active competition is not found for selected type", response);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "Active competition is not found for selected type or id", response);
             return result;
         }
         result.setCompetitionData(new CompetitionData(competition.getCompetitionId(),

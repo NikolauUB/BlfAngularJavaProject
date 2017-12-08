@@ -4,6 +4,7 @@ import java.util.List;
 
 public class UserStatisticHistory {
     private Long userId;
+    private String username;
     private Integer leaves;
     private Integer broomType;
     private List<UserCompetition> compIds;
@@ -51,5 +52,13 @@ public class UserStatisticHistory {
 
     public void setCompIds(List<UserCompetition> compIds) {
         this.compIds = compIds;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
