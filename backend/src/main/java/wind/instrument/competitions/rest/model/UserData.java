@@ -1,8 +1,7 @@
 package wind.instrument.competitions.rest.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
-@XmlRootElement
+
 public class UserData {
     private String username;
     private String saveImage;
