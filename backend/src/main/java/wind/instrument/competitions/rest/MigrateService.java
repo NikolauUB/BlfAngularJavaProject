@@ -38,20 +38,20 @@ public class MigrateService {
             return "Access Error!";
         }
         Calendar cal = Calendar.getInstance();
-        cal.set(2017, 10, 16, 23, 59);
+        cal.set(2018, 0, 15, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
-        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
-        competitionEntity.setCompetitionName("Обязательная классическая программа");
-        competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/rxunt-uyDPc");
+        competitionEntity.setCompetitionType(CompetitionType.CONCERT);
+        competitionEntity.setCompetitionName("Онлайн-Концерт");
+        competitionEntity.setCompetitionDesc(this.getConcertDescription());
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/Z9R0xG1Cgm4");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(true);
-        Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 0");
+        Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 4");
         query.executeUpdate();
         em.persist(competitionEntity);
-
+/*
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2017, 10, 16, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -80,7 +80,15 @@ public class MigrateService {
         Query queryFree = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 2");
         queryFree.executeUpdate();
         em.persist(competitionEntityFree);
+        */
         return "done";
+
+    }
+    private String getConcertDescription() {
+        return "<p>Это не конкурс - голосование отсутствует.</p> <p> Тем не менее, лавровые листочки будут выдаваться автоматически каждому участнику из расчета количество номеров в концерте умножить на два.</p>" +
+                "<p>Вы можете записать любые произведения в любом количестве, только, в случае нескольких произведений, их следует объединить в одно видео и в одну аудиозапись. </p>" +
+                "<p>Горячо приветствуются ансамбли!</p>" +
+                "<p>Удачи!</p>";
     }
 
     private String getClassicDescription() {

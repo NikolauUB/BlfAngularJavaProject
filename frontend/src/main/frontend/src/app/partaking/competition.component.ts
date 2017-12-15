@@ -57,7 +57,7 @@ export class CompetitionComponent  implements  OnInit {
 
   private initUserPartakeState(members: string) {
     this.competitionShortInfo.membersForShow = JSON.parse(members);
-    if (this.authService.getAuth() != null){
+    if (this.authService.getAuth() != null) {
       var member = this.competitionShortInfo.membersForShow.filter( (item) => {
         return item.mId === this.authService.getAuth().uId;
       });
@@ -81,7 +81,6 @@ export class CompetitionComponent  implements  OnInit {
           });
 	    }
         this.competitionShortInfo.userChoosePrescribeProgramm = (barMember != null && barMember.length > 0) ? CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE: -1;
-
       } else {
         this.competitionShortInfo.userChoosePrescribeProgramm =  this.competitionShortInfo.compType;
       }
@@ -132,7 +131,8 @@ export class CompetitionComponent  implements  OnInit {
     var possibleVariants = [CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE,
                     CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ,
                     CompetitionShortInfo.TYPE_FREE,
-                    CompetitionShortInfo.TYPE_COMPOSITION];
+                    CompetitionShortInfo.TYPE_COMPOSITION,
+                    CompetitionShortInfo.TYPE_CONCERT];
     for (var variant of possibleVariants) {
       if (membersForShowMap.has(variant)) {
         localStorage.setItem(ChangesController.COMPETITION_MEMBERS_PREFIX + variant, JSON.stringify(membersForShowMap.get(variant)));
@@ -174,12 +174,16 @@ export class CompetitionComponent  implements  OnInit {
       && this.competitionData.type === CompetitionShortInfo.TYPE_COMPOSITION);
   }
 
+  public isFinished(): boolean {
+    return new Date() <= this.competitionData.end;
+  }
+
   protected handleError(e: any) : void {
     if(e.status === 403) {
       alert("Ваша сессия не активна. Пожалуйста, зайдите на сайт!");
       this.router.navigateByUrl("login");
     } else {
-      this.errorMsg = e.json().message || e.toString();
+      this.errorMsg = e.toString();
     }
   }
 }

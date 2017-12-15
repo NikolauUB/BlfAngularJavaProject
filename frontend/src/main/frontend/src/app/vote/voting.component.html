@@ -1,22 +1,24 @@
 <div class="alert alert-danger" style="width:450px" *ngIf="notSaved"><strong>&dArr; Результаты голосования не сохранены! &dArr;</strong></div>
 <div style="margin-bottom: 20px;">
-    <small *ngIf="!isAuthentificated() && (opinionsMode || (isVotingStarted() && !isVotingEnded()))"><button class="btn btn-danger btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
+    <small *ngIf="this.showRedirectToLoginBtn()"><button class="btn btn-danger btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
     <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>
-    <small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button></small>
+    <small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">{{getBtnTitleGoToVoting()}}</button></small>
 
-  <button *ngIf="isAuthentificated() && !voteInfo.voted && !opinionsMode && isVotingStarted() && !isVotingEnded()" class="[ btn btn-success active ]" [class.disabled]="!anySelected()" (click)="sendResult(); $event.stopPropagation()">Сохранить результаты голосования</button>
+  <button *ngIf="this.showSaveVotingResultBtn()" class="[ btn btn-success active ]" [class.disabled]="!anySelected()" (click)="sendResult(); $event.stopPropagation()">Сохранить результаты голосования</button>
   <button *ngIf="isAuthentificated() && voteInfo.voted && !opinionsMode && isVotingStarted() && !isVotingEnded()" class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()">Изменить Ваш выбор</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
-    <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">&nbsp;Перейти к Голосованию&nbsp;</button>
-    <button *ngIf="isAuthentificated()&&!opinionsMode&&!statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = true; loadStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
-    <button *ngIf="isAuthentificated()&&!opinionsMode&&statisticMode&&voteInfo.voted" class="[ btn btn-success active ]" (click)="statisticMode = false; $event.stopPropagation()">&nbsp;Скрыть Результаты Голосования&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">{{getBtnTitleGoToVoting()}}</button>
+    <button *ngIf="this.showShowVotingResultsBtn()" class="[ btn btn-success active ]" (click)="statisticMode = true; loadStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode&&statisticMode" class="[ btn btn-success active ]" (click)="statisticMode = false; $event.stopPropagation()">&nbsp;Скрыть Результаты Голосования&nbsp;</button>
   <button *ngIf="isHistoryView()" class="[ btn btn-success active ]" (click)="goToStatistic(); $event.stopPropagation()">&nbsp;Вернуться к статистике&nbsp;</button>
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
 <vote-menu-app *ngIf="!opinionsMode && this.competitionShortInfo.compType > -1"></vote-menu-app>
-<h4 *ngIf="!opinionsMode && isVotingStarted() && !isVotingEnded()">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов. Голосование закончится {{convertTimeToDate(this.endDate)}}</h4>
-<h4 *ngIf="!opinionsMode && !isVotingStarted()">Голосование начнется после {{convertTimeToDate(this.startDate)}}</h4>
-<h4 *ngIf="!opinionsMode && isVotingEnded()">Голосование закрыто! А обсуждение продолжается!</h4>
+<h4 *ngIf="this.showVotingInstructionTtl()">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов. Голосование закончится {{convertTimeToDate(this.endDate)}}</h4>
+<h4 *ngIf="this.showConcertInstructionTtl()">Участники записали свои любимые произведения для <b>Онлайн-Концерта {{convertTimeToDate(this.startDate)}}</b>. Подробные комментарии читайте в описании номеров, которое можно увидеть в всплывающем окне при нажатии мышкой на именах участников.</h4>
+<h4 *ngIf="this.showVotingWillStartTtl()">Голосование начнется {{convertTimeToDate(this.startDate)}}</h4>
+<h4 *ngIf="this.showConcertWillStartTtl()">Концерт  начнется {{convertTimeToDate(this.startDate)}}</h4>
+<h4 *ngIf="this.showVotingCloseTtl()">Голосование закрыто, а обсуждение продолжается!</h4>
 <span  *ngFor="let voteItem of this.getVoteDataArray()">
   <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem) && !statisticMode">
     <div class="voteItemHeader btn-group" >
@@ -29,10 +31,10 @@
         <a style="float:right" class="[ btn ]"  [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" *ngIf="voteItem.order && !voteInfo.voted"  (click)="onSelect(voteItem); $event.stopPropagation();">
           <span aria-hidden="true" title="Отменить">&#10006;</span>
         </a>
-        <a style="float:right" *ngIf="!voteItem.order && !voteInfo.voted && !isUserPartake(voteItem) && isVotingStarted() && !isVotingEnded()" class="[  img-rounded ]" (click)="onSelect(voteItem); $event.stopPropagation();">
+        <a style="float:right" *ngIf="this.showLikeHandBtn(voteItem)" class="[  img-rounded ]" (click)="onSelect(voteItem); $event.stopPropagation();">
           <img src="assets/images/Up.png" title="Понравилось" class="likeIcon"/>
         </a>
-        <a style="float:right" *ngIf="isUserPartake(voteItem)" class="circleBtn">
+        <a style="float:right" *ngIf="showLikeNotAllowedBtn(voteItem)" class="circleBtn">
           <span aria-hidden="true" title="Вы участвуете в этом номере">&#9995;</span>
         </a>
     </div>

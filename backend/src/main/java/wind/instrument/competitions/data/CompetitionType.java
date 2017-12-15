@@ -8,7 +8,8 @@ public enum CompetitionType {
     PRESCRIBED_BAROQUE(0),
     PRESCRIBED_JAZZ(1),
     FREE(2),
-    COMPOSITION(3);
+    COMPOSITION(3),
+    CONCERT(4);
 
     private int value;
     private static Map<Integer, CompetitionType> map = new HashMap<Integer, CompetitionType>();

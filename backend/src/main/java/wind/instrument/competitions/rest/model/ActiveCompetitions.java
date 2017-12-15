@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 public class ActiveCompetitions {
 
-    private ArrayList<Integer> types;
+    private ArrayList<ActiveCompetitionType> types;
 
-    public ArrayList<Integer> getTypes() {
+    public ArrayList<ActiveCompetitionType> getTypes() {
         return types;
     }
 
-    public void setTypes(ArrayList<Integer> types) {
+    public void setTypes(ArrayList<ActiveCompetitionType> types) {
         this.types = types;
     }
 }

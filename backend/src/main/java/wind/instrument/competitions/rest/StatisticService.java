@@ -175,6 +175,8 @@ public class StatisticService {
                     Integer leaves = 2;
                     if (!allPlacesSelected) {
                         leaves = placeMap.containsKey(itemId) ? 5 - placeMap.get(itemId) : 1;
+                    } else if (placeMap.containsKey(itemId) && placeMap.get(itemId).equals(Integer.valueOf(0))) {
+                        leaves = 2 * items.size();
                     }
                     compItemsSummaryMap.put(itemId,
                             compItemsSummaryMap.containsKey(itemId) ? compItemsSummaryMap.get(itemId) + leaves : leaves);

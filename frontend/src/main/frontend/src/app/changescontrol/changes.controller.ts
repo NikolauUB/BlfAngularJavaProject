@@ -12,16 +12,20 @@ import { Ng2DeviceService  } from 'ng2-device-detector';
 export class ChangesController {
   public static PREVIOUS_TIME: string = "PREV_TIME";
   public static COMPETITION_LIST: string = "COMP_LIST";
+
+  public static LSTORAGE_OBJECT_COUNT: number = 5;
   public static DESCRIPTION_CLASSIC: string = "DESC_0";
   public static DESCRIPTION_JAZZ: string = "DESC_1";
   public static DESCRIPTION_FREE: string = "DESC_2";
   public static DESCRIPTION_COMPOSITION: string = "DESC_3";
+  public static DESCRIPTION_CONCERT: string = "DESC_4";
   public static DESCRIPTION_PREFIX: string = "DESC_";
 
   public static COMPETITION_MEMBERS_CLASSIC: string = "MBRS_0";
   public static COMPETITION_MEMBERS_JAZZ: string = "MBRS_1";
   public static COMPETITION_MEMBERS_FREE: string = "MBRS_2";
   public static COMPETITION_MEMBERS_COMPOSITION: string = "MBRS_3";
+  public static COMPETITION_MEMBERS_CONCERT: string = "MBRS_4";
   public static COMPETITION_MEMBERS_PREFIX: string = "MBRS_";
   public static HIDE_PARTAKE_DISCUSS_PREFIX: string = "HD_";
 
@@ -29,6 +33,7 @@ export class ChangesController {
   public static VOTING_JAZZ: string = "V_1";
   public static VOTING_FREE: string = "V_2";
   public static VOTING_COMPOSITION: string = "V_3";
+  public static VOTING_CONCERT: string = "V_4";
   public static VOTING_PREFIX: string = "V_";
 
   //keywords which are not stored in client storage
@@ -83,6 +88,7 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.VOTING_JAZZ);
       localStorage.removeItem(ChangesController.VOTING_FREE);
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
+      localStorage.removeItem(ChangesController.VOTING_CONCERT);
     }
   }
 
@@ -114,14 +120,17 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.DESCRIPTION_JAZZ);
       localStorage.removeItem(ChangesController.DESCRIPTION_FREE);
       localStorage.removeItem(ChangesController.DESCRIPTION_COMPOSITION);
+      localStorage.removeItem(ChangesController.DESCRIPTION_CONCERT);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CLASSIC);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_COMPOSITION);
+      localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CONCERT);
       localStorage.removeItem(ChangesController.VOTING_CLASSIC);
       localStorage.removeItem(ChangesController.VOTING_JAZZ);
       localStorage.removeItem(ChangesController.VOTING_FREE);
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
+      localStorage.removeItem(ChangesController.VOTING_CONCERT);
     }
 
     var checkResult = this.changesService
@@ -167,7 +176,7 @@ export class ChangesController {
 
   private checkCountAndClean(objectTypePrefix: string, objectCountConst: string, keyword: string): void {
     var counter = 0;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < ChangesController.LSTORAGE_OBJECT_COUNT; i++) {
       let ls = localStorage.getItem(objectTypePrefix + i);
       if (objectTypePrefix ===  ChangesController.VOTING_PREFIX) {
         let acmObj = (ls) ? JSON.parse(ls) : null;
@@ -178,7 +187,7 @@ export class ChangesController {
       }
     }
     if (counter !== +keyword.split(objectCountConst)[1]) {
-      for (let n = 0; n < 4; n++) {
+      for (let n = 0; n < ChangesController.LSTORAGE_OBJECT_COUNT; n++) {
         localStorage.removeItem(objectTypePrefix + n);
       }
     }
