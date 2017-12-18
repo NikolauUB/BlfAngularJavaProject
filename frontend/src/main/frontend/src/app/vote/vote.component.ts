@@ -247,7 +247,8 @@ export class VoteComponent implements OnInit,  OnDestroy {
   public showVotingCloseTtl(): boolean {
     return !this.opinionsMode
             && this.isVotingEnded()
-            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT;
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY;
   }
 
   public showVotingWillStartTtl(): boolean {
