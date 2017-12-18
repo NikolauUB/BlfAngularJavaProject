@@ -29,6 +29,7 @@ import {CompetitionShortInfo} from "./partaking/CompetitionShortInfo";
 import {ListComponent} from "./partaking/menu/list.component";
 import {JazzComponent} from "./partaking/jazz/jazz.component";
 import {FreeComponent} from "./partaking/free/free.component";
+import {ConcertComponent} from "./partaking/concert/concert.component";
 import {CompositionComponent} from "./partaking/composition/composition.component";
 import {ChangesService} from "./changescontrol/changes.service";
 import {ChangesController} from "./changescontrol/changes.controller";
@@ -43,6 +44,7 @@ import {AdminBaroqueComponent} from "./admin/baroque/admin.baroque.component";
 import {AdminCompositionComponent} from "./admin/composition/admin.composition.component";
 import {AdminJazzComponent} from "./admin/jazz/admin.jazz.component";
 import {AdminFreeComponent} from "./admin/free/admin.free.component";
+import {AdminConcertComponent} from "./admin/concert/admin.concert.component";
 import {AdminService} from "./admin/admin.service";
 import {Error403Component} from "./errorpages/error403.component";
 import {VoteMenuComponent} from "./vote/menu/vote.menu.component";
@@ -50,6 +52,8 @@ import {VoteBaroqueComponent} from "./vote/baroque/vote.baroque.component";
 import {VoteJazzComponent} from "./vote/jazz/vote.jazz.component";
 import {ShowByidComponent} from "./vote/byid/show.byid.component";
 import {VoteFreeComponent} from "./vote/free/vote.free.component";
+import {VoteConcertComponent} from "./vote/concert/vote.concert.component";
+import {AdminVoteConcertComponent} from "./vote/concert/admin.vote.concert.component";
 import {VoteCompositionComponent} from "./vote/composition/vote.composition.component";
 import { Ng2DeviceDetectorModule } from 'ng2-device-detector';
 import {OpinionsComponent} from "./vote/opinions/opinions.component";
@@ -77,6 +81,7 @@ export function runChangesController(changesService: ChangesController): () => P
     AdminCompositionComponent,
     AdminJazzComponent,
     AdminFreeComponent,
+    AdminConcertComponent,
     HistoryComponent,
     AppComponent,
     VoteComponent,
@@ -84,6 +89,8 @@ export function runChangesController(changesService: ChangesController): () => P
     VoteBaroqueComponent,
     VoteJazzComponent,
     VoteFreeComponent,
+    VoteConcertComponent,
+    AdminVoteConcertComponent,
     ShowByidComponent,
     OpinionsComponent,
     VoteCompositionComponent,
@@ -100,6 +107,7 @@ export function runChangesController(changesService: ChangesController): () => P
     BaroqueComponent,
     JazzComponent,
     FreeComponent,
+    ConcertComponent,
     CompositionComponent,
     ModalComponent,
     EditModalComponent,

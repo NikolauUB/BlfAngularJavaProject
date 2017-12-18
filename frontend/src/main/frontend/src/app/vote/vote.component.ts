@@ -43,10 +43,10 @@ export class VoteComponent implements OnInit,  OnDestroy {
 
   constructor(
     private voteService: VoteService,
-    private authService: AuthService,
+    protected authService: AuthService,
     protected partakingService: PartakingService,
     protected competitionShortInfo: CompetitionShortInfo,
-    private router: Router,
+    protected router: Router,
     private detailsController: DetailsController,
     private changesController: ChangesController,
     public route: ActivatedRoute) {
@@ -113,15 +113,21 @@ export class VoteComponent implements OnInit,  OnDestroy {
     return false;
   }
 
+
   public leafCount(item: VoteData, voterRecord: VoterRecord): number {
     var result = 1;
+
     if (this.isAllRecordsSelected(voterRecord)) {
-      return 2;
+      return (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT
+                || this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_SHOW_HISTORY)
+              ? (2*Object.keys(voterRecord.voterRawMap).length) : 2;
     }
+
     var place2 = this.placeForLeafsCount(item, voterRecord);
     if (place2 > 0) {
       result = (5 - place2);
     }
+
     return result;
 
   }
@@ -199,6 +205,78 @@ export class VoteComponent implements OnInit,  OnDestroy {
       ? "Для участия в обсуждении необходимо зайти на сайт"
       : "Для сохранения результатов голосования необходимо зайти на сайт";
   }
+
+  public showRedirectToLoginBtn(): boolean {
+    return !this.isAuthentificated()
+            && (this.opinionsMode || (
+            this.isVotingStarted()
+            && !this.isVotingEnded()
+            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode)));
+  }
+
+  public showSaveVotingResultBtn(): boolean {
+    return this.isAuthentificated()
+            && !this.voteInfo.voted
+            && !this.opinionsMode
+            && this.isVotingStarted()
+            && !this.isVotingEnded()
+            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode);
+  }
+
+  public showShowVotingResultsBtn(): boolean {
+    return this.isAuthentificated()
+            && !this.opinionsMode
+            && !this.statisticMode
+            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode)
+            && (this.voteInfo.voted || this.isVotingEnded());
+  }
+
+  public showVotingInstructionTtl(): boolean {
+    return !this.opinionsMode
+            && this.isVotingStarted()
+            && !this.isVotingEnded()
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT;
+  }
+
+  public showConcertInstructionTtl(): boolean {
+    return !this.opinionsMode
+                && this.isVotingStarted()
+                && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT;
+  }
+
+  public showVotingCloseTtl(): boolean {
+    return !this.opinionsMode
+            && this.isVotingEnded()
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY;
+  }
+
+  public showVotingWillStartTtl(): boolean {
+    return !this.opinionsMode
+            && !this.isVotingStarted()
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT;
+  }
+
+  public showConcertWillStartTtl(): boolean {
+     return !this.opinionsMode
+              && !this.isVotingStarted()
+              && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT;
+  }
+
+  public showLikeHandBtn(voteItem: any): boolean {
+    return !voteItem.order
+            && !this.voteInfo.voted
+            && (!this.isUserPartake(voteItem) || this.competitionShortInfo.adminMode)
+            && this.isVotingStarted()
+            && !this.isVotingEnded()
+            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode);
+  }
+
+  public showLikeNotAllowedBtn(voteItem: any): boolean {
+    return this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT
+            && this.isUserPartake(voteItem);
+  }
+
 
   public getVoteDataArray(): Array<VoteData> {
     return (this.opinionsMode) ? this.emptyVoteData : this.voteInfo.voteData;
@@ -291,6 +369,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
       this.errorMsg = "Извините, голосование закрыто!";
       return;
     }
+    if (!confirm("Ваше предыдущее голосование будет удалено! Продолжить?")) return;
     this.voteService
       .deleteVote(this.voteInfo.competitionData.id, this.authService.getAuth())
       .then(reply => {
@@ -305,7 +384,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   onSelect(voteSelected: VoteData): void {
     this.notSaved = false;
     this.errorMsg = "";
-    if (this.voteInfo.voted || this.isUserPartake(voteSelected)) {
+    if (this.voteInfo.voted || (!this.competitionShortInfo.adminMode && this.isUserPartake(voteSelected))) {
       return;
     }
     if (new Date(this.voteInfo.competitionData.end) < new Date()) {
@@ -341,6 +420,14 @@ export class VoteComponent implements OnInit,  OnDestroy {
         }
       });
     });
+  }
+
+
+  public getBtnTitleGoToVoting(): string {
+    if (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT)  {
+      return "Перейти к Записям";
+    }
+    return "Перейти к Голосованию";
   }
 
 
@@ -380,7 +467,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
   private selectItem(voteSelected: VoteData): void {
     this.voteInfo.voteData.forEach(item => {
       if (item.id === voteSelected.id) {
-        item.order = this.selectedItem.size + 1;
+        item.order = (!this.competitionShortInfo.adminMode) ? this.selectedItem.size + 1 : 0;
         this.selectedItem.add(item);
       }
     });

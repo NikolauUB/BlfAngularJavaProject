@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wind.instrument.competitions.data.CompetitionEntity;
 import wind.instrument.competitions.data.ThemeType;
 import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.rest.model.ActiveCompetitionType;
 import wind.instrument.competitions.rest.model.ActiveCompetitions;
 import wind.instrument.competitions.rest.model.CompetitionData;
 import wind.instrument.competitions.rest.model.CompetitionMember;
@@ -44,9 +45,13 @@ public class CompetitionService {
                         CompetitionEntity.class);
         try {
             List<CompetitionEntity> competList = activeCometQuery.getResultList();
-            ArrayList<Integer> list = new ArrayList<Integer>();
+            ArrayList<ActiveCompetitionType> list = new ArrayList<ActiveCompetitionType>();
             competList.forEach((item) -> {
-                list.add(item.getCompetitionType().getValue());
+                ActiveCompetitionType type = new ActiveCompetitionType();
+                type.setType(item.getCompetitionType().getValue());
+                type.setStart(item.getCompetitionStart());
+                type.setEnd(item.getCompetitionEnd());
+                list.add(type);
             });
             result.setTypes(list);
         } catch (NoResultException ex) {

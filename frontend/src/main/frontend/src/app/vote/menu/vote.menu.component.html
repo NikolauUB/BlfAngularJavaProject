@@ -6,6 +6,8 @@
        *ngIf="competitionList.hasBaroque" routerLink="/voteBaroque" routerLinkActive="active">Классическая программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 1}"
        *ngIf="competitionList.hasJazz" routerLink="/voteJazz" routerLinkActive="active">Джазовая программа</a>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 4}"
+       *ngIf="competitionList.hasConcert" routerLink="/voteConcert" routerLinkActive="active">Онлайн-Концерт</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 3}"
        *ngIf="competitionList.hasComposition" routerLink="/voteComposition" routerLinkActive="active">Композиторский конкурс</a>
   </nav>

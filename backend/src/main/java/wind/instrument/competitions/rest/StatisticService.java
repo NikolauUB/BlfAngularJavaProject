@@ -173,8 +173,10 @@ public class StatisticService {
                 boolean allPlacesSelected = placeMap.size() == items.size();
                 for (Long itemId : items) {
                     Integer leaves = 2;
-                    if (!allPlacesSelected) {
+                    if (!allPlacesSelected && placeMap.size() > 0) {
                         leaves = placeMap.containsKey(itemId) ? 5 - placeMap.get(itemId) : 1;
+                    } else if (placeMap.size() == 0) {
+                        leaves = 2 * items.size();
                     }
                     compItemsSummaryMap.put(itemId,
                             compItemsSummaryMap.containsKey(itemId) ? compItemsSummaryMap.get(itemId) + leaves : leaves);

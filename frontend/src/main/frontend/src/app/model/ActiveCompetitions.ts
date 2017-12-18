@@ -1,3 +1,5 @@
+import {ActiveCompetitionType} from "./ActiveCompetitionType";
+
 export class ActiveCompetitions {
-  types: Array<number>;
+  types: Array<ActiveCompetitionType>;
 }

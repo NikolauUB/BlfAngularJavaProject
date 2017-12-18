@@ -175,6 +175,7 @@ public class VoteDataService {
             competitionQuery =
                     em.createQuery("select c from CompetitionEntity c where c.competitionId = :compId",
                             CompetitionEntity.class);
+
         }
         CompetitionEntity competition = null;
         try {
@@ -204,8 +205,10 @@ public class VoteDataService {
         Collection<CompetitionItemEntity> competitionItemList = competition.getCompetitionItems();
         if (!ServiceUtil.isAdmin(currentUser)) {
             competitionItemList =
-                    competitionItemList.stream().filter(item -> (item.getActive() != null && item.getActive()))
-                        .collect(Collectors.toList());
+                    competitionItemList.stream().filter(item -> (
+                            (item.getActive() != null && item.getActive())
+                                    || (currentUser != null && item.getUserId().equals(currentUser.getUserId()))
+                        )).collect(Collectors.toList());
         }
         final Map<Long, Integer> votingOrderMap = new HashMap<Long, Integer>();
         if (currentUser != null) {

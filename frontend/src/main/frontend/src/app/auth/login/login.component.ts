@@ -62,6 +62,7 @@ export class LoginComponent implements OnInit {
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_JAZZ), authInfo);
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_COMPOSITION), authInfo);
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_FREE), authInfo);
+    this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_CONCERT), authInfo);
   }
 
   private cleanVotingCache(json: string, authInfo: AuthData): void {
