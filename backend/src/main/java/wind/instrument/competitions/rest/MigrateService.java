@@ -38,6 +38,21 @@ public class MigrateService {
             return "Access Error!";
         }
         Calendar cal = Calendar.getInstance();
+        cal.set(2018, 2, 1, 23, 59);
+        CompetitionEntity competitionEntity = new CompetitionEntity();
+        competitionEntity.setCompetitionType(CompetitionType.COMPOSITION);
+        competitionEntity.setCompetitionName("Конкурс композиторов");
+        competitionEntity.setCompetitionDesc(this.getCompositionDescription());
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/ux7u5MnsfSQ");
+        competitionEntity.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntity.setCompetitionEnd(cal.getTime());
+        competitionEntity.setActive(true);
+        Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 3");
+        query.executeUpdate();
+        em.persist(competitionEntity);
+
+        /*Calendar cal = Calendar.getInstance();
         cal.set(2018, 0, 15, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.CONCERT);
@@ -50,7 +65,7 @@ public class MigrateService {
         competitionEntity.setActive(true);
         Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 4");
         query.executeUpdate();
-        em.persist(competitionEntity);
+        em.persist(competitionEntity);*/
 /*
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2017, 10, 16, 23, 59);
@@ -84,6 +99,22 @@ public class MigrateService {
         return "done";
 
     }
+
+    private String getCompositionDescription() {
+        return "<p>В композиторском конкурсе задание придумывает победитель предыдущего конкурса. Этот конкурс не первый - начало было положено на форуме blf.ru</p>" +
+                "<p>Задание в композитрроском конкурсе - это обязательная последовательность нот, которая должна встретиться в сочинении хотя бы один раз.</p>" +
+                "<p>Победитель предыдущего конкурса, <a target=\"blank\" href=\"https://www.youtube.com/watch?v=ux7u5MnsfSQ\">Максим Хорош</a>, придумал следующую последовательность нот: </br>" +
+                "<b><font size=\"3\">Фа, ля, до, ре, си, соль, ми</font></b></p>" +
+                "<p>И стишок:</br>" +
+                "<font size=\"3\" color=\"blue\">Не каждый музыку в них поймет,</br>" +
+                "Сколько в них не смотри.</br>" +
+                "Но если их сыграет музыкант,</br>" +
+                "То каждый этим нотам будет рад!</font></p>" +
+                "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. Mожно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
+                "<p>Голосование будет подобным голосованию на фестивалях. Тот, кто наберёт больше листочков в данном конкурсе, придумывает задание на следующий раз.</p>" +
+                "<p>Удачи!</p>";
+    }
+
     private String getConcertDescription() {
         return "<p>Это не конкурс - голосование отсутствует.</p> <p> Тем не менее, лавровые листочки будут выдаваться автоматически каждому участнику из расчета количество номеров в концерте умножить на два.</p>" +
                 "<p>Вы можете записать любые произведения в любом количестве, только, в случае нескольких произведений, их следует объединить в одно видео и в одну аудиозапись. </p>" +
