@@ -8,6 +8,7 @@ import {UsersChanges} from "./UsersChanges";
 export class ChangesService {
   private keywordsUrl = 'api/getChangedKeywords';
   private threadUpdatesUrl = 'api/getThreadUpdates?thid=';
+  private activeThreadUpdatesUrl = 'api/getActiveThreadUpdates?tld=';
   private usersUpdatesUrl = 'api/getUsersUpdates?uld=';
 
   constructor(private http: Http) {
@@ -26,6 +27,14 @@ export class ChangesService {
         .then(response => response.json() as ThreadChanges)
         .catch(this.handleError);
   }
+
+  public getActiveThreadUpdates(time:number): Promise<Map<number, number>> {
+      return this.http.get(this.activeThreadUpdatesUrl + time)
+          .toPromise()
+          .then(response => response.json() as Map<number, number>)
+          .catch(this.handleError);
+  }
+
 
   public getUsersUpdates(usrTime:Date): Promise<UsersChanges> {
       return this.http.get(this.usersUpdatesUrl + usrTime)

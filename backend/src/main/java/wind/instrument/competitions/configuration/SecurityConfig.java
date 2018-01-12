@@ -41,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/getVotingOpinions").permitAll()
                 .antMatchers("/api/allstatistic").permitAll()
                 .antMatchers("/api/checkAuth").permitAll()
+                .antMatchers("/api/getActiveThreadUpdates").permitAll()
                 .antMatchers("/api/getCompetitionMembers").permitAll()
                 .antMatchers("/api/getChangedKeywords").permitAll()
                 .antMatchers("/api/getUsersUpdates").permitAll()

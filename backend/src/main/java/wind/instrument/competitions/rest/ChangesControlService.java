@@ -48,6 +48,7 @@ public class ChangesControlService {
     private boolean compDescChanged = false;
     private int themeCounter = 0;
     private int votingItemCounter = 0;
+    private final static int ACTIVE_FEST_DISCUSSION_CODE = 0;
 
     /**
      * @param previousTime - set it -1 so that just to init time point
@@ -116,6 +117,38 @@ public class ChangesControlService {
         }
         result.setTime(currentTime);
         return result;
+    }
+
+    @RequestMapping(value = "/api/getActiveThreadUpdates", method = RequestMethod.GET)
+    public HashMap<Long, Long> getActiveThreadUpdates(@RequestParam(value = "tld") Long threadControlTime, HttpServletResponse response) {
+        HashMap<Long, Long> result = new HashMap<Long, Long>();
+        TypedQuery<Object[]> newMessagesQuery =
+                em.createQuery("select c.competitionId, count(*), c.competitionType from MessageEntity m, CompetitionThemeEntity ct, CompetitionEntity c " +
+                                "where m.themeId = ct.themeId and ct.competitionId = c.competitionId and c.active = true and m.created > :time " +
+                                "group by c.competitionId, c.competitionType",
+                        Object[].class);
+
+        try {
+            Date threadControlDate = new Date(threadControlTime.longValue());
+            List<Object[]> countList = newMessagesQuery.setParameter("time", threadControlDate).getResultList();
+            for(Object[] idAndCount : countList) {
+                Integer type = (Integer)idAndCount[2];
+                if (type.equals(CompetitionType.PRESCRIBED_BAROQUE.getValue()) ||
+                        type.equals(CompetitionType.PRESCRIBED_JAZZ.getValue()) ||
+                        type.equals(CompetitionType.FREE.getValue())) {
+                    result.put(Long.valueOf(ACTIVE_FEST_DISCUSSION_CODE), (Long)idAndCount[1]);
+                } else {
+                    result.put((Long)idAndCount[0], (Long)idAndCount[1]);
+                }
+
+            }
+        } catch (NoResultException ex) {
+            LOG.error("Can not get result for count new msgs for active competitions: ", ex);
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, ex.getMessage(), response);
+            return result;
+        }
+        return result;
+
     }
 
     @RequestMapping(value = "/api/getThreadUpdates", method = RequestMethod.GET)

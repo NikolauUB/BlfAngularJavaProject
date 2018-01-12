@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import wind.instrument.competitions.data.MessageEntity;
-import wind.instrument.competitions.data.ThemeEntity;
-import wind.instrument.competitions.data.ThemeType;
-import wind.instrument.competitions.data.UserEntity;
+import wind.instrument.competitions.data.*;
 import wind.instrument.competitions.rest.model.VotingThread;
 import wind.instrument.competitions.rest.model.discussion.DiscussionItem;
 
@@ -157,6 +154,10 @@ public class OpinionService {
                 opinionTheme.setName("Voting theme for competition " + discussionItem.getCompetitionId());
                 opinionTheme.setThemeType(ThemeType.COMPETITION_VOTING);
                 em.persist(opinionTheme);
+                CompetitionThemeEntity competitionThemeEntity = new  CompetitionThemeEntity();
+                competitionThemeEntity.setThemeId(opinionTheme.getId());
+                competitionThemeEntity.setCompetitionId(discussionItem.getCompetitionId());
+                em.persist(competitionThemeEntity);
             }
         } catch (Exception ex) {
             LOG.error("Error getting or saving voting theme: ",ex);
@@ -167,8 +168,11 @@ public class OpinionService {
     }
 
     private ThemeEntity getVotingThemeByCompetitionId(Long id) {
+//        TypedQuery<ThemeEntity> themeQuery =
+//                em.createQuery("select t from ThemeEntity t where t.themeType = :type and t.competitionId = :cId",
+//                        ThemeEntity.class);
         TypedQuery<ThemeEntity> themeQuery =
-                em.createQuery("select t from ThemeEntity t where t.themeType = :type and t.competitionId = :cId",
+                em.createQuery("select t from ThemeEntity t inner join t.competitionTheme c where t.themeType = :type and c.competitionId = :cId",
                         ThemeEntity.class);
         try {
             return themeQuery.setParameter("cId", id)

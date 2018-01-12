@@ -35,7 +35,6 @@ public class MessageEntity {
     @JoinColumn(name = "theme_id", referencedColumnName = "theme_id", insertable = false, updatable = false)
     private ThemeEntity theme;
 
-
     private Date created;
     private Date updated;
 
