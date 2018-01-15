@@ -27,6 +27,8 @@ public class ThemeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "competition_id", referencedColumnName = "competition_id", insertable = false, updatable = false)
     private CompetitionEntity competition;
+    @OneToMany(mappedBy = "theme", targetEntity = CompetitionThemeEntity.class, fetch = FetchType.LAZY)
+    private Collection<CompetitionThemeEntity> competitionTheme;
 
     private Date created;
     private Date updated;

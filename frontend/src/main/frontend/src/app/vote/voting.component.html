@@ -1,12 +1,12 @@
 <div class="alert alert-danger" style="width:450px" *ngIf="notSaved"><strong>&dArr; Результаты голосования не сохранены! &dArr;</strong></div>
 <div style="margin-bottom: 20px;">
     <small *ngIf="this.showRedirectToLoginBtn()"><button class="btn btn-danger btn-sm active" (click)="goToLogin(); $event.stopPropagation()">{{getGoToLoginBtnTitle()}}</button></small>
-    <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button></small>
+    <small *ngIf="!isAuthentificated()&&!opinionsMode"><button class="btn btn-success btn-sm active" (click)="showToOpinionsAction(); $event.stopPropagation()">{{showToOpinionsTtl()}}</button></small>
     <small *ngIf="!isAuthentificated()&&opinionsMode"><button class="btn btn-success btn-sm active" (click)="opinionsMode = FALSE; $event.stopPropagation()">{{getBtnTitleGoToVoting()}}</button></small>
 
   <button *ngIf="this.showSaveVotingResultBtn()" class="[ btn btn-success active ]" [class.disabled]="!anySelected()" (click)="sendResult(); $event.stopPropagation()">Сохранить результаты голосования</button>
   <button *ngIf="isAuthentificated() && voteInfo.voted && !opinionsMode && isVotingStarted() && !isVotingEnded()" class="[ btn btn-danger active ]" (click)="deleteVoting(); $event.stopPropagation()">Изменить Ваш выбор</button>
-    <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = true; $event.stopPropagation()">&nbsp;&nbsp;Перейти к Oбсуждению&nbsp;&nbsp;</button>
+    <button *ngIf="isAuthentificated()&&!opinionsMode" class="[ btn btn-success active ]" (click)="showToOpinionsAction(); $event.stopPropagation()">{{showToOpinionsTtl()}}</button>
     <button *ngIf="isAuthentificated()&&opinionsMode" class="[ btn btn-success active ]" (click)="opinionsMode = false; $event.stopPropagation()">{{getBtnTitleGoToVoting()}}</button>
     <button *ngIf="this.showShowVotingResultsBtn()" class="[ btn btn-success active ]" (click)="statisticMode = true; loadStatistic(); $event.stopPropagation()">&nbsp;Показать Результаты Голосования&nbsp;</button>
     <button *ngIf="isAuthentificated()&&!opinionsMode&&statisticMode" class="[ btn btn-success active ]" (click)="statisticMode = false; $event.stopPropagation()">&nbsp;Скрыть Результаты Голосования&nbsp;</button>

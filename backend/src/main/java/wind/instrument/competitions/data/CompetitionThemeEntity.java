@@ -1,6 +1,7 @@
 package wind.instrument.competitions.data;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity(name = "CompetitionThemeEntity")
 @IdClass(CompetitionThemeId.class)
@@ -13,6 +14,11 @@ public class CompetitionThemeEntity {
     @Id
     @Column(name = "theme_id")
     private Long themeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "theme_id", referencedColumnName = "theme_id", insertable = false, updatable = false)
+    private ThemeEntity theme;
+
 
     public Long getCompetitionId() {
         return competitionId;

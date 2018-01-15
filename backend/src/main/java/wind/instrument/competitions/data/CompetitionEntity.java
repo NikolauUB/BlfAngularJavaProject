@@ -41,6 +41,7 @@ public class CompetitionEntity implements Serializable {
     private Collection<ThemeEntity> themesByMembers;
 
 
+
     private Date created;
     private Date updated;
 

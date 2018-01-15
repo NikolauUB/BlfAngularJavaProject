@@ -35,6 +35,7 @@ export class ChangesController {
   public static VOTING_COMPOSITION: string = "V_3";
   public static VOTING_CONCERT: string = "V_4";
   public static VOTING_PREFIX: string = "V_";
+  public static UNREAD_MESSAGES: string = "UNREAD_MSGS";
 
   //keywords which are not stored in client storage
   public static COMPETITION_MEMBERS_COUNT: string = "MBCNT_";
@@ -60,11 +61,34 @@ export class ChangesController {
     return true;
   }
 
-  public checkChangesInThread( thDate: Date, threadId: number): Promise<ThreadChanges> {
+  public checkChangesInThread(thDate: Date, threadId: number): Promise<ThreadChanges> {
     return this.changesService
         .getThreadUpdates(thDate, threadId)
         .then(reply => {return reply;})
         .catch(e => this.handleError(e));
+  }
+
+  private writeInStorageChangesInActiveThreads( thDate: number): void {
+      this.changesService
+          .getActiveThreadUpdates(thDate)
+          .then(reply => {
+            var unreadMsgs = localStorage.getItem(ChangesController.UNREAD_MESSAGES);
+            var jsonObject = (unreadMsgs != null) ? JSON.parse(unreadMsgs) : null;
+            if (jsonObject === null || Object.keys(jsonObject).length == 0) {
+               localStorage.setItem(ChangesController.UNREAD_MESSAGES, JSON.stringify(reply));
+            } else if (Object.keys(reply).length > 0) {
+              Object.keys(reply).forEach( key => {
+                if(jsonObject.hasOwnProperty(key)) {
+                  jsonObject[key] = jsonObject[key] + reply[key];
+                } else {
+                  jsonObject[key] = reply[key];
+                }
+              });
+              localStorage.setItem(ChangesController.UNREAD_MESSAGES, JSON.stringify(jsonObject));
+            }
+
+          })
+          .catch(e => this.handleError(e));
   }
 
   public checkUsersChanges(usrTime: Date): void {
@@ -132,6 +156,8 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.VOTING_COMPOSITION);
       localStorage.removeItem(ChangesController.VOTING_CONCERT);
     }
+
+    this.writeInStorageChangesInActiveThreads(time);
 
     var checkResult = this.changesService
         .checkChanges(time)

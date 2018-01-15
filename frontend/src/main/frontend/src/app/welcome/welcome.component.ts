@@ -129,30 +129,35 @@ export class WelcomeComponent implements OnInit {
               this.competitionList.hasBaroque = true;
               this.competitionList.baroqueStart = competition.start;
               this.competitionList.baroqueEnd = competition.end;
+              this.competitionList.idBaroque = competition.id;
               break;
             }
             case CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ: {
               this.competitionList.hasJazz = true;
               this.competitionList.jazzStart = competition.start;
               this.competitionList.jazzEnd = competition.end;
+              this.competitionList.idJazz = competition.id;
               break;
             }
             case CompetitionShortInfo.TYPE_FREE: {
               this.competitionList.hasFree = true;
               this.competitionList.freeStart = competition.start;
               this.competitionList.freeEnd = competition.end;
+              this.competitionList.idFree = competition.id;
               break;
             }
             case CompetitionShortInfo.TYPE_COMPOSITION: {
               this.competitionList.hasComposition = true;
               this.competitionList.compositionStart = competition.start;
               this.competitionList.compositionEnd = competition.end;
+              this.competitionList.idComposition = competition.id;
               break;
             }
             case CompetitionShortInfo.TYPE_CONCERT: {
               this.competitionList.hasConcert = true;
               this.competitionList.concertStart = competition.start;
               this.competitionList.concertEnd = competition.end;
+              this.competitionList.idConcert = competition.id;
               break;
             }
             default: {

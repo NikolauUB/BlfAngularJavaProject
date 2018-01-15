@@ -3,6 +3,7 @@ package wind.instrument.competitions.rest.model;
 import java.util.Date;
 
 public class ActiveCompetitionType {
+    private Long id;
     private Integer type;
     private Date start;
     private Date end;
@@ -29,5 +30,13 @@ public class ActiveCompetitionType {
 
     public void setEnd(Date end) {
         this.end = end;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

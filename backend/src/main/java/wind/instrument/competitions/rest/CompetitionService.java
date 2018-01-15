@@ -48,6 +48,7 @@ public class CompetitionService {
             ArrayList<ActiveCompetitionType> list = new ArrayList<ActiveCompetitionType>();
             competList.forEach((item) -> {
                 ActiveCompetitionType type = new ActiveCompetitionType();
+                type.setId(item.getCompetitionId());
                 type.setType(item.getCompetitionType().getValue());
                 type.setStart(item.getCompetitionStart());
                 type.setEnd(item.getCompetitionEnd());

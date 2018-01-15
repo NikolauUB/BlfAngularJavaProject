@@ -244,6 +244,35 @@ export class VoteComponent implements OnInit,  OnDestroy {
                 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT;
   }
 
+  public showToOpinionsTtl(): string {
+    var unreadMsgs = localStorage.getItem(ChangesController.UNREAD_MESSAGES);
+    if(unreadMsgs != null) {
+      var jsonObject = JSON.parse(unreadMsgs);
+      var keyId = (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE ||
+                          this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ ||
+                          this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_FREE) ? 0 : this.competitionShortInfo.compId;
+      if (jsonObject !== null && Object.keys(jsonObject).length > 0 && jsonObject.hasOwnProperty('' + keyId)) {
+        return "Перейти к Oбсуждению (Новых сообщений: " + jsonObject['' + keyId] + ")";
+      }
+    }
+    return "Перейти к Oбсуждению";
+  }
+
+  public showToOpinionsAction(): void {
+    var unreadMsgs = localStorage.getItem(ChangesController.UNREAD_MESSAGES);
+    if(unreadMsgs != null) {
+          var keyId = (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE ||
+                              this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ ||
+                              this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_FREE) ? 0 : this.competitionShortInfo.compId;
+          var jsonObject = JSON.parse(unreadMsgs);
+          if (jsonObject !== null && Object.keys(jsonObject).length > 0 && jsonObject.hasOwnProperty('' + keyId)) {
+            delete jsonObject['' + keyId];
+            localStorage.setItem(ChangesController.UNREAD_MESSAGES, JSON.stringify(jsonObject));
+          }
+        }
+    this.opinionsMode = true;
+  }
+
   public showVotingCloseTtl(): boolean {
     return !this.opinionsMode
             && this.isVotingEnded()
