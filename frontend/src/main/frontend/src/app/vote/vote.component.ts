@@ -177,6 +177,9 @@ export class VoteComponent implements OnInit,  OnDestroy {
       this.loadUsersData(userId);
     }
   }
+  public isLocalMp3Path(path: string): boolean {
+    return path.indexOf("assets/mp3") != -1;
+  }
 
   public loadUsername(userId: number): string {
     if (this.userAvatarMap.has(userId)) {
