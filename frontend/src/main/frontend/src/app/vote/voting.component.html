@@ -81,10 +81,16 @@
     </div>
     <div *ngIf="voteItem.audioEmbedUrl  && !statisticMode" class="audioDiv">
       <small>Послушать запись в <a href="{{voteItem.audioUrl}}" target="_blank" [class.linkselected]="selectedItem.has(voteItem)">новом окне</a></small>
-      <iframe width="358" height="134"
-              [src]="voteItem.audioEmbedUrl | safe"
-              frameborder="0">
+
+      <iframe *ngIf="isLocalMp3Path(voteItem.audioEmbedUrl)" width="358" height="134"
+              frameborder="0"  srcdoc="<audio controls><source src='{{voteItem.audioEmbedUrl}}'></audio>">
       </iframe>
+
+      <iframe *ngIf="!isLocalMp3Path(voteItem.audioEmbedUrl)" width="358" height="134"
+              [src]="voteItem.audioEmbedUrl | safe"
+              frameborder="0"  >
+      </iframe>
+
       <div style="z-index: 1; height: 12px; width: 357.5px; background: #EEE; position: relative; top: -18px; left:6px;"></div>
     </div>
     <div *ngIf="!voteItem.audioEmbedUrl && voteItem.audioUrl && !statisticMode" class="audioDiv">
