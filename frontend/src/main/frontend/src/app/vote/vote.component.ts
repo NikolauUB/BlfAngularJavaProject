@@ -214,7 +214,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
             && (this.opinionsMode || (
             this.isVotingStarted()
             && !this.isVotingEnded()
-            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode)));
+            && ((this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY) || this.competitionShortInfo.adminMode)));
   }
 
   public showSaveVotingResultBtn(): boolean {
@@ -223,7 +223,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
             && !this.opinionsMode
             && this.isVotingStarted()
             && !this.isVotingEnded()
-            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode);
+            && ((this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY)||this.competitionShortInfo.adminMode);
   }
 
   public showShowVotingResultsBtn(): boolean {
@@ -238,7 +238,8 @@ export class VoteComponent implements OnInit,  OnDestroy {
     return !this.opinionsMode
             && this.isVotingStarted()
             && !this.isVotingEnded()
-            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT;
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY;
   }
 
   public showConcertInstructionTtl(): boolean {
@@ -301,11 +302,12 @@ export class VoteComponent implements OnInit,  OnDestroy {
             && (!this.isUserPartake(voteItem) || this.competitionShortInfo.adminMode)
             && this.isVotingStarted()
             && !this.isVotingEnded()
-            && (this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT || this.competitionShortInfo.adminMode);
+            && ((this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY) || this.competitionShortInfo.adminMode);
   }
 
   public showLikeNotAllowedBtn(voteItem: any): boolean {
     return this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_CONCERT
+            && this.competitionShortInfo.compType !== CompetitionShortInfo.TYPE_SHOW_HISTORY
             && this.isUserPartake(voteItem);
   }
 
