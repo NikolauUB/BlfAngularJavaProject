@@ -24,7 +24,9 @@ export class PartakingService {
     private partakeDiscussUrl = 'api/getPartakeDiscuss';
     private adminDiscussUrl = 'api/getPartakeDiscussForAdmin';
     private activeCompetitionsUrl = 'api/getActiveCompetitions';
+    private futureCompetitionsUrl = 'api/getFutureCompetitions';
     private competitionDataUrl = 'api/getActiveCompetitionData';
+    private futureCompetitionDataUrl = 'api/getFutureCompetitionData';
     private competitionsMembersUrl = 'api/getCompetitionMembers';
 
 
@@ -41,9 +43,24 @@ export class PartakingService {
         .catch(this.handleError);
     }
 
+    public getFutureCompetitions(): Promise<ActiveCompetitions> {
+      return this.http.get(this.futureCompetitionsUrl)
+        .toPromise()
+        .then(response => response.json() as ActiveCompetitions)
+        .catch(this.handleError);
+    }
+
     public getCompetitionData(type: number): Promise<CompetitionData> {
       return this.http
         .get(this.competitionDataUrl + "?tp=" + type)
+        .toPromise()
+        .then(response => response.json() as CompetitionData)
+        .catch(this.handleError);
+    }
+
+    public getFutureCompetitionData(type: number): Promise<CompetitionData> {
+      return this.http
+        .get(this.futureCompetitionDataUrl + "?tp=" + type)
         .toPromise()
         .then(response => response.json() as CompetitionData)
         .catch(this.handleError);

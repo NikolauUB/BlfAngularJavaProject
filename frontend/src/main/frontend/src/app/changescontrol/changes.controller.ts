@@ -12,6 +12,7 @@ import { Ng2DeviceService  } from 'ng2-device-detector';
 export class ChangesController {
   public static PREVIOUS_TIME: string = "PREV_TIME";
   public static COMPETITION_LIST: string = "COMP_LIST";
+  public static COMPETITION_FUTURE_LIST: string = "FUTURE_LIST";
 
   public static LSTORAGE_OBJECT_COUNT: number = 5;
   public static DESCRIPTION_CLASSIC: string = "DESC_0";
@@ -20,6 +21,14 @@ export class ChangesController {
   public static DESCRIPTION_COMPOSITION: string = "DESC_3";
   public static DESCRIPTION_CONCERT: string = "DESC_4";
   public static DESCRIPTION_PREFIX: string = "DESC_";
+
+
+  public static DESCRIPTION_FUTURE_CLASSIC: string = "DESC_F_0";
+  public static DESCRIPTION_FUTURE_JAZZ: string = "DESC_F_1";
+  public static DESCRIPTION_FUTURE_FREE: string = "DESC_F_2";
+  public static DESCRIPTION_FUTURE_COMPOSITION: string = "DESC_F_3";
+  public static DESCRIPTION_FUTURE_CONCERT: string = "DESC_F_4";
+  public static DESCRIPTION_FUTURE_PREFIX: string = "DESC_F_";
 
   public static COMPETITION_MEMBERS_CLASSIC: string = "MBRS_0";
   public static COMPETITION_MEMBERS_JAZZ: string = "MBRS_1";
@@ -145,6 +154,12 @@ export class ChangesController {
       localStorage.removeItem(ChangesController.DESCRIPTION_FREE);
       localStorage.removeItem(ChangesController.DESCRIPTION_COMPOSITION);
       localStorage.removeItem(ChangesController.DESCRIPTION_CONCERT);
+      localStorage.removeItem(ChangesController.COMPETITION_FUTURE_LIST);
+      localStorage.removeItem(ChangesController.DESCRIPTION_FUTURE_CLASSIC);
+      localStorage.removeItem(ChangesController.DESCRIPTION_FUTURE_JAZZ);
+      localStorage.removeItem(ChangesController.DESCRIPTION_FUTURE_FREE);
+      localStorage.removeItem(ChangesController.DESCRIPTION_FUTURE_COMPOSITION);
+      localStorage.removeItem(ChangesController.DESCRIPTION_FUTURE_CONCERT);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_CLASSIC);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_JAZZ);
       localStorage.removeItem(ChangesController.COMPETITION_MEMBERS_FREE);

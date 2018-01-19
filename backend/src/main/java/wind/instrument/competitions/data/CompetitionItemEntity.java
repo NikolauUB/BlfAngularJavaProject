@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "competition_items", schema = "forumdata")
 public class CompetitionItemEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "competition_item_id")
     private Long competitionItemId;
     @Column(name = "competition_id")

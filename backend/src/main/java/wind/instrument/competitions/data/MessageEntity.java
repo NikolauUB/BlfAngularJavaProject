@@ -7,7 +7,7 @@ import java.util.Date;
 @Table(name = "message", schema = "forumdata")
 public class MessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "msg_id")
     private Long msgId;
     @Column(name = "theme_id")

@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name = "theme", schema = "forumdata")
 public class ThemeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "theme_id")
     private Long id;
     @Column(name = "competition_id")

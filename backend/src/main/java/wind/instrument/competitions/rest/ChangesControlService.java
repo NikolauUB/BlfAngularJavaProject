@@ -38,14 +38,17 @@ public class ChangesControlService {
     @Autowired
     private HttpSession httpSession;
 
-    private static String COMPETITION_LIST = "COMP_LIST";
-    private static String DESCRIPTION_FOR_TYPE = "DESC_";
-    private static String COMPETITION_MEMBERS_PREFIX = "MBRS_";
-    private static String COMPETITION_MEMBERS_COUNT = "MBCNT_";
-    private static String VOTING_ITEMS_COUNT = "VCNT_";
-    private static String VOTING_PREFIX = "V_";
+    private final static String COMPETITION_LIST = "COMP_LIST";
+    private final static String COMPETITION_FUTURE_LIST = "FUTURE_LIST";
+    private final static String DESCRIPTION_FOR_TYPE = "DESC_";
+    private final static String DESCRIPTION_FOR_FUTURE_TYPE = "DESC_F_";
+    private final static String COMPETITION_MEMBERS_PREFIX = "MBRS_";
+    private final static String COMPETITION_MEMBERS_COUNT = "MBCNT_";
+    private final static String VOTING_ITEMS_COUNT = "VCNT_";
+    private final static String VOTING_PREFIX = "V_";
 
     private boolean compDescChanged = false;
+    private boolean compDescFutureChanged = false;
     private int themeCounter = 0;
     private int votingItemCounter = 0;
     private final static int ACTIVE_FEST_DISCUSSION_CODE = 0;
@@ -62,7 +65,7 @@ public class ChangesControlService {
         long currentTime = System.currentTimeMillis();
         if (previousTime > 0) {
             TypedQuery<CompetitionEntity> activeCompetitionQuery =
-                    em.createQuery("select c from CompetitionEntity c where c.active = true",
+                    em.createQuery("select c from CompetitionEntity c where c.active = true or c.future = true",
                             CompetitionEntity.class);
             TypedQuery<ThemeEntity> partakeThemeQuery =
                     em.createQuery("select t from ThemeEntity t where t.competitionId = :compId and t.themeType = 1 " +
@@ -71,41 +74,55 @@ public class ChangesControlService {
             try {
                 List<CompetitionEntity> competitionList = activeCompetitionQuery.getResultList();
                 this.compDescChanged = false;
+                this.compDescFutureChanged = false;
                 this.themeCounter = 0;
                 this.votingItemCounter = 0;
                 competitionList.forEach((item) -> {
                     if (item.getUpdated().getTime() > previousTime.longValue()) {
-                        result.getKeywords().add(DESCRIPTION_FOR_TYPE + item.getCompetitionType().getValue());
-                        this.compDescChanged = true;
+                        if (item.getFuture()) {
+                            result.getKeywords().add(DESCRIPTION_FOR_FUTURE_TYPE + item.getCompetitionType().getValue());
+                            this.compDescFutureChanged = true;
+                        }
+                        if (item.getActive()) {
+                            result.getKeywords().add(DESCRIPTION_FOR_TYPE + item.getCompetitionType().getValue());
+                            this.compDescChanged = true;
+                        }
                     }
                     //check partake themes
-                    Collection<ThemeEntity> themeEntities =
-                            partakeThemeQuery.setParameter("compId", item.getCompetitionId()).getResultList();
+                    if (item.getFuture()) {
+                        Collection<ThemeEntity> themeEntities =
+                                partakeThemeQuery.setParameter("compId", item.getCompetitionId()).getResultList();
 
-                    this.themeCounter += (themeEntities != null) ? themeEntities.size() : 0;
-                    if (themeEntities != null && themeEntities.stream().anyMatch(
-                            (theme) -> theme.getCreated().getTime() > previousTime.longValue())) {
-                        result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + item.getCompetitionType().getValue());
+                        this.themeCounter += (themeEntities != null) ? themeEntities.size() : 0;
+                        if (themeEntities != null && themeEntities.stream().anyMatch(
+                                (theme) -> theme.getCreated().getTime() > previousTime.longValue())) {
+                            result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + item.getCompetitionType().getValue());
 
+                        }
                     }
 
                     //check competition items
-                    Collection<CompetitionItemEntity> competitionItems = item.getCompetitionItems();
-                    if (!ServiceUtil.isAdmin(em, httpSession)) {
-                        competitionItems =
-                                competitionItems.stream().filter(itm -> (itm.getActive() != null && itm.getActive()))
-                                        .collect(Collectors.toList());
-                    }
-                    this.votingItemCounter += (competitionItems != null) ? competitionItems.size() : 0;
-                    if (competitionItems != null && competitionItems.stream().anyMatch(
-                            (compItem) -> compItem.getUpdated().getTime() > previousTime.longValue())) {
-                        result.getKeywords().add(VOTING_PREFIX + item.getCompetitionType().getValue());
+                    if (item.getActive()) {
+                        Collection<CompetitionItemEntity> competitionItems = item.getCompetitionItems();
+                        if (!ServiceUtil.isAdmin(em, httpSession)) {
+                            competitionItems =
+                                    competitionItems.stream().filter(itm -> (itm.getActive() != null && itm.getActive()))
+                                            .collect(Collectors.toList());
+                        }
+                        this.votingItemCounter += (competitionItems != null) ? competitionItems.size() : 0;
+                        if (competitionItems != null && competitionItems.stream().anyMatch(
+                                (compItem) -> compItem.getUpdated().getTime() > previousTime.longValue())) {
+                            result.getKeywords().add(VOTING_PREFIX + item.getCompetitionType().getValue());
+                        }
                     }
 
                 });
 
                 if (this.compDescChanged) {
                     result.getKeywords().add(COMPETITION_LIST);
+                }
+                if (this.compDescFutureChanged) {
+                    result.getKeywords().add(COMPETITION_FUTURE_LIST);
                 }
                 //control common member's count
                 result.getKeywords().add(COMPETITION_MEMBERS_COUNT + this.themeCounter);

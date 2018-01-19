@@ -38,7 +38,7 @@ export class CompetitionComponent  implements  OnInit {
   }
 
   private init(): void {
-    var compDesc: string = localStorage.getItem(ChangesController.DESCRIPTION_PREFIX + this.competitionShortInfo.compType);
+    var compDesc: string = localStorage.getItem(ChangesController.DESCRIPTION_FUTURE_PREFIX + this.competitionShortInfo.compType);
     if (compDesc != null) {
        this.competitionData = JSON.parse(compDesc);
        this.competitionShortInfo.compId = this.competitionData.id;
@@ -98,7 +98,7 @@ export class CompetitionComponent  implements  OnInit {
 
   public loadCompetition(): void {
     this.partakingService
-      .getCompetitionData(this.competitionShortInfo.compType)
+      .getFutureCompetitionData(this.competitionShortInfo.compType)
       .then( reply => this.initCompetitionDesc(reply))
       .catch(e => this.handleError(e))
   }
@@ -107,7 +107,7 @@ export class CompetitionComponent  implements  OnInit {
     this.competitionData = reply;
     this.competitionShortInfo.compId = this.competitionData.id;
     localStorage.setItem(
-      ChangesController.DESCRIPTION_PREFIX + this.competitionData.type,
+      ChangesController.DESCRIPTION_FUTURE_PREFIX + this.competitionData.type,
       JSON.stringify(this.competitionData));
   }
 

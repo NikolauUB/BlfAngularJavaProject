@@ -11,7 +11,7 @@ import java.util.Date;
 @Table(name = "users", schema = "forumdata")
 public class UserEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
     private Long userId;
     @Column(name = "username", unique = true)

@@ -9,7 +9,7 @@ import java.util.Date;
 @UniqueConstraint(columnNames = {"user_id", "competition_item_id"}))
 public class CompetitionVotingEntity implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "competition_voting_id")
     private Long competitionVotingId;
     @Column(name = "competition_id")
