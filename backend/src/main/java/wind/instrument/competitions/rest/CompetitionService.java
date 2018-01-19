@@ -61,6 +61,30 @@ public class CompetitionService {
         return result;
     }
 
+    @RequestMapping(value = "/api/getFutureCompetitions", method = RequestMethod.GET)
+    public ActiveCompetitions getFutureCompetitions(HttpServletResponse response) {
+        ActiveCompetitions result = new ActiveCompetitions();
+        TypedQuery<CompetitionEntity> activeCometQuery =
+                em.createQuery("select c from CompetitionEntity c where c.future = true",
+                        CompetitionEntity.class);
+        try {
+            List<CompetitionEntity> competList = activeCometQuery.getResultList();
+            ArrayList<ActiveCompetitionType> list = new ArrayList<ActiveCompetitionType>();
+            competList.forEach((item) -> {
+                ActiveCompetitionType type = new ActiveCompetitionType();
+                type.setId(item.getCompetitionId());
+                type.setType(item.getCompetitionType().getValue());
+                type.setStart(item.getCompetitionStart());
+                type.setEnd(item.getCompetitionEnd());
+                list.add(type);
+            });
+            result.setTypes(list);
+        } catch (NoResultException ex) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, bundle.getString("ACTIVE_COMPETIONS_IS_NOT_FOUND"), response);
+        }
+        return result;
+    }
+
 
     @RequestMapping(value = "/api/getActiveCompetitionData", method = RequestMethod.GET)
     public CompetitionData getActiveCompetitionData(@RequestParam("tp") Integer competitionType,
@@ -68,6 +92,33 @@ public class CompetitionService {
         CompetitionData result = null;
         TypedQuery<CompetitionEntity> activeCometQuery =
                 em.createQuery("select c from CompetitionEntity c where c.active = true and c.competitionType=:type",
+                        CompetitionEntity.class);
+        try {
+            CompetitionEntity competitionEntity = activeCometQuery
+                    .setParameter("type", competitionType)
+                    .getSingleResult();
+
+            result = new CompetitionData(
+                    competitionEntity.getCompetitionId(),
+                    competitionEntity.getCompetitionName(),
+                    competitionEntity.getCompetitionType().getValue(),
+                    competitionEntity.getCompetitionDesc(),
+                    competitionEntity.getCompetitionSampleVideo(),
+                    competitionEntity.getCompetitionStart(),
+                    competitionEntity.getCompetitionEnd());
+            return result;
+        } catch (NoResultException ex) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, bundle.getString("ACTIVE_COMPETIONS_IS_NOT_FOUND"), response);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/api/getFutureCompetitionData", method = RequestMethod.GET)
+    public CompetitionData getFutureCompetitionData(@RequestParam("tp") Integer competitionType,
+                                                    HttpServletResponse response) {
+        CompetitionData result = null;
+        TypedQuery<CompetitionEntity> activeCometQuery =
+                em.createQuery("select c from CompetitionEntity c where c.future = true and c.competitionType=:type",
                         CompetitionEntity.class);
         try {
             CompetitionEntity competitionEntity = activeCometQuery
@@ -99,7 +150,7 @@ public class CompetitionService {
     public ArrayList<CompetitionMember> getCompetitionMembers(HttpServletResponse response) {
         ArrayList<CompetitionMember> result = new ArrayList<CompetitionMember>();
         TypedQuery<CompetitionEntity> activeCometQuery =
-                em.createQuery("select c from CompetitionEntity c where c.active = true",
+                em.createQuery("select c from CompetitionEntity c where c.future = true",
                         CompetitionEntity.class);
         try {
             List<CompetitionEntity> competitionList = activeCometQuery.getResultList();

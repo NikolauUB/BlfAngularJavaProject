@@ -48,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/getUserDetails").permitAll()
                 .antMatchers("/api/getActiveCompetitions").permitAll()
                 .antMatchers("/api/getActiveCompetitionData").permitAll()
+                .antMatchers("/api/getFutureCompetitions").permitAll()
+                .antMatchers("/api/getFutureCompetitionData").permitAll()
                 .antMatchers("/api/login").permitAll()
                 .antMatchers("/api/question").permitAll()
                 .antMatchers("/api/register").permitAll()

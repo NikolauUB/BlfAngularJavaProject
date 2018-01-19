@@ -17,11 +17,11 @@ export class ListComponent extends CompetitionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    let savedList = localStorage.getItem(ChangesController.COMPETITION_LIST);
+    let savedList = localStorage.getItem(ChangesController.COMPETITION_FUTURE_LIST);
     if(savedList !== null) {
       this.competitionList = JSON.parse(savedList);
     } else {
-      this.loadActiveCompetitions();
+      this.loadFutureCompetitions();
     }
   }
 
@@ -29,9 +29,9 @@ export class ListComponent extends CompetitionComponent implements OnInit {
       return new Date() <= end;
   }
 
-  private loadActiveCompetitions(): void {
+  private loadFutureCompetitions(): void {
     this.partakingService
-      .getActiveCompetitions()
+      .getFutureCompetitions()
       .then( reply => this.handleCompetitions(reply))
       .catch(e => this.handleError(e));
   }
@@ -80,6 +80,6 @@ export class ListComponent extends CompetitionComponent implements OnInit {
         }
       }
       //save in local storage
-      localStorage.setItem(ChangesController.COMPETITION_LIST, JSON.stringify(this.competitionList));
+      localStorage.setItem(ChangesController.COMPETITION_FUTURE_LIST, JSON.stringify(this.competitionList));
   }
 }

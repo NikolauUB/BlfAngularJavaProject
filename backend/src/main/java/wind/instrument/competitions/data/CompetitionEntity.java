@@ -13,7 +13,7 @@ import java.util.Date;
 public class CompetitionEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "competition_id")
     private Long competitionId;
     @Column(name = "competition_name")
@@ -30,6 +30,8 @@ public class CompetitionEntity implements Serializable {
     private Integer competitionType;
     @Column(name = "active", nullable = false)
     private Boolean active;
+    @Column(name = "future")
+    private Boolean future;
 
 
     @OneToMany(mappedBy = "competition", targetEntity = CompetitionItemEntity.class, fetch = FetchType.LAZY)
@@ -144,5 +146,13 @@ public class CompetitionEntity implements Serializable {
 
     public Date getUpdated() {
         return updated;
+    }
+
+    public Boolean getFuture() {
+        return future;
+    }
+
+    public void setFuture(Boolean future) {
+        this.future = future;
     }
 }
