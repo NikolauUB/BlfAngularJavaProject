@@ -123,6 +123,11 @@ public class ChangesControlService {
                 }
                 if (this.compDescFutureChanged) {
                     result.getKeywords().add(COMPETITION_FUTURE_LIST);
+                    result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + "0");
+                    result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + "1");
+                    result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + "2");
+                    result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + "3");
+                    result.getKeywords().add(COMPETITION_MEMBERS_PREFIX + "4");
                 }
                 //control common member's count
                 result.getKeywords().add(COMPETITION_MEMBERS_COUNT + this.themeCounter);
