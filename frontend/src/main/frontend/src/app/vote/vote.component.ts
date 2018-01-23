@@ -467,7 +467,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
 
   public convertTimeToDate(time: any): string {
     var d = new Date(time);
-    return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+    return d.toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric' });
   }
 
   public goToLogin(): void {

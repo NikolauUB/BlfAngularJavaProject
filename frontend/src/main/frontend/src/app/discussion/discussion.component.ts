@@ -77,7 +77,7 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
 
   private getAuthorDetails(item: DiscussionItem): void {
-    item.authorDetails = new UserData(); 
+    item.authorDetails = new UserData();
     item.authorDetails.username = "Пользователь " + item.authorId;
     item.authorDetails.previewImage = DetailsController.defaultAvatar;
     this.userDetailsController.loadUserDetails(item.authorId, item.authorDetails, this.changesController);
@@ -85,7 +85,8 @@ export class DiscussionComponent extends CompetitionComponent implements OnInit,
 
   public convertTimeToDate(time: any): string {
     var d = new Date(time);
-    return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ', ' + d.getHours() + ':' + d.getMinutes();
+    return d.toLocaleDateString("ru-RU", { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: "numeric"});
+    //return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear() + ', ' + d.getHours() + ':' + d.getMinutes();
   }
 
 
