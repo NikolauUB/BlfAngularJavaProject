@@ -213,13 +213,28 @@ public class ChangesControlService {
         ArrayList<Long> userIds = new ArrayList<Long>();
         result.setUserIds(userIds);
 
-        TypedQuery<UserEntity> usersQuery =
+        /*TypedQuery<UserEntity> usersQuery =
                 em.createQuery("select u from UserEntity u where (u.updated > :ctlTime and exists " +
                                 "(select t from ThemeEntity t, CompetitionEntity c " +
                                 "where t.competitionId = c.competitionId " +
                                 "and t.userId = u.userId " +
                                 "and c.active = true)) " +
                                 "or (u.updated > :ctlTime  and exists " +
+                                "(select ciu from CompetitionItemUsers ciu, CompetitionItemEntity cis, " +
+                                "CompetitionEntity cs " +
+                                "where ciu.competitionItemId = cis.competitionItemId " +
+                                "and cis.competitionId = cs.competitionId " +
+                                "and ciu.userId = u.userId " +
+                                "and cs.active = true))"
+                        , UserEntity.class);*/
+        //optimization
+        TypedQuery<UserEntity> usersQuery =
+                em.createQuery("select u from UserEntity u where u.updated > :ctlTime and (exists " +
+                                "(select t from ThemeEntity t, CompetitionEntity c " +
+                                "where t.competitionId = c.competitionId " +
+                                "and t.userId = u.userId " +
+                                "and c.active = true) " +
+                                "or exists " +
                                 "(select ciu from CompetitionItemUsers ciu, CompetitionItemEntity cis, " +
                                 "CompetitionEntity cs " +
                                 "where ciu.competitionItemId = cis.competitionItemId " +

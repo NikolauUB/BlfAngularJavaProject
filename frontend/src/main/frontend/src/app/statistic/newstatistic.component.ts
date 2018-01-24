@@ -36,7 +36,7 @@ export class NewstatisticComponent implements OnInit {
 
   public getCompetitionName(item: UserCompetition): string {
      var d = new Date(item.start);
-     return item.name + ' ' + (d.getMonth()+1) + '.' + d.getFullYear();
+     return item.name + ' - ' + d.toLocaleDateString("ru-RU", {month: 'long', year: 'numeric' });
   }
 
   public showCompetition(): void {

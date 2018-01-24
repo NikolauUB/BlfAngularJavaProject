@@ -32,29 +32,29 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentDate = new Date();
-    var savedList = localStorage.getItem(ChangesController.COMPETITION_LIST);
+    var savedList = localStorage.getItem(ChangesController.COMPETITION_FUTURE_LIST);
     if (savedList !== null) {
       this.competitionList = JSON.parse(savedList);
       this.init();
     } else {
-      this.loadActiveCompetitions();
+      this.loadFutureCompetitions();
     }
   }
 
   private init(): void {
     var compDesc: string;
     if (this.competitionList.hasBaroque || this.competitionList.hasJazz) {
-      compDesc = (this.competitionList.hasBaroque) ? localStorage.getItem(ChangesController.DESCRIPTION_CLASSIC) : localStorage.getItem(ChangesController.DESCRIPTION_JAZZ);
+      compDesc = (this.competitionList.hasBaroque) ? localStorage.getItem(ChangesController.DESCRIPTION_FUTURE_CLASSIC) : localStorage.getItem(ChangesController.DESCRIPTION_FUTURE_JAZZ);
       (compDesc != null)
         ? this.setDates(JSON.parse(compDesc))
         : ((this.competitionList.hasBaroque) ? this.loadCompetition(CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE) : this.loadCompetition(CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ));
     }
     if (this.competitionList.hasFree) {
-      compDesc = localStorage.getItem(ChangesController.DESCRIPTION_FREE);
+      compDesc = localStorage.getItem(ChangesController.DESCRIPTION_FUTURE_FREE);
       (compDesc != null) ? this.setDates(JSON.parse(compDesc)) : this.loadCompetition(CompetitionShortInfo.TYPE_FREE);
     }
     if (this.competitionList.hasComposition) {
-      compDesc = localStorage.getItem(ChangesController.DESCRIPTION_COMPOSITION);
+      compDesc = localStorage.getItem(ChangesController.DESCRIPTION_FUTURE_COMPOSITION);
       (compDesc != null) ? this.setDates(JSON.parse(compDesc)) : this.loadCompetition(CompetitionShortInfo.TYPE_COMPOSITION);
     }
   }
@@ -83,13 +83,13 @@ export class WelcomeComponent implements OnInit {
     return (this.compositionEndDate) ? this.compositionEndDate < this.currentDate : false;
   }
   public convertTimeToDate(time: any): string {
-        var d = new Date(time);
-        return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
-   }
+    var d = new Date(time);
+    return d.toLocaleDateString("ru-RU", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
 
   private loadCompetition(compType: number): void {
     this.partakingService
-      .getCompetitionData(compType)
+      .getFutureCompetitionData(compType)
       .then(reply => this.treatReply(reply))
       .catch(e => this.handleError(e))
   }
@@ -115,9 +115,9 @@ export class WelcomeComponent implements OnInit {
   }
 
 
-  private loadActiveCompetitions(): void {
+  private loadFutureCompetitions(): void {
     this.partakingService
-      .getActiveCompetitions()
+      .getFutureCompetitions()
       .then(reply => this.handleCompetitions(reply))
       .catch(e => this.handleError(e));
   }
@@ -166,7 +166,7 @@ export class WelcomeComponent implements OnInit {
           }
         }
     //save in local storage
-    localStorage.setItem(ChangesController.COMPETITION_LIST, JSON.stringify(this.competitionList));
+    localStorage.setItem(ChangesController.COMPETITION_FUTURE_LIST, JSON.stringify(this.competitionList));
     this.init();
   }
 

@@ -30,7 +30,7 @@ public class CompetitionEntity implements Serializable {
     private Integer competitionType;
     @Column(name = "active", nullable = false)
     private Boolean active;
-    @Column(name = "future")
+    @Column(name = "future", nullable = false)
     private Boolean future;
 
 
