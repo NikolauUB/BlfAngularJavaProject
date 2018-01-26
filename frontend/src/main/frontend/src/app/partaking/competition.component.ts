@@ -89,7 +89,7 @@ export class CompetitionComponent  implements  OnInit {
 
   public convertTimeToDate(time: any): string {
     var d = new Date(time);
-    return d.toLocaleDateString("ru-RU", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return d.toLocaleDateString("ru-RU", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
   }
 
   public reloadMembers(): void {
