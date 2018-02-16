@@ -118,8 +118,7 @@ export class VoteComponent implements OnInit,  OnDestroy {
     var result = 1;
 
     if (this.isAllRecordsSelected(voterRecord)) {
-      return (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT
-                || this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_SHOW_HISTORY)
+      return (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT)
               ? (2*Object.keys(voterRecord.voterRawMap).length) : 2;
     }
 
