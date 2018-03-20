@@ -4,6 +4,8 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,16 +17,19 @@ import wind.instrument.competitions.rest.model.votestatistic.UserCompetition;
 import wind.instrument.competitions.rest.model.votestatistic.UserStatisticHistory;
 import wind.instrument.competitions.rest.model.votestatistic.VoteStatistic;
 import wind.instrument.competitions.rest.model.votestatistic.VoterRecord;
+import wind.instrument.competitions.service.StatisticCacheService;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
+
 @RestController
 @Transactional(propagation =  Propagation.SUPPORTS, readOnly = true)
+@CacheConfig(cacheNames = "allStatistic")
 public class StatisticService {
 
     private static Logger LOG = LoggerFactory.getLogger(VoteDataService.class);
@@ -39,41 +44,19 @@ public class StatisticService {
     @Autowired
     private HttpSession httpSession;
 
+
+    @Autowired
+    private StatisticCacheService statisticService;
+
     @RequestMapping(value = "/api/allstatistic", method = RequestMethod.GET)
-    public List<UserStatisticHistory> getAllStatistic(HttpServletResponse response) {
-        List<UserStatisticHistory> result = new ArrayList<>();
-
-        TypedQuery<Object[]> userSummary =
-                em.createQuery("select c, u.username from CompetitionVotingSummary c, UserEntity u WHERE c.userId = u.userId order by c.leafSummary desc, u.username", Object[].class);
-        TypedQuery<CompetitionEntity> userCompetions =
-                em.createQuery("select c from CompetitionEntity c where " +
-                        "exists (select i from CompetitionItemEntity i " +
-                        "LEFT JOIN i.competitionItemUsers u " +
-                        "where i.competitionId = c.competitionId " +
-                        "and (i.userId = :userId or u.userId = :userId)) order by c.created DESC" , CompetitionEntity.class);
-        List<Object[]> summaries = userSummary.getResultList();
-        for (Object[] summaryItemArr : summaries) {
-            CompetitionVotingSummary summaryItem = (CompetitionVotingSummary) summaryItemArr[0];
-            String username =(String) summaryItemArr[1];
-            UserStatisticHistory userStatistic = new UserStatisticHistory();
-            userStatistic.setUserId(summaryItem.getUserId());
-            userStatistic.setUsername(username);
-            userStatistic.setBroomType(summaryItem.getBroomType().getValue());
-            userStatistic.setLeaves(summaryItem.getLeafSummary());
-            List<CompetitionEntity>  compList =
-                    userCompetions.setParameter("userId", summaryItem.getUserId()).getResultList();
-            List<UserCompetition> userComps = new ArrayList<UserCompetition>();
-            for(CompetitionEntity competition : compList) {
-                userComps.add(new UserCompetition(competition.getCompetitionId(),
-                        competition.getCompetitionName(),
-                        competition.getCompetitionStart()));
-            }
-            userStatistic.setCompIds(userComps);
-            result.add(userStatistic);
+    public List<UserStatisticHistory> getAllStatistic() {
+        List<UserStatisticHistory> result = statisticService.getAllStatistic();
+        if (result == null) {
+            result = statisticService.putAllStatistic();
         }
-
         return result;
     }
+
     @RequestMapping(value = "/api/updatestatistic", method = RequestMethod.GET)
     @Transactional(propagation =  Propagation.REQUIRED, readOnly = false)
     public void updateStatistic(HttpServletResponse response) throws Exception{
@@ -87,7 +70,6 @@ public class StatisticService {
         Iterator<Long> userIds = readyToSave.keySet().iterator();
         while (userIds.hasNext()) {
             Long userId = userIds.next();
-            Session session = (Session) em.getDelegate();
             CompetitionVotingSummary userSummary = em.find(CompetitionVotingSummary.class, userId);
             BroomType previousBroom = BroomType.NONE;
             if (userSummary == null) {
@@ -119,6 +101,8 @@ public class StatisticService {
             }
             em.persist(userSummary);
         }
+        //clean cash
+        statisticService.cleanCache();
 
     }
 
