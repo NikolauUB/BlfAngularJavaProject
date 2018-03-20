@@ -1,0 +1,20 @@
+<config xmlns="http://www.ehcache.org/v3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jsr107="http://www.ehcache.org/v3/jsr107"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd
+							http://www.ehcache.org/v3/jsr107 http://www.ehcache.org/schema/ehcache-107-ext-3.0.xsd">
+    <persistence  directory="D:/projects/JavaWebForum/cache"></persistence>
+    <heap-store>
+        <max-object-graph-size>10</max-object-graph-size>
+        <max-object-size unit="kB">100</max-object-size>
+    </heap-store>
+    <disk-store thread-pool="all-statistic"></disk-store>
+    <cache alias="allStatistic">
+        <expiry>
+            <ttl unit="days">10</ttl>
+        </expiry>
+        <heap unit="entries">10</heap>
+        <jsr107:mbeans enable-statistics="true"/>
+    </cache>
+
+</config>
