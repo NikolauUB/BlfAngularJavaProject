@@ -8,6 +8,7 @@ public class AuthStatus {
     /**
      * code of error in case of authorization errors
      * 400 - bad credentials
+     * 403 - forbiden
      * 500 - server error
      */
     private int cd = HttpServletResponse.SC_OK;

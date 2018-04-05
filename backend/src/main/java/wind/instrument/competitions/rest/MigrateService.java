@@ -3,6 +3,8 @@ package wind.instrument.competitions.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,20 @@ public class MigrateService {
 
     @Autowired
     private HttpSession httpSession;
+
+    @Autowired
+    private ApplicationContext context;
+
+    @RequestMapping("/stopServer")
+    public String stopServer(HttpServletResponse res) {
+        if (!AdminInfo.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
+            res.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return "Access Error!";
+        }
+        int exitCode = SpringApplication.exit(context, () -> 0);
+        System.exit(exitCode);
+        return "Server shutdown ...";
+    }
 
     //for testing only
     @RequestMapping("/migrate")

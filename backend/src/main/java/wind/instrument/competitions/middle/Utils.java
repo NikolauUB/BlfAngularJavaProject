@@ -1,18 +1,22 @@
 package wind.instrument.competitions.middle;
 
 
-import java.security.MessageDigest;
+
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Base64;
+
 
 public class Utils {
+    public final static String VK_APP = "vk_app_";
+    public final static String VK_APP_ID = "";
 
     public static String generateNewSalt () throws NoSuchAlgorithmException {
         //...
+        return null;
     }
 
     public static String encryptPassword(String password, String salt) throws NoSuchAlgorithmException {
-       //...
+        //...
+        return null;
     }
+
 }

@@ -6,22 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import wind.instrument.competitions.configuration.SessionParameters;
 import wind.instrument.competitions.data.UserEntity;
-import wind.instrument.competitions.middle.BotCheckException;
-import wind.instrument.competitions.middle.Question;
-import wind.instrument.competitions.middle.ReservedUsernames;
+import wind.instrument.competitions.middle.*;
 import wind.instrument.competitions.rest.model.*;
 
 import javax.persistence.EntityManager;
@@ -33,6 +32,8 @@ import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 /**
@@ -42,6 +43,7 @@ import java.util.ResourceBundle;
 @RestController
 @Transactional
 public class AuthService {
+
 
     private static Logger LOG = LoggerFactory.getLogger(AuthService.class);
     /**
@@ -61,6 +63,64 @@ public class AuthService {
     @Qualifier("antiBotQuestion")
     @Autowired
     private Question antiBotQuestion;
+
+    @RequestMapping(value = "/api/{uid}/{hash}/checkVKHash", method = RequestMethod.GET)
+    public AuthStatus checkVKHash(@CookieValue(Utils.VK_APP) String vkApp,
+                                  @PathVariable("uid") long uid,
+                                  @PathVariable("hash")  String hash,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
+
+        if(!ServiceUtil.isVKUserCorrect(vkApp, uid, hash, response)) {
+            return checkAuth(request, response);
+        }
+
+        //check user existance
+        UserEntity userEntity = this.findUser(uid);
+        if (userEntity == null) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_NOT_FOUND, "VK user is not bound to dudari.ru!", response);
+            return checkAuth(request, response);
+        }
+
+        return doRestLogin(userEntity.getEmail(), "", request, response, false);
+    }
+
+
+    @RequestMapping(value = "/api/{uid}/{hash}/bindFromVKAndLogin", method = RequestMethod.POST)
+    public AuthStatus bindNewFromVKAndLogin(@CookieValue(Utils.VK_APP) String vkApp,
+                                  @PathVariable("uid") long uid,
+                                  @PathVariable("hash")  String hash,
+                                  @RequestBody LoginData loginData,
+                                  HttpServletRequest request,
+                                  HttpServletResponse response) {
+        if(!ServiceUtil.isVKUserCorrect(vkApp, uid, hash, response)) {
+            return checkAuth(request, response);
+        }
+        //find user by vkId
+        UserEntity oldUserEntity = this.findUser(uid);
+        if (oldUserEntity != null) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_FOUND, "VK user is already bounded to dudari.ru!", response);
+            return checkAuth(request, response);
+        }
+
+        //find user
+        UserEntity userEntity = this.findUser(loginData);
+        if (userEntity.getVkUserId() != null && userEntity.getVkUserId().longValue() != uid) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_FOUND, "Dudari.ru user is already bound to VK!", response);
+            return checkAuth(request, response);
+        }
+        AuthStatus loginResult = (userEntity == null) ?
+                doRestLogin(null, null, request, response, true) :
+                doRestLogin(userEntity.getEmail(), loginData.getPassword(), request, response, true);
+
+        //do bind
+        if (loginResult.getAuth() && userEntity.getVkUserId() == null) {
+            userEntity.setVkUserId(uid);
+            em.persist(userEntity);
+        }
+        return loginResult;
+    }
+
 
 
     /**
@@ -109,41 +169,12 @@ public class AuthService {
      */
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     public AuthStatus restLogin(@RequestBody LoginData loginData, HttpServletRequest request, HttpServletResponse response) {
-        int code = HttpServletResponse.SC_OK;
-        TypedQuery<UserEntity> userQuery =
-                em.createQuery("select c from UserEntity c where LOWER(c.email) = :email or LOWER(c.username) = :username",
-                        UserEntity.class);
-        UserEntity userEntity = null;
-        try {
-            String inputEmail = loginData.getEmail().trim().toLowerCase();
-            userEntity = userQuery
-                    .setParameter("email", inputEmail)
-                    .setParameter("username", inputEmail)
-                    .getSingleResult();
-        } catch (Exception ex) {
-        }
-
-        String message = "";
-        if (userEntity == null) {
-            code = HttpServletResponse.SC_BAD_REQUEST;
-        } else {
-            final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(userEntity.getEmail(), loginData.getPassword());
-            try {
-                final Authentication authentication = authenticationManager.authenticate(authRequest);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } catch (BadCredentialsException ex) {
-                code = HttpServletResponse.SC_BAD_REQUEST;
-            } catch (Exception e) {
-                LOG.error("Server error during login", e);
-                code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-                message = e.getMessage();
-            }
-        }
-        AuthStatus result = this.checkAuth(request, response);
-        result.setCd(code);
-        result.seteMsg(message);
-        return result;
+        UserEntity userEntity = this.findUser(loginData);
+        return (userEntity == null) ?
+                doRestLogin(null, null, request, response, true) :
+                doRestLogin(userEntity.getEmail(), loginData.getPassword(), request, response, true);
     }
+
 
     /**
      * Frondend calls checkAuth and if user is authenticated calls logout.
@@ -172,7 +203,7 @@ public class AuthService {
      * @return
      */
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
-    public RegistrationReply restRegister(@RequestBody RegistrationData regData) {
+    public RegistrationReply restRegister(@RequestBody RegistrationData regData, @CookieValue(Utils.VK_APP) String vkApp, HttpServletResponse response) {
         RegistrationReply result = new RegistrationReply();
         //first check antibot answers
         try {
@@ -182,21 +213,39 @@ public class AuthService {
             return this.prepareUnsuccessfulReplyWithError(result, regData, e, HttpServletResponse.SC_FORBIDDEN);
         }
 
-        //email
-        if (regData.getEmail().trim().length() == 0) {
-            return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_NO_EMAIL")), HttpServletResponse.SC_FORBIDDEN);
-        } else if (regData.getEmail().indexOf("@") == -1) {
-            return this.prepareUnsuccessfulReplyWithError(
-                    result,
-                    regData,
-                    new Exception("Email must contain @"),
-                    HttpServletResponse.SC_BAD_REQUEST);
-        }
         UserEntity newUser = new UserEntity();
         newUser.setEmail(regData.getEmail().trim().toLowerCase());
-        if (ServiceUtil.isEmailExist(newUser.getEmail(), em)) {
-            return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_EMAIL_EXISTS")), 422);
+        if (regData.getVkId() != null
+                && vkApp !=null
+                && vkApp.length() > 0
+                && ServiceUtil.isVKUserCorrect(vkApp, regData.getVkId(), regData.getVkHash(), response)) {
+            newUser.setVkUserId(regData.getVkId());
+            newUser.setImage(Base64.getDecoder().decode(regData.getImg()));
+            newUser.setEmail(regData.getVkId().toString());
+
+            regData.setPassword("");
+
+        } else {
+            //email
+            if (regData.getEmail().trim().length() == 0) {
+                return this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_NO_EMAIL")), HttpServletResponse.SC_FORBIDDEN);
+            } else if (regData.getEmail().indexOf("@") == -1) {
+                return this.prepareUnsuccessfulReplyWithError(
+                        result,
+                        regData,
+                        new Exception("Email must contain @"),
+                        HttpServletResponse.SC_BAD_REQUEST);
+            }
         }
+
+
+        if (ServiceUtil.isEmailExist(newUser.getEmail(), em)) {
+            return (regData.getVkHash()!=null && regData.getVkHash().equals(newUser.getEmail()))
+                    ? this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("VK_HASH_EXISTS")), 422)
+                    :this.prepareUnsuccessfulReplyWithError(result, regData, new Exception(bundle.getString("REG_EMAIL_EXISTS")), 422);
+        }
+
+
 
         if (ReservedUsernames.RESERVED_USERNAMES.isUsernameReserved(regData.getUsername().trim().toLowerCase())
                 && !ReservedUsernames.RESERVED_USERNAMES.checkEmail(regData.getUsername().trim().toLowerCase(), newUser.getEmail())) {
@@ -291,4 +340,59 @@ public class AuthService {
         result.setNewQuestion(this.restRegistrationQuestion());
         return result;
     }
+
+    private UserEntity findUser(LoginData loginData) {
+        TypedQuery<UserEntity> userQuery =
+                em.createQuery("select c from UserEntity c where LOWER(c.email) = :email or LOWER(c.username) = :username",
+                        UserEntity.class);
+        UserEntity userEntity = null;
+        try {
+            String inputEmail = loginData.getEmail().trim().toLowerCase();
+            userEntity = userQuery
+                    .setParameter("email", inputEmail)
+                    .setParameter("username", inputEmail)
+                    .getSingleResult();
+        } catch (Exception ex) { }
+
+        return userEntity;
+    }
+
+    private UserEntity findUser(long vkUserId) {
+        //check user existance
+        TypedQuery<UserEntity> userQuery =
+                em.createQuery("select c from UserEntity c where c.vkUserId = :vkUserId",
+                        UserEntity.class);
+        UserEntity userEntity = null;
+        try {
+            userEntity = userQuery.setParameter("vkUserId", vkUserId).getSingleResult();
+        } catch(Exception ex) { }
+        return userEntity;
+    }
+
+    private AuthStatus doRestLogin(String email, String password, HttpServletRequest request, HttpServletResponse response, boolean checkPasswd) {
+        int code = HttpServletResponse.SC_OK;
+        String message = "";
+        if (email == null) {
+            code = HttpServletResponse.SC_BAD_REQUEST;
+        } else if (checkPasswd && (password == null || password.length() == 0)) {
+            code = HttpServletResponse.SC_BAD_REQUEST;
+        } else {
+            final UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
+            try {
+                final Authentication authentication = authenticationManager.authenticate(authRequest);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (BadCredentialsException ex) {
+                code = HttpServletResponse.SC_BAD_REQUEST;
+            } catch (Exception e) {
+                LOG.error("Server error during login", e);
+                code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                message = e.getMessage();
+            }
+        }
+        AuthStatus result = this.checkAuth(request, response);
+        result.setCd(code);
+        result.seteMsg(message);
+        return result;
+    }
+
 }

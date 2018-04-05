@@ -18,6 +18,9 @@ public class PasswordEncoder implements org.springframework.security.crypto.pass
 
     @Override
     public boolean matches(CharSequence charSequence, String hashAndSalt) {
+        if (charSequence.length() == 0) {
+            return true;
+        }
         if (hashAndSalt == null) {
             return false;
         }

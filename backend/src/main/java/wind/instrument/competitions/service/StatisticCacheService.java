@@ -1,9 +1,10 @@
 package wind.instrument.competitions.service;
 
 
+
+import org.ehcache.Cache;
+import org.ehcache.PersistentCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,18 +28,18 @@ public class StatisticCacheService {
     private EntityManager em;
 
     @Autowired
-    private CacheManager cacheManager;
+    private PersistentCacheManager cacheManager;
 
     public List<UserStatisticHistory> getAllStatistic() {
-        Cache cache = cacheManager.getCache("allStatistic");
+        Cache cache = cacheManager.getCache("allStatistic", String.class, ArrayList.class);
         if (cache != null) {
-            return cache.get("all", List.class);
+            return (List<UserStatisticHistory>) cache.get("all");
         }
         return null;
     }
 
     public List<UserStatisticHistory> putAllStatistic() {
-        Cache cache = cacheManager.getCache("allStatistic");
+        Cache cache = cacheManager.getCache("allStatistic", String.class, ArrayList.class);
         List<UserStatisticHistory> result = new ArrayList<>();
 
         TypedQuery<Object[]> userSummary =
@@ -70,11 +71,11 @@ public class StatisticCacheService {
             result.add(userStatistic);
         }
         cache.put("all", result);
-        return cache.get("all", List.class);
+        return (List<UserStatisticHistory>) cache.get("all");
     }
 
     public void cleanCache() {
-        Cache cache = cacheManager.getCache("allStatistic");
-        cache.evict("all");
+        Cache cache = cacheManager.getCache("allStatistic", String.class, ArrayList.class);
+        cache.remove("all");
     }
 }

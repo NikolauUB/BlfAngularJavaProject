@@ -1,8 +1,9 @@
 package wind.instrument.competitions.rest.model.votestatistic;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UserStatisticHistory {
+public class UserStatisticHistory implements Serializable{
     private Long userId;
     private String username;
     private Integer leaves;

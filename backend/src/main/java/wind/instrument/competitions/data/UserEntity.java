@@ -27,10 +27,13 @@ public class UserEntity implements Serializable {
     @Lob
     @Column(name = "image", length = 100000)
     private byte[] image;
+    @Column(name = "vk_user_id", unique = true)
+    private Long vkUserId;
 
     private Date created;
     private Date updated;
     private Date lastVisit;
+
 
     @PrePersist
     protected void onCreate() {
@@ -116,5 +119,13 @@ public class UserEntity implements Serializable {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public Long getVkUserId() {
+        return vkUserId;
+    }
+
+    public void setVkUserId(Long vkUserId) {
+        this.vkUserId = vkUserId;
     }
 }

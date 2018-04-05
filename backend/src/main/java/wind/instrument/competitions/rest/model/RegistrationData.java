@@ -7,6 +7,9 @@ public class RegistrationData {
     private String email;
     private String username;
     private String password;
+    private Long vkId;
+    private String vkHash;
+    private String img;
 
     public LinkedList<String> getGivenAnswers() {
         return givenAnswers;
@@ -40,4 +43,27 @@ public class RegistrationData {
         this.password = password;
     }
 
+    public Long getVkId() {
+        return vkId;
+    }
+
+    public void setVkId(Long vkId) {
+        this.vkId = vkId;
+    }
+
+    public String getVkHash() {
+        return vkHash;
+    }
+
+    public void setVkHash(String vkHash) {
+        this.vkHash = vkHash;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }

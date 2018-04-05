@@ -7,6 +7,7 @@ import {ProfileComponent} from "./auth/profile/profile.component";
 import {AboutComponent} from "./about/about.component";
 import {HistoryComponent} from "app/history/history.component";
 import {LoginComponent} from "./auth/login/login.component";
+import {LoginvkComponent} from "./auth/login/loginvk.component";
 import {ChangePasswordComponentComponent} from "./auth/changepassword/changepassword.component";
 import {ChangeEmailComponent} from "./auth/changeemail/changeemail.component";
 import {BaroqueComponent} from "./partaking/baroque/baroque.component";
@@ -46,6 +47,7 @@ const routes: Routes = [
   { path: 'concert',     component: ConcertComponent },
   { path: 'composition',     component: CompositionComponent },
   { path: 'login', component: LoginComponent},
+  { path: 'loginvk', component: LoginvkComponent}, //no apache  alias required
   { path: 'changePassword', component: ChangePasswordComponentComponent},
   { path: 'changeEmail', component: ChangeEmailComponent},
   { path: 'rules', component: RulesComponent},

@@ -29,6 +29,8 @@ export class AuthService {
   private changePasswordByTidUrl = 'api/changepasswordtid';
   private changeemailUrl = 'api/changeemail';
   private userDetailsUrl = 'api/getUserDetails';
+  private checkVKHashUrl = 'checkVKHash';
+  private bindToVKUrl = 'bindFromVKAndLogin';
 
 
   constructor(private http: Http) {
@@ -62,6 +64,39 @@ export class AuthService {
       .catch(this.handleError);
   }
 
+  public checkVKHash(uid: number, hash: string): Promise<AuthData> {
+      return this.checkAuth()
+            .then(authInfo => this.safeCheckVKHash(uid, hash, authInfo))
+            .catch(this.handleError);
+  }
+
+  public bindToVK(uid: number, hash: string, loginData: LoginData): Promise<AuthData> {
+        return this.checkAuth()
+              .then(authInfo => this.safeBindToVK(uid, hash, loginData, authInfo))
+              .catch(this.handleError);
+  }
+
+  private safeCheckVKHash(uid: number, hash: string, authInfo: AuthData): Promise<AuthData> {
+      this.auth = authInfo;
+      this.setCSRFHeaders(this.auth.tkn);
+      var url = "api/" + uid + "/" +  hash + "/" + this.checkVKHashUrl;
+      return this.http.get(url, {headers: this.postHeaders})
+              .toPromise()
+              .then(response => this.refreshAuth(response.json()))
+              .catch(this.handleError);
+  }
+
+  private safeBindToVK(uid: number, hash: string, loginData: LoginData, authInfo: AuthData): Promise<AuthData> {
+      this.auth = authInfo;
+      this.setCSRFHeaders(this.auth.tkn);
+      var url = "api/" + uid + "/" +  hash + "/" + this.bindToVKUrl;
+      return this.http.post(url,
+               JSON.stringify(loginData),
+               {headers: this.postHeaders})
+               .toPromise()
+               .then(response => this.refreshAuth(response.json()))
+               .catch(this.handleError);
+  }
   public getQuestion(): Promise<QuestionData> {
     return this.http.get(this.questionUrl)
       .toPromise()

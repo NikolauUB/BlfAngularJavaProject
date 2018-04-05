@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages = {"wind.instrument.competitions.data"})
 @ImportResource("classpath:private-bean-data-config.xml")
 @EnableTransactionManagement
-@EnableCaching
 public class WindInstCompetitionApplication {
 
     public static void main(String[] args) {

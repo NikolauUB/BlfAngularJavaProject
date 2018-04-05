@@ -55,6 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/changepasswordtid").permitAll()
                 .antMatchers("/css").permitAll()
+                .antMatchers("/api/{uid}/{hash}/checkVKHash").permitAll()
+                .antMatchers("/api/{uid}/{hash}/bindFromVKAndLogin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()
