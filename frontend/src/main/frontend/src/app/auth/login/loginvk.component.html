@@ -1,0 +1,39 @@
+<div>
+  <div class="alert alert-danger" *ngIf="errorMsg">{{this.errorMsg}}</div>
+  <div class="tab">
+    <button [class.tabbuttonselected]="this.isToBind === true" (click)="this.isToBind = true; this.errorMsg='';"><b>Привязать VK к существующей учетной записи</b></button>
+    <button [class.tabbuttonselected]="this.isToBind === false" (click)="this.isToBind = false; this.errorMsg='';"><b>Создать новую учетной запись</b></button>
+  </div>
+  <div *ngIf="this.isToBind" class="tabcontent">
+    <div class="form-group mediumWidth">
+      <label for="userEmail">Адрес электронной почты или имя:</label>
+      <input type="text" id="userEmail" class="form-control mediumWidth" required [(ngModel)]="loginData.email" name="userEmail"/>
+    </div>
+    <div class="form-group mediumWidth">
+      <label for="userPassword">Пароль:</label>
+      <input  type="password" id="userPassword" class="form-control mediumWidth" required [(ngModel)]="loginData.password" name="userPassword"/>
+    </div>
+    <button class="btn btn-primary active" (click)="doBindVK(); $event.stopPropagation()">Привязать</button>
+  </div>
+  <div *ngIf="!this.isToBind" class="tabcontent">
+    <div class="form-group mediumWidth">
+      <label for="userName">Использовать имя:</label>
+      <input  type="text" id="userName" class="form-control mediumWidth" required [(ngModel)]="registrationData.username" name="userName"/>
+    </div>
+    <div class="form-group mediumWidth">
+      <label for="useVKPicture">Использовать картинку VK:</label>
+      <input  #useVKPicture type="checkbox" id="useVKPicture" name="useVKPicture" (click)="loadImageFromVK(imagePreview, useVKPicture); $event.stopPropagation()"/>
+    </div>
+    <div class="form-group">
+      &nbsp;&nbsp;<img  #imagePreview src="{{previewImage}}"/>
+    </div>
+    <h3>Выберите только духовые музыкальные инструменты!</h3>
+    <span  *ngFor="let answer of questionData.questionAnswers " (click)="onSelect(answer)"
+           [class.selected]="selectedAnswers.has(answer)">
+      <input type="image" name="pict" src="assets/images/first/{{answer}}.jpg"  alt="" vspace="20" hspace="20" width="160" height="160"/>
+    </span>
+    <div>
+      <button class="btn btn-primary active" (click)="doCreateFromVK(imagePreview); $event.stopPropagation()">Создать</button>
+    </div>
+  </div>
+</div>

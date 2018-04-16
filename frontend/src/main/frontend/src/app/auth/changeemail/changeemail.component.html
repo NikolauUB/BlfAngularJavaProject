@@ -3,14 +3,13 @@
 <div class="regItems">
   <form #emailForm="ngForm">
     <div class="form-group">
-      <label for="emailOld">Cтарый адрес электронной почты:</label>
+      <label for="emailOld">Cтарый адрес электронной почты (если отсутствует, оставить поле пустым):</label>
       <input type="email"
              autocomplete="off"
              id="emailOld"
              name="emailOld"
              class="form-control"
-             [(ngModel)]="emailData.oldEmail"
-             required email/>
+             [(ngModel)]="emailData.oldEmail"/>
     </div>
     <div class="form-group">
       <label for="emailNew">Новый адрес электронной почты:</label>

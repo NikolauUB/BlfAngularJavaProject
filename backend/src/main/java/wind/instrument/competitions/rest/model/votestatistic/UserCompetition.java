@@ -1,8 +1,9 @@
 package wind.instrument.competitions.rest.model.votestatistic;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class UserCompetition {
+public class UserCompetition implements Serializable {
     private Long id;
     private String name;
     private Date start;

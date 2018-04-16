@@ -5,6 +5,7 @@ import {LoginData} from "../../model/auth/LoginData";
 import {AuthData} from "../../model/auth/AuthData";
 import {ChangesController} from "../../changescontrol/changes.controller";
 import {CompetitionInfo} from "../../model/CompetitionInfo";
+declare var VK :any;
 
 @Component({
   selector: 'login-app',
@@ -12,16 +13,16 @@ import {CompetitionInfo} from "../../model/CompetitionInfo";
   styleUrls: [ '../../vote/voting.component.css' ]
 })
 export class LoginComponent implements OnInit {
-  private static defaultUrl: string = 'profile';
+  protected static defaultUrl: string = 'profile';
   private static defaultLoginTitle: string = "Вход в личный кабинет";
   loginData:LoginData = new LoginData();
   errorMsg: string;
   returnUrl: string = LoginComponent.defaultUrl;
   loginTitle: string = LoginComponent.defaultLoginTitle;
 
-  constructor(private authService:AuthService,
-              private router:Router,
-              private route: ActivatedRoute) {
+  constructor(protected authService:AuthService,
+              protected router:Router,
+              protected route: ActivatedRoute) {
   }
   ngOnInit():void {
     if(this.route.snapshot.queryParams['returnUrl'] != null) {
@@ -31,7 +32,12 @@ export class LoginComponent implements OnInit {
       this.returnUrl = LoginComponent.defaultUrl;
       this.loginTitle = LoginComponent.defaultLoginTitle;
     }
-
+    // uncomment
+    VK.Widgets.Auth("vk_auth", {"authUrl":"/loginvk"});
+  }
+  public testRedirectVK(): void {
+      //todo comment
+     
   }
 
   public doLogin(): void {
@@ -46,18 +52,20 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private redirectToProfile(authInfo: AuthData) {
+  protected redirectToProfile(authInfo: AuthData) {
     if (authInfo.cd === 200 && authInfo.auth) {
       this.cleanVotingCaches(authInfo);
       this.router.navigateByUrl(this.returnUrl);
     } else if (authInfo.cd === 400) {
       this.errorMsg = "Неправильный адрес электронной почты / имя или пароль";
+    } else if (authInfo.cd === 404) {
+      this.errorMsg = "Пользователь не найден";
     } else if (authInfo.cd === 500) {
       this.errorMsg = authInfo.eMsg;
     }
   }
 
-  private cleanVotingCaches(authInfo: AuthData): void {
+  public cleanVotingCaches(authInfo: AuthData): void {
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_CLASSIC), authInfo);
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_JAZZ), authInfo);
     this.cleanVotingCache(localStorage.getItem(ChangesController.VOTING_COMPOSITION), authInfo);

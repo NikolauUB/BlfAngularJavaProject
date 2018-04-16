@@ -17,7 +17,7 @@
 
 
   <h3>Весенний конкурс композиторов 2018</h3>
-  <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто.</p>
+  <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
   <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
   <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
 

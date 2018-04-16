@@ -9,9 +9,9 @@ import { AppComponent } from './app.component';
 import { VoteComponent }      from './vote/vote.component';
 import { VoteService }          from './vote/vote.service';
 import { ModalComponent } from "./modal/modal.component";
-import { EditModalComponent} from "./modal/editmodal.component";
+import {EditModalComponent} from "./modal/editmodal.component";
 import {ItemdetailsComponent} from "./modal/itemdetails.component";
-import { ShowpictureComponent} from "./modal/showpicture.component";
+import {ShowpictureComponent} from "./modal/showpicture.component";
 import {RegisterComponent} from "./auth/register/reqister.component";
 import {ProfileComponent} from "./auth/profile/profile.component";
 import {AuthService} from "./auth/auth.service";
@@ -20,6 +20,7 @@ import {AboutComponent} from "./about/about.component";
 import {RulesComponent} from "./rules/rules.component";
 import {HistoryComponent} from "./history/history.component";
 import {LoginComponent} from "./auth/login/login.component";
+import {LoginvkComponent} from "./auth/login/loginvk.component";
 import {PasswordConfirmValidator} from "./auth/PasswordConfirmValidator";
 import {ChangePasswordComponentComponent} from "./auth/changepassword/changepassword.component";
 import {ChangeEmailComponent} from "./auth/changeemail/changeemail.component";
@@ -60,7 +61,7 @@ import {OpinionsComponent} from "./vote/opinions/opinions.component";
 import { OpinionService } from "./vote/opinions/opinion.service";
 import {NewstatisticComponent} from "./statistic/newstatistic.component";
 import {NewstatisticService} from "./statistic/newstatistic.service";
-
+//import {CanActivateMain} from "./can.activate.main";
 
 
 /**
@@ -96,6 +97,7 @@ export function runChangesController(changesService: ChangesController): () => P
     VoteCompositionComponent,
     RulesComponent,
     LoginComponent,
+    LoginvkComponent,
     RegisterComponent,
     ProfileComponent,
     CompetitionComponent,
@@ -126,6 +128,7 @@ export function runChangesController(changesService: ChangesController): () => P
     Ng2DeviceDetectorModule.forRoot()
   ],
   providers: [
+    //CanActivateMain,
     VoteService,
     AuthService,
     AdminService,
