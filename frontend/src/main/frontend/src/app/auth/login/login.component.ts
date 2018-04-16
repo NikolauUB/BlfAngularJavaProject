@@ -32,11 +32,12 @@ export class LoginComponent implements OnInit {
       this.returnUrl = LoginComponent.defaultUrl;
       this.loginTitle = LoginComponent.defaultLoginTitle;
     }
-    //VK.Widgets.Auth("vk_auth", {"authUrl":"/dev/Login"});
+    // uncomment
+    VK.Widgets.Auth("vk_auth", {"authUrl":"/loginvk"});
   }
   public testRedirectVK(): void {
-     this.router.navigateByUrl("/loginvk?uid=3844960&first_name=%D0%95%D0%BB%D0%B5%D0%BD%D0%B0&last_name=%D0%A5%D0%BE%D0%BB%D0%BE%D0%B4%D0%B8%D0%BB%D0%BE%D0%B2%D0%B0&photo=https://pp.userapi.com/c113/u3844960/a_d6342567.jpg&photo_rec=https://pp.userapi.com/c113/u3844960/e_7974b37e.jpg&hash=05fa65ffd5917c8d8aa5f311ad7db0d0");
-     //this.router.navigateByUrl("/loginvk?uid=4648803&first_name=Николай&last_name=Барабанщиков&photo=https://pp.userapi.com/c626723/v626723803/4144b/bJnH5CZlSpQ.jpg&photo_rec=https://pp.userapi.com/c626723/v626723803/4144e/WSHczuyjOpg.jpg&hash=d469937abb106928dab321dd4b26b37b");
+      //todo comment
+     
   }
 
   public doLogin(): void {

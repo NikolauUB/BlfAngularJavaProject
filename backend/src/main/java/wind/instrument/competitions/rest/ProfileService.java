@@ -211,7 +211,10 @@ public class ProfileService {
                         response);
             }
             //check old password
-            if (passwordData.getOldPassword() == null || passwordData.getOldPassword().trim().length() == 0) {
+            if (passwordData.getOldPassword() == null) {
+                passwordData.setOldPassword("");
+            }
+            if (currentUser.getVkUserId() == null && passwordData.getOldPassword().trim().length() == 0) {
                 ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST,
                         bundle.getString("NO_OLD_PASSWORD"),
                         response);
@@ -281,9 +284,16 @@ public class ProfileService {
             return HttpServletResponse.SC_BAD_REQUEST;
         }
         //change email
+        Long emailAsVKId = null;
+        try {
+            emailAsVKId = Long.valueOf(currentUser.getEmail());
+        } catch (Exception ex) {}
+
         if (emailData.getNewEmail() != null && emailData.getNewEmail().trim().length() > 0) {
-            if (emailData.getOldEmail() != null && emailData.getOldEmail().trim().length() > 0) {
-                if (currentUser.getEmail().toLowerCase().equals(emailData.getOldEmail().trim().toLowerCase())) {
+            if ((emailAsVKId != null && emailData.getOldEmail() == null)
+                    || (emailData.getOldEmail() != null && emailData.getOldEmail().trim().length() > 0)) {
+                if ((emailAsVKId != null && emailAsVKId.equals(currentUser.getVkUserId()))
+                        || currentUser.getEmail().toLowerCase().equals(emailData.getOldEmail().trim().toLowerCase())) {
                     if (ServiceUtil.isEmailExist(emailData.getNewEmail().trim(), em)) {
                         ServiceUtil.sendResponseError(HttpServletResponse.SC_BAD_REQUEST,
                                 bundle.getString("REG_EMAIL_EXISTS"),

@@ -1,10 +1,10 @@
 <div>
   <div class="alert alert-danger" *ngIf="errorMsg">{{this.errorMsg}}</div>
   <div class="tab">
-    <button class="tablinks" (click)="this.isToBind = true"><b>Привязать VK к существующей учетной записи</b></button>
-    <button class="tablinks" (click)="this.isToBind = false"><b>Создать новую учетной запись</b></button>
+    <button [class.tabbuttonselected]="this.isToBind === true" (click)="this.isToBind = true; this.errorMsg='';"><b>Привязать VK к существующей учетной записи</b></button>
+    <button [class.tabbuttonselected]="this.isToBind === false" (click)="this.isToBind = false; this.errorMsg='';"><b>Создать новую учетной запись</b></button>
   </div>
-  <div *ngIf="this.isToBind">
+  <div *ngIf="this.isToBind" class="tabcontent">
     <div class="form-group mediumWidth">
       <label for="userEmail">Адрес электронной почты или имя:</label>
       <input type="text" id="userEmail" class="form-control mediumWidth" required [(ngModel)]="loginData.email" name="userEmail"/>
@@ -15,7 +15,7 @@
     </div>
     <button class="btn btn-primary active" (click)="doBindVK(); $event.stopPropagation()">Привязать</button>
   </div>
-  <div *ngIf="!this.isToBind">
+  <div *ngIf="!this.isToBind" class="tabcontent">
     <div class="form-group mediumWidth">
       <label for="userName">Использовать имя:</label>
       <input  type="text" id="userName" class="form-control mediumWidth" required [(ngModel)]="registrationData.username" name="userName"/>

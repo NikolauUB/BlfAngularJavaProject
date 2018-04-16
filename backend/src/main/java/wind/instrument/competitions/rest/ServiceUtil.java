@@ -161,11 +161,11 @@ public class ServiceUtil {
         String sid = ServiceUtil.getVKAttribute(vkApp, VK_SID_PATTERN);
         String sig = ServiceUtil.getVKAttribute(vkApp, VK_SIG_PATTERN);
 
-        //todo exception about expired
-        //if (ServiceUtil.isCookieExpired(vkExpire)) {
-        //    ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK connection is expired!", response);
-        //    return false;
-        //}
+        //exception about expired
+        if (ServiceUtil.isCookieExpired(vkExpire)) {
+            ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK connection is expired!", response);
+            return false;
+        }
 
         //check userId
         if (Long.parseLong(vkUserId.split("=")[1]) != uid) {
