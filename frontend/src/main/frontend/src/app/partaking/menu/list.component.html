@@ -1,5 +1,8 @@
 <div id="primary" class="clear-block">
   <nav>
+    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 2}"
+       *ngIf="competitionList.hasFree && this.competitionNotFinished(competitionList.freeEnd)"
+       routerLink="/free" routerLinkActive="active">Свободная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 4}"
        *ngIf="competitionList.hasConcert && this.competitionNotFinished(competitionList.concertEnd)"
        routerLink="/concert" routerLinkActive="active">Онлайн-Концерт</a>
@@ -10,10 +13,7 @@
        *ngIf="competitionList.hasBaroque && this.competitionNotFinished(competitionList.baroqueEnd)"
        routerLink="/baroque" routerLinkActive="active">Классическая программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 1}"
-       *ngIf="competitionList.hasJazz && this.competitionNotFinished(competitionList.jazzEnd)" 
+       *ngIf="competitionList.hasJazz && this.competitionNotFinished(competitionList.jazzEnd)"
        routerLink="/jazz" routerLinkActive="active">Джазовая программа</a>
-    <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 2}"
-       *ngIf="competitionList.hasFree && this.competitionNotFinished(competitionList.freeEnd)"
-       routerLink="/free" routerLinkActive="active">Свободная программа</a>
   </nav>
 </div>

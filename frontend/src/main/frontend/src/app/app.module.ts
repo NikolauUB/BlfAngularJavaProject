@@ -36,6 +36,7 @@ import {ChangesService} from "./changescontrol/changes.service";
 import {ChangesController} from "./changescontrol/changes.controller";
 import {DiscussionComponent} from "./discussion/discussion.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
+import {FriendsComponent} from "./welcome/friends.component";
 import {StatisticComponent} from "./statistic/statistic.component";
 import {SafePipe} from "./safe.pipe";
 import {DetailsController} from "./auth/userdetails/details.controller";
@@ -116,6 +117,7 @@ export function runChangesController(changesService: ChangesController): () => P
     ItemdetailsComponent,
     ShowpictureComponent,
     WelcomeComponent,
+    FriendsComponent,
     StatisticComponent,
     NewstatisticComponent,
     Error403Component
