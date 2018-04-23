@@ -17,6 +17,7 @@ import {ConcertComponent} from "./partaking/concert/concert.component";
 import {CompositionComponent} from "./partaking/composition/composition.component";
 import {RulesComponent} from "./rules/rules.component";
 import {WelcomeComponent} from "./welcome/welcome.component";
+import {FriendsComponent} from "./welcome/friends.component";
 import {StatisticComponent} from "./statistic/statistic.component";
 import {AdminBaroqueComponent} from "./admin/baroque/admin.baroque.component";
 import {AdminCompositionComponent} from "./admin/composition/admin.composition.component";
@@ -35,7 +36,7 @@ import {ShowByidComponent} from "./vote/byid/show.byid.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: '',     component: VoteCompositionComponent },
+  { path: '',     component: VoteBaroqueComponent },
   { path: 'about',     component: AboutComponent },
   { path: 'history',     component: HistoryComponent },
   { path: 'voting',     component: VoteComponent },
@@ -52,6 +53,7 @@ const routes: Routes = [
   { path: 'changeEmail', component: ChangeEmailComponent},
   { path: 'rules', component: RulesComponent},
   { path: 'welcome', component: WelcomeComponent},
+  { path: 'friends', component: FriendsComponent},
   { path: 'blfRuStatistic', component: StatisticComponent},
   { path: 'adminBaroque', component: AdminBaroqueComponent},
   { path: 'adminComposition', component: AdminCompositionComponent},
