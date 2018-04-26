@@ -118,7 +118,8 @@ export class VoteComponent implements OnInit,  OnDestroy {
     var result = 1;
 
     if (this.isAllRecordsSelected(voterRecord)) {
-      return (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT)
+      var nonZeroArray = Object.keys(voterRecord.voterRawMap).map(key=>voterRecord.voterRawMap[key]);
+      return (this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT || nonZeroArray.filter(val=>val!==0).length === 0)
               ? (2*Object.keys(voterRecord.voterRawMap).length) : 2;
     }
 
