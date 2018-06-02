@@ -47,7 +47,7 @@ public class MigrateService {
     }
 
     //for testing only
-    @RequestMapping("/migrate")
+    @RequestMapping("/api/migrate")
     public String migrate(HttpServletRequest req, HttpServletResponse res) {
         if (!AdminInfo.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
             res.setStatus(HttpServletResponse.SC_FORBIDDEN);
