@@ -47,28 +47,41 @@ public class MigrateService {
     }
 
     //for testing only
-    @RequestMapping("/migrate")
+    @RequestMapping("/api/migrate")
     public String migrate(HttpServletRequest req, HttpServletResponse res) {
         if (!AdminInfo.ADMIN_USERNAME.equals("" + httpSession.getAttribute(SessionParameters.USERNAME.name()))) {
             res.setStatus(HttpServletResponse.SC_FORBIDDEN);
             return "Access Error!";
         }
-        /*
+
         Calendar cal = Calendar.getInstance();
-        cal.set(2018, 2, 1, 23, 59);
-        CompetitionEntity competitionEntity = new CompetitionEntity();
-        competitionEntity.setCompetitionType(CompetitionType.COMPOSITION);
-        competitionEntity.setCompetitionName("Конкурс композиторов");
-        competitionEntity.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/ux7u5MnsfSQ");
-        competitionEntity.setCompetitionStart(cal.getTime());
+        cal.set(2018, 8, 1, 23, 59);
+        CompetitionEntity competitionEntityComp = new CompetitionEntity();
+        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
+        competitionEntityComp.setCompetitionName("Конкурс композиторов");
+        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/zGQJJfgTEDI");
+        competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
-        competitionEntity.setCompetitionEnd(cal.getTime());
-        competitionEntity.setActive(true);
-        Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 3");
-        query.executeUpdate();
-        em.persist(competitionEntity);
-        */
+        competitionEntityComp.setCompetitionEnd(cal.getTime());
+        competitionEntityComp.setActive(false);
+        competitionEntityComp.setFuture(true);
+        em.persist(competitionEntityComp);
+
+        cal.set(2018, 6, 16, 23, 59);
+        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
+        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
+        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
+        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZIbATZHZE44");
+        competitionEntityConcert.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityConcert.setCompetitionEnd(cal.getTime());
+        competitionEntityConcert.setActive(false);
+        competitionEntityConcert.setFuture(true);
+        em.persist(competitionEntityConcert);
+
+        /*
         Calendar cal = Calendar.getInstance();
         cal.set(2018, 3, 16, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
@@ -124,22 +137,18 @@ public class MigrateService {
                 "update CompetitionEntity ce set ce.competitionStart = '2018-03-05 23:59:00', ce.competitionEnd = '2018-04-05 23:59:00' where ce.active = 'true' and ce.competitionType in (" +
                         CompetitionType.CONCERT.getValue() + ", " + CompetitionType.COMPOSITION.getValue() + ")");
         query.executeUpdate();
+        */
         return "done";
 
     }
 
     private String getCompositionDescription() {
-        return "<p>В композиторском конкурсе задание придумывает победитель предыдущего конкурса. Этот конкурс не первый - начало было положено на форуме blf.ru</p>" +
+        return "<p>В композиторском конкурсе задание придумывает тот, чьё сочинение набрало больше голосов в предыдущем конкурсе. Таким сочинением был мой <a target=\"blank\" href=\"http://dudari.ru/assets/score/NikolayUBPreludeDminor.pdf\">дуэт для блокфлейт альт и тенор</a>.</p>" +
                 "<p>Задание в композитрроском конкурсе - это обязательная последовательность нот, которая должна встретиться в сочинении хотя бы один раз.</p>" +
-                "<p>Победитель предыдущего конкурса, <a target=\"blank\" href=\"https://www.youtube.com/watch?v=ux7u5MnsfSQ\">Максим Хорош</a>, придумал следующую последовательность нот: </br>" +
-                "<b><font size=\"3\">Фа, ля, до, ре, си, соль, ми</font></b></p>" +
-                "<p>И стишок:</br>" +
-                "<font size=\"3\" color=\"blue\">Не каждый музыку в них поймет,</br>" +
-                "Сколько в них не смотри.</br>" +
-                "Но если их сыграет музыкант,</br>" +
-                "То каждый этим нотам будет рад!</font></p>" +
-                "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. Mожно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
-                "<p>Голосование будет подобным голосованию на фестивалях. Тот, кто наберёт больше листочков в данном конкурсе, придумывает задание на следующий раз.</p>" +
+                "<p>Жду Ваши сочинения, включающие следующую последовательность нот: </br>" +
+                "<b><font size=\"3\">Ми, Соль, Ля, До-диез, Ре, Фа-диез, Ля, Ре</font></b></p>" +
+                "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
+                "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
                 "<p>Удачи!</p>";
     }
 
