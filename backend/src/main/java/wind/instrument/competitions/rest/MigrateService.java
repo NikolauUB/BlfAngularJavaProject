@@ -55,89 +55,83 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-        cal.set(2018, 8, 1, 23, 59);
-        CompetitionEntity competitionEntityComp = new CompetitionEntity();
-        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
-        competitionEntityComp.setCompetitionName("Конкурс композиторов");
-        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/zGQJJfgTEDI");
-        competitionEntityComp.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityComp.setCompetitionEnd(cal.getTime());
-        competitionEntityComp.setActive(false);
-        competitionEntityComp.setFuture(true);
-        em.persist(competitionEntityComp);
+//        cal.set(2018, 8, 1, 23, 59);
+//        CompetitionEntity competitionEntityComp = new CompetitionEntity();
+//        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
+//        competitionEntityComp.setCompetitionName("Конкурс композиторов");
+//        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
+//        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/zGQJJfgTEDI");
+//        competitionEntityComp.setCompetitionStart(cal.getTime());
+//        cal.add(Calendar.MONTH, 1);
+//        competitionEntityComp.setCompetitionEnd(cal.getTime());
+//        competitionEntityComp.setActive(false);
+//        competitionEntityComp.setFuture(true);
+//        em.persist(competitionEntityComp);
 
-        cal.set(2018, 6, 16, 23, 59);
-        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
-        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
-        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
-        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZIbATZHZE44");
-        competitionEntityConcert.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityConcert.setCompetitionEnd(cal.getTime());
-        competitionEntityConcert.setActive(false);
-        competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);
+//        cal.set(2018, 6, 16, 23, 59);
+//        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
+//        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
+//        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
+//        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
+//        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZIbATZHZE44");
+//        competitionEntityConcert.setCompetitionStart(cal.getTime());
+//        cal.add(Calendar.MONTH, 1);
+//        competitionEntityConcert.setCompetitionEnd(cal.getTime());
+//        competitionEntityConcert.setActive(false);
+//        competitionEntityConcert.setFuture(true);
+//        em.persist(competitionEntityConcert);
 
-        /*
-        Calendar cal = Calendar.getInstance();
-        cal.set(2018, 3, 16, 23, 59);
+
+        cal.set(2018, 9, 15, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("http://dudari.ru/assets/score/PreludeFMajor.pdf");
+        competitionEntity.setCompetitionSampleVideo("http://dudari.ru/assets/score/BachAria.pdf");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
-        //Query query = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 4");
-        //query.executeUpdate();
+        Query query = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 0");
+        query.executeUpdate();
         em.persist(competitionEntity);
 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-        cal.set(2018, 3, 16, 23, 59);
+        cal.set(2018, 9, 15, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
         competitionEntityJazz.setCompetitionName("Обязательная джазовая программа");
         competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/kmfeKUNDDYs");
+        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/5uzsKr1qNe8");
         competitionEntityJazz.setCompetitionStart(cal.getTime());
 
         cal.add(Calendar.MONTH, 1);
         competitionEntityJazz.setCompetitionEnd(cal.getTime());
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
-        //Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 1");
-        //queryJazz.executeUpdate();
+        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 1");
+        queryJazz.executeUpdate();
         em.persist(competitionEntityJazz);
 
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2018, 3, 30, 23, 59);
+        cal.set(2018, 9, 29, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
-        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору!");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/3PIgSkVRboo");
+        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/_FKFwX2Wsq0");
         competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
-        //Query queryFree = em.createQuery("update CompetitionEntity ce set ce.active = 'false' where ce.competitionType = 2");
-        //queryFree.executeUpdate();
+        Query queryFree = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 2");
+        queryFree.executeUpdate();
         em.persist(competitionEntityFree);
-
+        /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
                         CompetitionType.CONCERT.getValue() + ", " + CompetitionType.COMPOSITION.getValue() + ")");
-        query.executeUpdate();
-        query = em.createQuery(
-                "update CompetitionEntity ce set ce.competitionStart = '2018-03-05 23:59:00', ce.competitionEnd = '2018-04-05 23:59:00' where ce.active = 'true' and ce.competitionType in (" +
-                        CompetitionType.CONCERT.getValue() + ", " + CompetitionType.COMPOSITION.getValue() + ")");
-        query.executeUpdate();
-        */
+        query.executeUpdate(); */
         return "done";
 
     }
@@ -160,32 +154,30 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: неизвестен (London 1728)</p>" +
-                "<p><strong>Произведение</strong>: Прелюдия 1 из сочинения \"Prelude and Aria\"</p>" +
-                "<p><strong>Пример исполнения</strong>: \"живой\" пример отсутствует: <a href=\"http://dudari.ru/assets/minus/PreludeFMajor.mp3\" target=\"_blank\">MIDI из нотного редактора</a></p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/PreludeFMajor.pdf\" target=\"_blank\">фа мажор</a>, &nbsp;<a href=\"http://dudari.ru/assets/score/PreludeCMajor.pdf\" target=\"_blank\">до мажор</a></p>" +
-                "<p>Стилистика произведения похожа на стиль композитора-клавесиниста Панкраса Руайе, который жил в то же время: " +
-                "<a href=\"https://www.youtube.com/watch?v=8PxZSN-B6uI\" target=\"_blank\">Le Vertigo</a>, " +
-                "<a href=\"https://imslp.nl/imglnks/usimg/f/f2/IMSLP42978-PMLP54515-PremierLivre.pdf\" target=\"_blank\">Ноты Le Vertigo находятся на странице 19</a>. " +
-                "У него используются похожие украшения 32-ми. Если слушать с нотами, можно заметить, что играются такие украшения не совсем так, как написаною</p>" +
+        return "<p><strong>Композитор</strong>: Иоганн Себастьян Бах</p>" +
+                "<p><strong>Произведение</strong>: Ария</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/BachAria.pdf\" target=\"_blank\">Для сопрано</a>, &nbsp;<a href=\"http://dudari.ru/assets/score/BachAriaAlt.pdf\" target=\"_blank\">Для альта</a></p>" +
+                "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
 
 
     private String getJazzDescription() {
-        return "<p><strong>Композитор</strong>: Jerry Herman</p>" +
-                "<p><strong>Произведение</strong>: &quot;Hello, Dolly&quot;</p>" +
-                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=kmfeKUNDDYs\" target=\"_blank\">&nbsp;Луи Армстронг</a></p>" +
-                "<p><strong>Ноты</strong>: <a href=\"http://www.jazzpla.net/H/Hellodolly.htm\" target=\"_blank\">Джазовый стандарт</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/HelloDollyCMajor.pdf\" target=\"_blank\">в до мажоре</a>, <a href=\"http://dudari.ru/assets/score/HelloDollyFMajor.pdf\" target=\"_blank\">в фа мажоре</a>" +
+        return "<p><strong>Композитор</strong>: George Shearing</p>" +
+                "<p><strong>Произведение</strong>: &quot;Lullaby of Birdland&quot;</p>" +
+                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=5uzsKr1qNe8\" target=\"_blank\">&nbsp;Кларнет</a></p>" +
+                "<p><strong>Ноты</strong>: <a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandAmiSoprano.pdf\" target=\"_blank\">для сопрано в ля миноре</a>, " +
+                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandGmiSoprano.pdf\" target=\"_blank\">для сопрано в соль миноре</a>, " +
+                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandCmiAlt.pdf\" target=\"_blank\">для альта в до миноре</a>, " +
+                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandDmiAlt.pdf\" target=\"_blank\">для альта в ре миноре</a>" +
                 "</p>" +
                 "<p>Минусовки:&nbsp;</p>" +
                 "<ul>" +
-                "<li>До мажор: <a href=\"http://dudari.ru/assets/minus/LouisArmstrong-HelloDolly(minusCMajor).mp3\" target=\"_blank\">LouisArmstrong-HelloDolly(minusCMajor).mp3</a></li>" +
-                "<li>Фа мажор: <a href=\"http://dudari.ru/assets/minus/LouisArmstrong-HelloDolly(minusFmajor).mp3\" target=\"_blank\">LouisArmstrong-HelloDolly(minusFmajor).mp3</a></li>" +
-                "<li>Здесь можно скачать минусовку в любой тональности и темпе, и послушать плюс: <a href=\"http://x-minus.me/track/6035/hello-dolly\" target=\"_blank\">http://x-minus.me/track/6035/hello-dolly</a></li>" +
+                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingAmi.mp3\" target=\"_blank\">Cопрано (ля минор)</a></li>" +
+                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGeorgeShearingGmi.mp3\" target=\"_blank\">Cопрано (соль минор)</a></li>" +
+                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingСmi.mp3\" target=\"_blank\">Альт (до минор)</a></li>" +
+                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingDmi.mp3\" target=\"_blank\">Альт (ре минор)</a></li>" +
                 "</ul>" +
-                "<p>Ноты условные, так как точно не передают ритм. Слушайте примеры исполнения и пытайтесь играть на слух.</p>" +
                 "<p>Удачи!</p>";
     }
 }
