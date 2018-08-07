@@ -132,11 +132,6 @@ public class MigrateService {
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
                         CompetitionType.CONCERT.getValue() + ", " + CompetitionType.COMPOSITION.getValue() + ")");
         query.executeUpdate(); */
-        query = em.createQuery(
-                "update CompetitionEntity ce set ce.competitionStart = '2018-09-03 23:59:00', ce.competitionEnd = '2018-09-03 23:59:00' " +
-                        "where ce.active = 'true' and ce.competitionId = ?");
-        query.executeUpdate();
-
         return "done";
 
     }
