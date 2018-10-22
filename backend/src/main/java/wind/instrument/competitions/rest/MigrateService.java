@@ -55,18 +55,18 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-//        cal.set(2018, 8, 1, 23, 59);
-//        CompetitionEntity competitionEntityComp = new CompetitionEntity();
-//        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
-//        competitionEntityComp.setCompetitionName("Конкурс композиторов");
-//        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-//        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/zGQJJfgTEDI");
-//        competitionEntityComp.setCompetitionStart(cal.getTime());
-//        cal.add(Calendar.MONTH, 1);
-//        competitionEntityComp.setCompetitionEnd(cal.getTime());
-//        competitionEntityComp.setActive(false);
-//        competitionEntityComp.setFuture(true);
-//        em.persist(competitionEntityComp);
+        cal.set(2019, 2, 4, 23, 59);
+        CompetitionEntity competitionEntityComp = new CompetitionEntity();
+        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
+        competitionEntityComp.setCompetitionName("Конкурс композиторов");
+        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/1_lWUeZPJYk");
+        competitionEntityComp.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityComp.setCompetitionEnd(cal.getTime());
+        competitionEntityComp.setActive(false);
+        competitionEntityComp.setFuture(true);
+        em.persist(competitionEntityComp);
 
 //        cal.set(2018, 6, 16, 23, 59);
 //        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
@@ -82,51 +82,51 @@ public class MigrateService {
 //        em.persist(competitionEntityConcert);
 
 
-        cal.set(2018, 9, 15, 23, 59);
-        CompetitionEntity competitionEntity = new CompetitionEntity();
-        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
-        competitionEntity.setCompetitionName("Обязательная классическая программа");
-        competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("http://dudari.ru/assets/score/BachAria.pdf");
-        competitionEntity.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntity.setCompetitionEnd(cal.getTime());
-        competitionEntity.setActive(false);
-        competitionEntity.setFuture(true);
-        Query query = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 0");
-        query.executeUpdate();
-        em.persist(competitionEntity);
+//        cal.set(2018, 9, 15, 23, 59);
+//        CompetitionEntity competitionEntity = new CompetitionEntity();
+//        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
+//        competitionEntity.setCompetitionName("Обязательная классическая программа");
+//        competitionEntity.setCompetitionDesc(this.getClassicDescription());
+//        competitionEntity.setCompetitionSampleVideo("http://dudari.ru/assets/score/BachAria.pdf");
+//        competitionEntity.setCompetitionStart(cal.getTime());
+//        cal.add(Calendar.MONTH, 1);
+//        competitionEntity.setCompetitionEnd(cal.getTime());
+//        competitionEntity.setActive(false);
+//        competitionEntity.setFuture(true);
+//        Query query = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 0");
+//        query.executeUpdate();
+//        em.persist(competitionEntity);
 
-        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-        cal.set(2018, 9, 15, 23, 59);
-        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
-        competitionEntityJazz.setCompetitionName("Обязательная джазовая программа");
-        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/5uzsKr1qNe8");
-        competitionEntityJazz.setCompetitionStart(cal.getTime());
+//        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
+//        cal.set(2018, 9, 15, 23, 59);
+//        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
+//        competitionEntityJazz.setCompetitionName("Обязательная джазовая программа");
+//        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
+//        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/5uzsKr1qNe8");
+//        competitionEntityJazz.setCompetitionStart(cal.getTime());
 
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityJazz.setCompetitionEnd(cal.getTime());
-        competitionEntityJazz.setActive(false);
-        competitionEntityJazz.setFuture(true);
-        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 1");
-        queryJazz.executeUpdate();
-        em.persist(competitionEntityJazz);
+//        cal.add(Calendar.MONTH, 1);
+//        competitionEntityJazz.setCompetitionEnd(cal.getTime());
+//        competitionEntityJazz.setActive(false);
+//        competitionEntityJazz.setFuture(true);
+//        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 1");
+//        queryJazz.executeUpdate();
+//        em.persist(competitionEntityJazz);
 
-        CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2018, 9, 29, 23, 59);
-        competitionEntityFree.setCompetitionType(CompetitionType.FREE);
-        competitionEntityFree.setCompetitionName("Свободная программа");
-        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/_FKFwX2Wsq0");
-        competitionEntityFree.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityFree.setCompetitionEnd(cal.getTime());
-        competitionEntityFree.setActive(false);
-        competitionEntityFree.setFuture(true);
-        Query queryFree = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 2");
-        queryFree.executeUpdate();
-        em.persist(competitionEntityFree);
+//        CompetitionEntity competitionEntityFree = new CompetitionEntity();
+//        cal.set(2018, 9, 29, 23, 59);
+//        competitionEntityFree.setCompetitionType(CompetitionType.FREE);
+//        competitionEntityFree.setCompetitionName("Свободная программа");
+//        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
+//        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/_FKFwX2Wsq0");
+//        competitionEntityFree.setCompetitionStart(cal.getTime());
+//        cal.add(Calendar.MONTH, 1);
+//        competitionEntityFree.setCompetitionEnd(cal.getTime());
+//        competitionEntityFree.setActive(false);
+//        competitionEntityFree.setFuture(true);
+//        Query queryFree = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 2");
+//        queryFree.executeUpdate();
+//        em.persist(competitionEntityFree);
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -138,7 +138,7 @@ public class MigrateService {
 
     private String getCompositionDescription() {
         return "<p>В композиторском конкурсе задание придумывает тот, чьё сочинение набрало больше голосов в предыдущем конкурсе. Таким сочинением был мой <a target=\"blank\" href=\"http://dudari.ru/assets/score/NikolayUBPreludeDminor.pdf\">дуэт для блокфлейт альт и тенор</a>.</p>" +
-                "<p>Задание в композитрроском конкурсе - это обязательная последовательность нот, которая должна встретиться в сочинении хотя бы один раз.</p>" +
+                "<p>Задание в композиторском конкурсе - это обязательная последовательность нот, которая должна встретиться в сочинении хотя бы один раз.</p>" +
                 "<p>Жду Ваши сочинения, включающие следующую последовательность нот: </br>" +
                 "<b><font size=\"3\">Ми, Соль, Ля, До-диез, Ре, Фа-диез, Ля, Ре</font></b></p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
