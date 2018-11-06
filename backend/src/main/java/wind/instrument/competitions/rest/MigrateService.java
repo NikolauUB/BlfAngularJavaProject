@@ -55,6 +55,21 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
+	    
+	cal.set(2018, 0, 14, 23, 59);
+        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
+        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
+        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
+        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZdUWPA_AX6o");
+        competitionEntityConcert.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityConcert.setCompetitionEnd(cal.getTime());
+        competitionEntityConcert.setActive(false);
+        competitionEntityConcert.setFuture(true);
+        em.persist(competitionEntityConcert);
+
+    
         cal.set(2019, 2, 4, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
@@ -68,20 +83,7 @@ public class MigrateService {
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
 
-//        cal.set(2018, 6, 16, 23, 59);
-//        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
-//        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
-//        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
-//        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-//        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZIbATZHZE44");
-//        competitionEntityConcert.setCompetitionStart(cal.getTime());
-//        cal.add(Calendar.MONTH, 1);
-//        competitionEntityConcert.setCompetitionEnd(cal.getTime());
-//        competitionEntityConcert.setActive(false);
-//        competitionEntityConcert.setFuture(true);
-//        em.persist(competitionEntityConcert);
-
-
+        
 //        cal.set(2018, 9, 15, 23, 59);
 //        CompetitionEntity competitionEntity = new CompetitionEntity();
 //        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
