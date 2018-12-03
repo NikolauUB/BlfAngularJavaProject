@@ -97,7 +97,7 @@ public class StatisticService {
                 userSummary.setLeafSummary(summ - BroomType.FIRST_BROOM.getValue());
             } else {
                 userSummary.setBroomType(previousBroom);
-                userSummary.setLeafSummary(summ);
+                userSummary.setLeafSummary(summ - previousBroom);
             }
             em.persist(userSummary);
         }
