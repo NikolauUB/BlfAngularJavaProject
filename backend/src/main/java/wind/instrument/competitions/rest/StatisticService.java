@@ -59,7 +59,7 @@ public class StatisticService {
 
     @RequestMapping(value = "/api/updatestatistic", method = RequestMethod.GET)
     @Transactional(propagation =  Propagation.REQUIRED, readOnly = false)
-    public void updateStatistic(HttpServletResponse response) throws Exception{
+    public String updateStatistic(HttpServletResponse response) throws Exception{
         if (!ServiceUtil.isAdmin(em, httpSession)) {
             try {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not administrator");
@@ -103,7 +103,7 @@ public class StatisticService {
         }
         //clean cash
         statisticService.cleanCache();
-
+        return "Statistic is updated successfully";
     }
 
 
