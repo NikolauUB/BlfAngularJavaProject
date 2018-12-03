@@ -64,7 +64,7 @@ public class StatisticService {
             try {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not administrator");
             } catch (Exception ex) {}
-            return;
+            return "Error";
         }
         Map<Long,Integer> readyToSave = this.calculateUsersStatistic(response);
         Iterator<Long> userIds = readyToSave.keySet().iterator();
