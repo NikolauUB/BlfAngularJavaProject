@@ -68,6 +68,7 @@ export class EditModalComponent implements AfterViewInit{
     } else {
       this.model.msgText = text;
       this.saver.saveItem(this.model);
+      this.hide();
     }
 
   }
