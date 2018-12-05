@@ -16,6 +16,7 @@ export class EditModalComponent implements AfterViewInit{
   modalName: string;
   model: DiscussionItem = new DiscussionItem();
   saver: EditInterface;
+  saved: boolean = false;
   whatToDo: string = "";
   errorMsg:string;
   nicEdit:any;
@@ -48,6 +49,7 @@ export class EditModalComponent implements AfterViewInit{
       this.nicEdit.instanceById('nickEdit').setContent("");
     }
     this.saver = saver;
+    this.saved = false;
     this.whatToDo = actionDesc;
     window.scrollTo(0,0);
     this.modal.show();
@@ -66,6 +68,7 @@ export class EditModalComponent implements AfterViewInit{
     if (text.length > 8192) {
       this.errorMsg="Размер текста заявки ограничен размером 8 килобайт. Посмотреть текст в формате HTML можно по кнопке 'Edit HTML'.";
     } else {
+      this.saved = true;
       this.model.msgText = text;
       this.saver.saveItem(this.model);
     }

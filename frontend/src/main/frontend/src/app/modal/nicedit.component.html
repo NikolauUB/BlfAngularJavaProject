@@ -14,7 +14,7 @@
       </div>
   </div>
   <div class="app-modal-footer">
-    <button class="btn btn-primary btn-sm" (click)="saveItem(); $event.stopPropagation()">Сохранить</button>
+    <button class="btn btn-primary btn-sm" [disabled]="saved" (click)="saveItem(); $event.stopPropagation()">Сохранить</button>
     <button class="btn btn-primary btn-sm" (click)="modal.hide()">Закрыть</button>
   </div>
 </app-modal>
