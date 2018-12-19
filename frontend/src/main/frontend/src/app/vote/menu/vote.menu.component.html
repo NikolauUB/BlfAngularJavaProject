@@ -3,9 +3,9 @@
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 2}"
        *ngIf="competitionList.hasFree" routerLink="/voteFree" routerLinkActive="active">Свободная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 0}"
-       *ngIf="competitionList.hasBaroque" routerLink="/voteBaroque" routerLinkActive="active">Классическая программа</a>
+       *ngIf="competitionList.hasBaroque" routerLink="/voteBaroque" routerLinkActive="active">Классическая обязательная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 1}"
-       *ngIf="competitionList.hasJazz" routerLink="/voteJazz" routerLinkActive="active">Джазовая программа</a>
+       *ngIf="competitionList.hasJazz" routerLink="/voteJazz" routerLinkActive="active">Альтернативная обязательная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 3}"
        *ngIf="competitionList.hasComposition" routerLink="/voteComposition" routerLinkActive="active">Композиторский конкурс</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 4}"
