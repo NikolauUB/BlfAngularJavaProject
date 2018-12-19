@@ -8,10 +8,10 @@
        routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 0}"
        *ngIf="competitionList.hasBaroque && this.competitionNotFinished(competitionList.baroqueEnd)"
-       routerLink="/baroque" routerLinkActive="active">Классическая программа</a>
+       routerLink="/baroque" routerLinkActive="active">Классическая обязательная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 1}"
        *ngIf="competitionList.hasJazz && this.competitionNotFinished(competitionList.jazzEnd)"
-       routerLink="/jazz" routerLinkActive="active">Джазовая программа</a>
+       routerLink="/jazz" routerLinkActive="active">Альтернативная обязательная программа</a>
     <a class="button" [ngClass]="{'buttoncurrent': this.competitionShortInfo.compType == 2}"
        *ngIf="competitionList.hasFree && this.competitionNotFinished(competitionList.freeEnd)"
        routerLink="/free" routerLinkActive="active">Свободная программа</a>
