@@ -1,3 +1,13 @@
+.competcurrent {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #5dafee;
+  border-radius: 10pt;
+  color: #333333;
+}
+.competitionlink {
+  
+}
 .button {
   font: bold 11px Arial;
   text-decoration: none;
