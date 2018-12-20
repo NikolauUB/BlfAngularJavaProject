@@ -1,13 +1,14 @@
 .competcurrent {
-  font: bold 14px Arial;
+  font: 500 14px Segoe UI;
   text-decoration: none;
-  background-color: #5dafee;
-  border-radius: 10pt;
+  background-color: #7acae0;
+  border-radius: 5pt;
   color: #333333;
   cursor: default;
 }
 .competitionlink {
   padding: 2px 6px 2px 6px;
+  font: 500 15px Segoe UI !important;
 }
 .button {
   font: bold 11px Arial;
