@@ -14,11 +14,11 @@
   <div style="display: inline-block" class="alert alert-danger" *ngIf="errorMsg">{{errorMsg}}</div>
 </div>
 <vote-menu-app *ngIf="!opinionsMode && this.competitionShortInfo.compType > -1"></vote-menu-app>
-<h4 *ngIf="this.showVotingInstructionTtl()">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов. Голосование закончится {{convertTimeToDate(this.endDate)}}</h4>
-<h4 *ngIf="this.showConcertInstructionTtl()">Участники записали свои любимые произведения для <b>Онлайн-Концерта {{convertTimeToDate(this.startDate)}}</b>. Подробные комментарии читайте в описании номеров, которое можно увидеть в всплывающем окне при нажатии мышкой на именах участников.</h4>
-<h4 *ngIf="this.showVotingWillStartTtl()">Голосование начнется {{convertTimeToDate(this.startDate)}}</h4>
-<h4 *ngIf="this.showConcertWillStartTtl()">Концерт  начнется {{convertTimeToDate(this.startDate)}}</h4>
-<h4 *ngIf="this.showVotingCloseTtl()">Голосование закрыто, а обсуждение продолжается!</h4>
+<h4 *ngIf="this.showVotingInstructionTtl()" class="segoemessage">Возможно выбрать от одного до всех исполнений. Порядок выбора запоминается и учитывается при подсчете результатов. Голосование закончится {{convertTimeToDate(this.endDate)}}</h4>
+<h4 *ngIf="this.showConcertInstructionTtl()" class="segoemessage">Участники записали свои любимые произведения для <b>Онлайн-Концерта {{convertTimeToDate(this.startDate)}}</b>. Подробные комментарии читайте в описании номеров, которое можно увидеть в всплывающем окне при нажатии мышкой на именах участников.</h4>
+<h4 *ngIf="this.showVotingWillStartTtl()" class="segoemessage">Голосование начнется {{convertTimeToDate(this.startDate)}}</h4>
+<h4 *ngIf="this.showConcertWillStartTtl()" class="segoemessage">Концерт  начнется {{convertTimeToDate(this.startDate)}}</h4>
+<h4 *ngIf="this.showVotingCloseTtl()" class="segoemessage">Голосование закрыто, а обсуждение продолжается!</h4>
 <span  *ngFor="let voteItem of this.getVoteDataArray()">
   <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem) && !statisticMode">
     <div class="voteItemHeader btn-group" >
