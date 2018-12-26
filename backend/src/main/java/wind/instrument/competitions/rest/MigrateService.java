@@ -89,7 +89,7 @@ public class MigrateService {
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("??????????");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/_pVmzKuWi-k");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
@@ -170,9 +170,9 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Иоганн Себастьян Бах</p>" +
-                "<p><strong>Произведение</strong>: Ария</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/BachAria.pdf\" target=\"_blank\">Для сопрано</a>, &nbsp;<a href=\"http://dudari.ru/assets/score/BachAriaAlt.pdf\" target=\"_blank\">Для альта</a></p>" +
+        return "<p><strong>Композитор</strong>: Доменико скарлатти</p>" +
+                "<p><strong>Произведение</strong>: Аллегро из блокфлейтовой сонаты Ля минор</p>" +
+                "<p><strong>Ноты: <a href=\"\" target=\"_blank\">Соло</a>, &nbsp;<a href=\"http://hz.imslp.info/files/imglnks/usimg/f/fd/IMSLP275358-PMLP447143-scarlatti_sonata_9_score.pdf\" target=\"_blank\">Полная версия</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
