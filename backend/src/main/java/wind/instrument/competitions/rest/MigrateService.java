@@ -104,7 +104,7 @@ public class MigrateService {
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
         competitionEntityJazz.setCompetitionName("Обязательная народная программа");
         competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-        competitionEntityJazz.setCompetitionSampleVideo("??????????????");
+        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/J0C5YI_wfsU");
         competitionEntityJazz.setCompetitionStart(cal.getTime());
 
         cal.add(Calendar.MONTH, 1);
@@ -179,21 +179,12 @@ public class MigrateService {
 
 
     private String getJazzDescription() {
-        return "<p><strong>Композитор</strong>: George Shearing</p>" +
-                "<p><strong>Произведение</strong>: &quot;Lullaby of Birdland&quot;</p>" +
-                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=5uzsKr1qNe8\" target=\"_blank\">&nbsp;Кларнет</a></p>" +
-                "<p><strong>Ноты</strong>: <a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandAmiSoprano.pdf\" target=\"_blank\">для сопрано в ля миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandGmiSoprano.pdf\" target=\"_blank\">для сопрано в соль миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandCmiAlt.pdf\" target=\"_blank\">для альта в до миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandDmiAlt.pdf\" target=\"_blank\">для альта в ре миноре</a>" +
+        return "<p><strong>Композитор</strong>: Народная китайская музыка</p>" +
+                "<p><strong>Произведение</strong>: 茉莉花 ( Muo Li Hua )／ The Jasmine Flower </p>" +
+                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=J0C5YI_wfsU\" target=\"_blank\">&nbsp;флейта дизи</a></p>" +
+                "<p><strong>Ноты</strong>: <a href=\"https://www.flutetunes.com/tunes.php?id=713\" target=\"_blank\">На сайте flutetunes</a> " +
                 "</p>" +
-                "<p>Минусовки:&nbsp;</p>" +
-                "<ul>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingAmi.mp3\" target=\"_blank\">Cопрано (ля минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGeorgeShearingGmi.mp3\" target=\"_blank\">Cопрано (соль минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingСmi.mp3\" target=\"_blank\">Альт (до минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingDmi.mp3\" target=\"_blank\">Альт (ре минор)</a></li>" +
-                "</ul>" +
+                "<p>Без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
 }
