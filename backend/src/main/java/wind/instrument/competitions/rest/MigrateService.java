@@ -56,79 +56,79 @@ public class MigrateService {
 
         Calendar cal = Calendar.getInstance();
 	    
-	cal.set(2018, 0, 14, 23, 59);
-        CompetitionEntity competitionEntityConcert = new CompetitionEntity();
-        competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
-        competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
-        competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZdUWPA_AX6o");
-        competitionEntityConcert.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityConcert.setCompetitionEnd(cal.getTime());
-        competitionEntityConcert.setActive(false);
-        competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);
+	//cal.set(2018, 0, 14, 23, 59);
+        //CompetitionEntity competitionEntityConcert = new CompetitionEntity();
+        //competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
+        //competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
+        //competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
+        //competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/ZdUWPA_AX6o");
+        //competitionEntityConcert.setCompetitionStart(cal.getTime());
+        //cal.add(Calendar.MONTH, 1);
+        //competitionEntityConcert.setCompetitionEnd(cal.getTime());
+        //competitionEntityConcert.setActive(false);
+        //competitionEntityConcert.setFuture(true);
+        //em.persist(competitionEntityConcert);
 
     
-        cal.set(2019, 2, 4, 23, 59);
-        CompetitionEntity competitionEntityComp = new CompetitionEntity();
-        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
-        competitionEntityComp.setCompetitionName("Конкурс композиторов");
-        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/1_lWUeZPJYk");
-        competitionEntityComp.setCompetitionStart(cal.getTime());
-        cal.add(Calendar.MONTH, 1);
-        competitionEntityComp.setCompetitionEnd(cal.getTime());
-        competitionEntityComp.setActive(false);
-        competitionEntityComp.setFuture(true);
-        em.persist(competitionEntityComp);
+        //cal.set(2019, 2, 4, 23, 59);
+        //CompetitionEntity competitionEntityComp = new CompetitionEntity();
+        //competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
+        //competitionEntityComp.setCompetitionName("Конкурс композиторов");
+        //competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
+        //competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/1_lWUeZPJYk");
+        //competitionEntityComp.setCompetitionStart(cal.getTime());
+        //cal.add(Calendar.MONTH, 1);
+        //competitionEntityComp.setCompetitionEnd(cal.getTime());
+        //competitionEntityComp.setActive(false);
+        //competitionEntityComp.setFuture(true);
+        //em.persist(competitionEntityComp);
 
         
-//        cal.set(2018, 9, 15, 23, 59);
-//        CompetitionEntity competitionEntity = new CompetitionEntity();
-//        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
-//        competitionEntity.setCompetitionName("Обязательная классическая программа");
-//        competitionEntity.setCompetitionDesc(this.getClassicDescription());
-//        competitionEntity.setCompetitionSampleVideo("http://dudari.ru/assets/score/BachAria.pdf");
-//        competitionEntity.setCompetitionStart(cal.getTime());
-//        cal.add(Calendar.MONTH, 1);
-//        competitionEntity.setCompetitionEnd(cal.getTime());
-//        competitionEntity.setActive(false);
-//        competitionEntity.setFuture(true);
+        cal.set(2019, 3, 15, 23, 59);
+        CompetitionEntity competitionEntity = new CompetitionEntity();
+        competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
+        competitionEntity.setCompetitionName("Обязательная классическая программа");
+        competitionEntity.setCompetitionDesc(this.getClassicDescription());
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/_pVmzKuWi-k");
+        competitionEntity.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntity.setCompetitionEnd(cal.getTime());
+        competitionEntity.setActive(false);
+        competitionEntity.setFuture(true);
 //        Query query = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 0");
 //        query.executeUpdate();
-//        em.persist(competitionEntity);
+        em.persist(competitionEntity);
 
-//        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-//        cal.set(2018, 9, 15, 23, 59);
-//        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
-//        competitionEntityJazz.setCompetitionName("Обязательная джазовая программа");
-//        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-//        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/5uzsKr1qNe8");
-//        competitionEntityJazz.setCompetitionStart(cal.getTime());
+        CompetitionEntity competitionEntityJazz = new CompetitionEntity();
+        cal.set(2019, 3, 15, 23, 59);
+        competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
+        competitionEntityJazz.setCompetitionName("Обязательная народная программа");
+        competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
+        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/J0C5YI_wfsU");
+        competitionEntityJazz.setCompetitionStart(cal.getTime());
 
-//        cal.add(Calendar.MONTH, 1);
-//        competitionEntityJazz.setCompetitionEnd(cal.getTime());
-//        competitionEntityJazz.setActive(false);
-//        competitionEntityJazz.setFuture(true);
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityJazz.setCompetitionEnd(cal.getTime());
+        competitionEntityJazz.setActive(false);
+        competitionEntityJazz.setFuture(true);
 //        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 1");
 //        queryJazz.executeUpdate();
-//        em.persist(competitionEntityJazz);
+        em.persist(competitionEntityJazz);
 
-//        CompetitionEntity competitionEntityFree = new CompetitionEntity();
-//        cal.set(2018, 9, 29, 23, 59);
-//        competitionEntityFree.setCompetitionType(CompetitionType.FREE);
-//        competitionEntityFree.setCompetitionName("Свободная программа");
-//        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-//        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/_FKFwX2Wsq0");
-//        competitionEntityFree.setCompetitionStart(cal.getTime());
-//        cal.add(Calendar.MONTH, 1);
-//        competitionEntityFree.setCompetitionEnd(cal.getTime());
-//        competitionEntityFree.setActive(false);
-//        competitionEntityFree.setFuture(true);
+        CompetitionEntity competitionEntityFree = new CompetitionEntity();
+        cal.set(2019, 3, 29, 23, 59);
+        competitionEntityFree.setCompetitionType(CompetitionType.FREE);
+        competitionEntityFree.setCompetitionName("Свободная программа");
+        competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/hZjvdD6gJXU");
+	competitionEntityFree.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityFree.setCompetitionEnd(cal.getTime());
+        competitionEntityFree.setActive(false);
+        competitionEntityFree.setFuture(true);
 //        Query queryFree = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 2");
 //        queryFree.executeUpdate();
-//        em.persist(competitionEntityFree);
+        em.persist(competitionEntityFree);
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -170,30 +170,21 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Иоганн Себастьян Бах</p>" +
-                "<p><strong>Произведение</strong>: Ария</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/BachAria.pdf\" target=\"_blank\">Для сопрано</a>, &nbsp;<a href=\"http://dudari.ru/assets/score/BachAriaAlt.pdf\" target=\"_blank\">Для альта</a></p>" +
+        return "<p><strong>Композитор</strong>: Доменико скарлатти</p>" +
+                "<p><strong>Произведение</strong>: Аллегро из блокфлейтовой сонаты Ля минор</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/DomenicoScarlattiAllegro.pdf\" target=\"_blank\">Ноты соло</a>, &nbsp;<a href=\"http://hz.imslp.info/files/imglnks/usimg/f/fd/IMSLP275358-PMLP447143-scarlatti_sonata_9_score.pdf\" target=\"_blank\">Полная версия</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
 
 
     private String getJazzDescription() {
-        return "<p><strong>Композитор</strong>: George Shearing</p>" +
-                "<p><strong>Произведение</strong>: &quot;Lullaby of Birdland&quot;</p>" +
-                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=5uzsKr1qNe8\" target=\"_blank\">&nbsp;Кларнет</a></p>" +
-                "<p><strong>Ноты</strong>: <a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandAmiSoprano.pdf\" target=\"_blank\">для сопрано в ля миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandGmiSoprano.pdf\" target=\"_blank\">для сопрано в соль миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandCmiAlt.pdf\" target=\"_blank\">для альта в до миноре</a>, " +
-                "<a href=\"http://dudari.ru/assets/score/GShearingLullabyofBirdlandDmiAlt.pdf\" target=\"_blank\">для альта в ре миноре</a>" +
+        return "<p><strong>Композитор</strong>: Народная китайская музыка</p>" +
+                "<p><strong>Произведение</strong>: 茉莉花 ( Muo Li Hua )／ The Jasmine Flower </p>" +
+                "<p><strong>Пример исполнения</strong>:<a href=\"https://www.youtube.com/watch?v=J0C5YI_wfsU\" target=\"_blank\">&nbsp;флейта дизи</a></p>" +
+                "<p><strong>Ноты</strong>: <a href=\"https://www.flutetunes.com/tunes.php?id=713\" target=\"_blank\">На сайте flutetunes</a>, <a href=\"http://dudari.ru/assets/score/mo-li-hua.pdf\" target=\"_blank\">Или</a> " +
                 "</p>" +
-                "<p>Минусовки:&nbsp;</p>" +
-                "<ul>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingAmi.mp3\" target=\"_blank\">Cопрано (ля минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGeorgeShearingGmi.mp3\" target=\"_blank\">Cопрано (соль минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingСmi.mp3\" target=\"_blank\">Альт (до минор)</a></li>" +
-                "<li><a href=\"http://dudari.ru/assets/minus/LullabyOfBirdlandGShearingDmi.mp3\" target=\"_blank\">Альт (ре минор)</a></li>" +
-                "</ul>" +
+                "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
 }

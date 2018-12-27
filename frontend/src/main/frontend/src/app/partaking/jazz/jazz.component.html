@@ -4,6 +4,6 @@
 <br>
 
 <div *ngIf="isUserChooseBaroqueProgramm()"><h4>Вы сделали заявку в <a routerLink="/baroque" routerLinkActive="active">обязательной классической программе</a>! Спасибо!</h4></div>
-<div *ngIf="!isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Если Ваша запись для обязательной джазовой программы готова, сделайте заявку!</h4></div>
-<div *ngIf="isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Спасибо за Вашу готовность участвовать в джазовой классической программе!</h4></div>
+<div *ngIf="!isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Если Ваша запись для обязательной альтернативной программы готова, сделайте заявку!</h4></div>
+<div *ngIf="isTakenPart() && !isUserChooseBaroqueProgramm()"><h4>Спасибо за Вашу готовность участвовать в обязательной альтернативной программе!</h4></div>
 <discussion-thread-app></discussion-thread-app>
