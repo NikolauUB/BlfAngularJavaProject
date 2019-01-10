@@ -9,10 +9,10 @@
           <figcaption><small><b>{{getUsername(userId)}}</b></small></figcaption>
         </figure>
       </span></div>
-      <div><span class="detailsspan">Композитор:</span> {{voteItem.author}}</div>
-      <div><span class="detailsspan">Произведение:</span> {{voteItem.composition}}</div>
-      <div><span class="detailsspan">Описание:</span> <div [innerHTML]="voteItem.description"></div></div>
-      <div><span class="detailsspan">Инструменты:</span> {{voteItem.instrmnts}}</div>
+    <div><div class="detaildiv b">Композитор:</div> <div class="detaildiv">{{voteItem.author}}</div></div>
+      <div><div class="detaildiv b">Произведение:</div> <div class="detaildiv">{{voteItem.composition}}</div></div>
+      <div><div class="detaildiv b">Описание:</div> <div class="detaildiv" [innerHTML]="voteItem.description"></div></div>
+      <div><div class="detaildiv b">Инструменты:</div> <div class="detaildiv">{{voteItem.instrmnts}}</div></div>
       <div *ngIf="voteItem.videoUrl"><span class="detailsspan">Видео:</span><a href="{{voteItem.videoUrl}}" target="_blank">Открыть в новом окне</a></div>
       <div *ngIf="voteItem.audioUrl"><span class="detailsspan">Audio:</span><a href="{{voteItem.audioUrl}}" target="_blank">Открыть в новом окне</a></div>
 
