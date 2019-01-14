@@ -203,7 +203,7 @@ public class AuthService {
      * @return
      */
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
-    public RegistrationReply restRegister(@RequestBody RegistrationData regData, @CookieValue(Utils.VK_APP) String vkApp, HttpServletResponse response) {
+    public RegistrationReply restRegister(@RequestBody RegistrationData regData, @CookieValue(value=Utils.VK_APP, required=false) String vkApp, HttpServletResponse response) {
         RegistrationReply result = new RegistrationReply();
         //first check antibot answers
         try {
