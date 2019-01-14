@@ -9,15 +9,12 @@
           <figcaption><small><b>{{getUsername(userId)}}</b></small></figcaption>
         </figure>
       </span></div>
-    <div>
       <div><span class="detailsspan">Композитор:</span> {{voteItem.author}}</div>
       <div><span class="detailsspan">Произведение:</span> {{voteItem.composition}}</div>
       <div><span class="detailsspan">Описание:</span> <div [innerHTML]="voteItem.description"></div></div>
       <div><span class="detailsspan">Инструменты:</span> {{voteItem.instrmnts}}</div>
       <div *ngIf="voteItem.videoUrl"><span class="detailsspan">Видео:</span><a href="{{voteItem.videoUrl}}" target="_blank">Открыть в новом окне</a></div>
       <div *ngIf="voteItem.audioUrl"><span class="detailsspan">Audio:</span><a href="{{voteItem.audioUrl}}" target="_blank">Открыть в новом окне</a></div>
-
-
   </div>
   <div class="app-modal-footer">
     <button type="button" class="btn btn-primary btn-s" (click)="modal.hide()">Закрыть</button>
