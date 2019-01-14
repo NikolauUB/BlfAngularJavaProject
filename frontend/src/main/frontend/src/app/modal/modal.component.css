@@ -8,6 +8,18 @@
   font-weight: bold;
 }
 
+.detaildiv {
+  text-align:justify;
+  padding:5px;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box;    
+  margin-bottom:10px;
+}
+.b {
+  font-weight: bold;
+}
+
 .detailsavatar {
   display: inline-block;
   vertical-align: top;
