@@ -2,32 +2,23 @@
 <div style="display:inline-block; width:45%; vertical-align: top">
   <h2>Новости</h2>
   <div>
-    <h3>Прием заявок на весенний конкурс композиторов 4 марта 2019 открыт</h3>
-    <p><a routerLink="/composition" routerLinkActive="active">Отправить заявку</a></p>
-    
-    <h3>Прием заявок на зимний онлайн-концерт 14 января 2019 открыт</h3>
-    <p>Это не конкурс - голосования отсутствует. Вы можете записать любые понравившиеся вам вещи. Условия два: главная партия должна быть исполнена на духовом инструменте и, если вещи больше одной, они должны быть объединены в одну запись <a routerLink="/concert" routerLinkActive="active">Отправить заявку</a> </p>
-    
-    <h3>Осенний онлайн-фестиваль 2018</h3>
+    <h3>Весенний онлайн-фестиваль 2018</h3>
     <p *ngIf="isObEnded()">Голосование по обязательной классической программе закрыто.</p>
-    <p *ngIf="isObEnded()">Голосование по обязательной джазовой программе закрыто.</p>
+    <p *ngIf="isObEnded()">Голосование по обязательной народной программе закрыто.</p>
     <p *ngIf="isFreeEnded()">Голосование по обязательной свободной программе закрыто.</p>
 
     <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной классической программе началось. Окончание голосования: {{convertTimeToDate(this.obEndDate)}} <a routerLink="/voteBaroque" routerLinkActive="active">Голосовать</a></p>
-    <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной джазовой программе началось. Окончание голосования: {{convertTimeToDate(this.obEndDate)}} <a routerLink="/voteJazz" routerLinkActive="active">Голосовать</a></p>
+    <p *ngIf="isObStarted() && !isObEnded()">Голосование по обязательной народной программе началось. Окончание голосования: {{convertTimeToDate(this.obEndDate)}} <a routerLink="/voteJazz" routerLinkActive="active">Голосовать</a></p>
     <p *ngIf="isFreeStarted() && !isFreeEnded()">Голосование по обязательной свободной программе началось. Окончание голосования: {{convertTimeToDate(this.freeEndDate)}} <a routerLink="/voteFree" routerLinkActive="active">Голосовать</a></p>
 
     <p *ngIf="!isObStarted() && competitionList.hasBaroque">Срок сдачи записей обязательной классической программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/baroque" routerLinkActive="active">Подать заявку</a></p>
-    <p *ngIf="!isObStarted() && competitionList.hasJazz">Срок сдачи записей обязательной джазовой программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/jazz" routerLinkActive="active">Подать заявку</a></p>
+    <p *ngIf="!isObStarted() && competitionList.hasJazz">Срок сдачи записей обязательной народной программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/jazz" routerLinkActive="active">Подать заявку</a></p>
     <p *ngIf="!isFreeStarted() && competitionList.hasFree">Срок сдачи записей обязательной свободной программы: {{convertTimeToDate(this.freeStartDate)}} <a routerLink="/free" routerLinkActive="active">Подать заявку</a></p>
     
-    <h3>Осенний конкурс композиторов 2018</h3>
-    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
+    <h3>Весенний конкурс композиторов 2019</h3>
+    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. Поздравления победителям ЛюдМиле и Татьяне Ивановне. Ждем задание на следующий раз (1 сентября 2019)<a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
     <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
     <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
-
-    <h3>Начался летний онлайн-концерт 2018</h3>
-    <p>Это не конкурс - голосования отсутствует. Тем не менее, каждый участник получит лавровые листочки из расчета: количество участников умножить на два. <a routerLink="/voteConcert" routerLinkActive="active">Послушать записи</a> </p>
 
     <h3>Добавлена страница статистики</h3>
     <p>Теперь подсчет ведется  полностью автоматически. Слушатели выбирают понравившиеся записи, их голоса запоминаются в базе данных. После окончания голосования в отдельной таблице формируется отчет, суммирующий результаты участников по всем программам. Статистику по прошедшему осеннему фестивалю можно посмотреть по ссылке: <a routerLink="/newstatistic" routerLinkActive="active">Фестивальная статистика</a> </p>
@@ -52,7 +43,7 @@
     как правило, лишены этой важной составляющей в обучении - возможности показать свои достижения другим людям с такими же интересами
     и узнать их отзыв.</p>
   <h3 align="center">Календарь наших мероприятий</h3>
-  <p align="center"><img src="assets/images/CalendarEvents.png" width="70%"/></p>
+  <p align="center"><img src="http://blfclub.ru/wp-content/uploads/2018/06/logo-80.png" width="70%"/></p>
   <p align="center"><small><a routerLink="/about" routerLinkActive="active">Подробнее о сайте</a></small></p>
 </div>
 </div>
