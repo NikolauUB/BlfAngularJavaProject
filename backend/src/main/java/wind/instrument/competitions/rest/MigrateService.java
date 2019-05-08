@@ -70,20 +70,20 @@ public class MigrateService {
         //em.persist(competitionEntityConcert);
 
     
-        //cal.set(2019, 2, 4, 23, 59);
-        //CompetitionEntity competitionEntityComp = new CompetitionEntity();
-        //competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
-        //competitionEntityComp.setCompetitionName("Конкурс композиторов");
-        //competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        //competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/1_lWUeZPJYk");
-        //competitionEntityComp.setCompetitionStart(cal.getTime());
-        //cal.add(Calendar.MONTH, 1);
-        //competitionEntityComp.setCompetitionEnd(cal.getTime());
-        //competitionEntityComp.setActive(false);
-        //competitionEntityComp.setFuture(true);
-        //em.persist(competitionEntityComp);
+        cal.set(2019, 8, 2, 23, 59);
+        CompetitionEntity competitionEntityComp = new CompetitionEntity();
+        competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
+        competitionEntityComp.setCompetitionName("Конкурс композиторов");
+        competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
+        competitionEntityComp.setCompetitionSampleVideo("url to splitted bideo");
+        competitionEntityComp.setCompetitionStart(cal.getTime());
+        cal.add(Calendar.MONTH, 1);
+        competitionEntityComp.setCompetitionEnd(cal.getTime());
+        competitionEntityComp.setActive(false);
+        competitionEntityComp.setFuture(true);
+        em.persist(competitionEntityComp);
 
-        
+        /*
         cal.set(2019, 3, 15, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -95,9 +95,7 @@ public class MigrateService {
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
-//        Query query = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 0");
-//        query.executeUpdate();
-        em.persist(competitionEntity);
+	em.persist(competitionEntity);
 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2019, 3, 15, 23, 59);
@@ -106,13 +104,10 @@ public class MigrateService {
         competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
         competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/J0C5YI_wfsU");
         competitionEntityJazz.setCompetitionStart(cal.getTime());
-
         cal.add(Calendar.MONTH, 1);
         competitionEntityJazz.setCompetitionEnd(cal.getTime());
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
-//        Query queryJazz = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 1");
-//        queryJazz.executeUpdate();
         em.persist(competitionEntityJazz);
 
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
@@ -126,9 +121,8 @@ public class MigrateService {
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
-//        Query queryFree = em.createQuery("update CompetitionEntity ce set ce.future = 'false' where ce.competitionType = 2");
-//        queryFree.executeUpdate();
         em.persist(competitionEntityFree);
+	*/
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
