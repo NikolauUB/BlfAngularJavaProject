@@ -61,7 +61,7 @@ public class MigrateService {
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/R2Vy7s9suVs");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
@@ -75,7 +75,7 @@ public class MigrateService {
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("url to splitted bideo");
+        competitionEntityComp.setCompetitionSampleVideo("");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
@@ -133,23 +133,49 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>Обычно в композиторском конкурсе задание придумывает тот, чьё сочинение набрало больше голосов в предыдущем конкурсе. " +
-                "Однако, этот раз необычный. " +
-                "Победителем <a target=\"blank\" href=\"http://dudari.ru/showByid/5600\">предущего конкурса</a> стал " +
-                "<a target=\"blank\" href=\"https://www.youtube.com/watch?v=1_lWUeZPJYk\">Максим Хорош</a> с сочинением " +
-                "<a target=\"blank\" href=\"https://app.box.com/s/1x7mbvjhcrofdy3sef4hmwc335isrqf7\">\"Соло дождя\"</a> (справа), " +
-                "и пораздумав он подарил своё право придумывать задание на следующий раз другому участнику " +
-                "<a target=\"blank\" href=\"https://www.youtube.com/watch?v=YST08L09IkA\">Татьяне Ивановне</a>" +
-                "с созвучным сочинением <a target=\"blank\" href=\"http://dudari.ru/assets/score/TativaAboveARiver.pdf\">\"Над рекой\"</a>.</p>" +
-                "<p>Задание в композиторском конкурсе - это обязательная последовательность нот, которая должна встретиться в сочинении " +
-                "хотя бы один раз.</p>" +
-				"<p>Татьяна Ивановна придумала следующее задание.</p>" +
-				"<p>к<b>Ля</b>ксой <b>Си</b>-<b>Ре</b>невой лег на кон<b>Соль</b></br>" +
-                "кот, наблюдая в окно за <b>Си</b>ницей,</br>" +
-                "прежде, чем прыгнуть, решил затаиться,</br>" +
-                "прыгнул за птичкой, но в<b>Ля</b>пался в <b>Соль</b></p>" +
-                "<p>Жду Ваши сочинения, включающие заданную последовательность нот: </br>" +
-                "<b><font size=\"3\">ЛЯ, СИ, РЕ, СОЛЬ, СИ, ЛЯ, СОЛЬ</font></b></p>" +
+        return "<p>В прошлом конкурсе композиторов оказалось два победителя: <a href=\"https://youtu.be/MDVxJ0cV9uA\" target=\"blank\">ЛюдМила<\a> и <a href=\"https://youtu.be/bmjjkYLTvL8\" target=\"blank\">Татьяна Ивановна<\a>. Поздравляем!</p>" +
+		"<p>Они вдвоем придумали задание на следующий раз: </p>" +
+		"<p><b>ДО-ДИЕЗ</b>, <b>ЛЯ</b>, <b>СИ</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ФА-ДИЕЗ</b>.</p>" +
+		"<p> И в случае двух победителей стихотворений тоже должно быть два: </p>" +
+		"<table cellpadding=\"10\">" +
+		"<tr>" +
+		"<td valign=\"top\">" +
+		"<pre>" +
+		"Как то ДО с диезом в ухе\r\n" +
+		"Заявилось к ЛЯ по делу.\r\n" +
+		"Там компания дудела.\r\n" +
+		"СИ была уже под мухой.\r\n" +
+		"\r\n" +
+		"Ноты со стола свалила,\r\n" +
+		"ДО с диезом нагрубила,\r\n" +
+		"Наступила РЕ на ногу,\r\n" +
+		"До с диезом на подмогу\r\n" +
+		"\r\n" +
+		"К РЕ рванулось утешать.\r\n" +
+		"ФА, которая с диезом\r\n" +
+		"Оказалась самой трезвой,\r\n" +
+		"Стала ссору усмирять,\r\n" +
+		"\r\n" +
+		"С пола ноты собирать.\r\n" +
+		"И, построив всех рядком,\r\n" +
+		"Побеседовав ладком.\r\n" +
+		"Стали музыку играть.\r\n" +
+		"</pre>" +
+		"</td>" +
+		"<td  valign=\"top\">" +
+		"<pre>" +
+		"ДО ДИЕЗ с истошным визгом тормозит у дома ЛЯ.\r\n " +
+		"В доме том поет ансамбль, СИ солирует шутя.\r\n " +
+		"\r\n" +
+		"Сдуло ветром всё с пюпитра, тем, что ДО ДИЕЗ нагнал,\r\n " +
+		"РЕ напуган был машиной, той, что ДО ДИЕЗ пригнал.\r\n " +
+		"\r\n" +
+		"РЕ готовится к конфликту, но флегматик ФА ДИЕЗ,\r\n" +
+		"Ставит ноты все на место, продолжается концерт\r\n" +
+		"</pre>" +
+		"</td>" +
+		"</tr>" +
+		"</table>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
