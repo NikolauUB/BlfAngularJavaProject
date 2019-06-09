@@ -133,7 +133,7 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов оказалось два победителя: <a href=\"https://youtu.be/MDVxJ0cV9uA\" target=\"blank\">ЛюдМила<\a> и <a href=\"https://youtu.be/bmjjkYLTvL8\" target=\"blank\">Татьяна Ивановна<\a>. Поздравляем!</p>" +
+        return "<p>В прошлом конкурсе композиторов оказалось два победителя: <a href=\"https://youtu.be/MDVxJ0cV9uA\" target=\"blank\">ЛюдМила</a> и <a href=\"https://youtu.be/bmjjkYLTvL8\" target=\"blank\">Татьяна Ивановна</a>. Поздравляем!</p>" +
 		"<p>Они вдвоем придумали задание на следующий раз: </p>" +
 		"<p><b>ДО-ДИЕЗ</b>, <b>ЛЯ</b>, <b>СИ</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ФА-ДИЕЗ</b>.</p>" +
 		"<p> И в случае двух победителей стихотворений тоже должно быть два: </p>" +
