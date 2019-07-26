@@ -89,7 +89,7 @@ public class MigrateService {
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/_pVmzKuWi-k");
+        competitionEntity.setCompetitionSampleVideo("");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
@@ -189,9 +189,9 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Доменико скарлатти</p>" +
-                "<p><strong>Произведение</strong>: Аллегро из блокфлейтовой сонаты Ля минор</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/DomenicoScarlattiAllegro.pdf\" target=\"_blank\">Ноты соло</a>, &nbsp;<a href=\"http://hz.imslp.info/files/imglnks/usimg/f/fd/IMSLP275358-PMLP447143-scarlatti_sonata_9_score.pdf\" target=\"_blank\">Полная версия</a></p>" +
+        return "<p><strong>Композитор</strong>: затерян в истории</p>" +
+                "<p><strong>Произведение</strong>: Salarello, 17 век</p>" +
+                "<p><strong>Ноты: <a href=\"https://musescore.com/user/8094196/scores/5396944\" target=\"_blank\">Ноты с Musescore.com</a>, &nbsp;<a href=\"\" target=\"_blank\">Pdf</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
