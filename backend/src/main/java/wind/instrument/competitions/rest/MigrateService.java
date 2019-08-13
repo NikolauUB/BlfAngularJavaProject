@@ -89,14 +89,15 @@ public class MigrateService {
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("");
+        competitionEntity.setCompetitionSampleVideo("add");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-
+	
+	    /*
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2019, 9, 14, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -109,13 +110,13 @@ public class MigrateService {
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
-
+*/
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2019, 3, 29, 23, 59);
+        cal.set(2019, 9, 28, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/hZjvdD6gJXU");
+        competitionEntityFree.setCompetitionSampleVideo("add");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
@@ -192,6 +193,7 @@ public class MigrateService {
         return "<p><strong>Композитор</strong>: затерян в истории</p>" +
                 "<p><strong>Произведение</strong>: Salarello, 17 век</p>" +
                 "<p><strong>Ноты: <a href=\"https://musescore.com/user/8094196/scores/5396944\" target=\"_blank\">Ноты с Musescore.com</a>, &nbsp;<a href=\"\" target=\"_blank\">Pdf</a></p>" +
+		"<p><strong>Ноты упрощенного варианта: <a href=\"https://vk.com/doc174574879_509928950?hash=171a07f50f3e91d1df&dl=c9ea7097509c834eb2\" target=\"_blank\">Упрощенный вариант</a>, &nbsp;<a href=\"\" target=\"_blank\">Pdf</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
