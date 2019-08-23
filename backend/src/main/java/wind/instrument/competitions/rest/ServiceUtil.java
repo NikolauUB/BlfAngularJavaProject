@@ -172,11 +172,11 @@ public class ServiceUtil {
             ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK user ids are not equals!", response);
             return false;
         }
-
-        if (!ServiceUtil.checkVKAuth(vkExpire, vkUserId, secret, sid, sig)) {
-            ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK user are not connected to VK API!", response);
-            return false;
-        }
+        
+        //if (!ServiceUtil.checkVKAuth(vkExpire, vkUserId, secret, sid, sig)) {
+        //    ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK user are not connected to VK API!", response);
+        //    return false;
+        //}
 
         if (!ServiceUtil.checkUserVKHash(vkUserId, hash)) {
             ServiceUtil.sendResponseError(HttpServletResponse.SC_FORBIDDEN, "VK user hash is not valid!", response);
