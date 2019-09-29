@@ -18,7 +18,7 @@ export class BaroqueComponent extends DiscussionComponent implements OnInit, Aft
   }
 
   public isUserChooseJazzProgramm(): boolean {
-    return this.competitionShortInfo.isUserChooseAlternativeProgramm();
+    return false;//this.competitionShortInfo.isUserChooseAlternativeProgramm();
   }
 
 }
