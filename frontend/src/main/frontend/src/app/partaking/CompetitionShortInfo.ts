@@ -18,14 +18,14 @@ export class CompetitionShortInfo {
   adminModeUserThread: number = -1;
 
   public isUserChooseAlternativeProgramm(): boolean {
-    if (this.userChoosePrescribeProgramm !== -1) {
-      return (this.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE
-              && this.userChoosePrescribeProgramm === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ)
-              ||
-              (this.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ
-              && this.userChoosePrescribeProgramm === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE);
-    } else {
+    //if (this.userChoosePrescribeProgramm !== -1) {
+    //  return (this.compType === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE
+    //          && this.userChoosePrescribeProgramm === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ)
+    //          ||
+    //          (this.compType === CompetitionShortInfo.TYPE_PRESCRIBED_JAZZ
+    //          && this.userChoosePrescribeProgramm === CompetitionShortInfo.TYPE_PRESCRIBED_BAROQUE);
+    //} else {
       return false;
-    }
+    //}
   }
 }
