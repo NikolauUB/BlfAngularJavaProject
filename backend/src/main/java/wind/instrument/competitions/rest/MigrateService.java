@@ -74,7 +74,7 @@ public class MigrateService {
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/3CViCvab1KM");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
@@ -110,6 +110,7 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 */
+/*	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2019, 9, 28, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -122,6 +123,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
+*/	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
