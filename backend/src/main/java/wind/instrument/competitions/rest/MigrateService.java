@@ -54,14 +54,13 @@ public class MigrateService {
             return "Access Error!";
         }
 
-        Calendar cal = Calendar.getInstance();
-	/*    
-	cal.set(2019, 6, 15, 23, 59);
+        Calendar cal = Calendar.getInstance();    
+	cal.set(2020, 0, 20, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/R2Vy7s9suVs");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/????");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
@@ -70,7 +69,7 @@ public class MigrateService {
         em.persist(competitionEntityConcert);
 
     
-        cal.set(2019, 8, 2, 23, 59);
+        cal.set(2020, 2, 2, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
@@ -82,8 +81,8 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	*/	
-        
+	
+        /*
         cal.set(2019, 9, 14, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -96,7 +95,7 @@ public class MigrateService {
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	
+	*/
 	    /*
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2019, 9, 14, 23, 59);
