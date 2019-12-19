@@ -134,7 +134,7 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов победил <a href=\"https://www.youtube.com/watch?v=3CViCvab1KM\" target=\"blank\">Daerhon</a> с композицией "Свободная Минутка". Поздравляем!</p>" +
+        return "<p>В прошлом конкурсе композиторов победил <a href=\"https://www.youtube.com/watch?v=3CViCvab1KM\" target=\"blank\">Daerhon</a> с композицией \"Свободная Минутка\". Поздравляем!</p>" +
 		"<p>Задание на следующий раз: </p>" +
 		"<p><b>СИ</b>, <b>МИ</b>, <b>СИ</b>, <b>ДО</b>, <b>ЛЯ</b>, <b>МИ</b>, <b>ЛЯ</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
