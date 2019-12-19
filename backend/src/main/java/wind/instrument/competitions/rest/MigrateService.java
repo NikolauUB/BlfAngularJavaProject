@@ -54,14 +54,13 @@ public class MigrateService {
             return "Access Error!";
         }
 
-        Calendar cal = Calendar.getInstance();
-	/*    
-	cal.set(2019, 6, 15, 23, 59);
+        Calendar cal = Calendar.getInstance();    
+	cal.set(2020, 0, 20, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/R2Vy7s9suVs");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/YVxCXtjFXWI");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
@@ -70,20 +69,20 @@ public class MigrateService {
         em.persist(competitionEntityConcert);
 
     
-        cal.set(2019, 8, 2, 23, 59);
+        cal.set(2020, 2, 2, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/3CViCvab1KM");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	*/	
-        
+	
+        /*
         cal.set(2019, 9, 14, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -96,7 +95,7 @@ public class MigrateService {
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	
+	*/
 	    /*
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2019, 9, 14, 23, 59);
@@ -111,6 +110,7 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 */
+/*	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2019, 9, 28, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -123,6 +123,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
+*/	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -133,49 +134,9 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов оказалось два победителя: <a href=\"https://youtu.be/MDVxJ0cV9uA\" target=\"blank\">ЛюдМила</a> и <a href=\"https://youtu.be/bmjjkYLTvL8\" target=\"blank\">Татьяна Ивановна</a>. Поздравляем!</p>" +
-		"<p>Они вдвоем придумали задание на следующий раз: </p>" +
-		"<p><b>ДО-ДИЕЗ</b>, <b>ЛЯ</b>, <b>СИ</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ДО-ДИЕЗ</b>, <b>PE</b>, <b>ФА-ДИЕЗ</b>.</p>" +
-		"<p> И в случае двух победителей стихотворений тоже должно быть два: </p>" +
-		"<table cellpadding=\"10\">" +
-		"<tr>" +
-		"<td valign=\"top\">" +
-		"<pre>" +
-		"Как то ДО с диезом в ухе\r\n" +
-		"Заявилось к ЛЯ по делу.\r\n" +
-		"Там компания дудела.\r\n" +
-		"СИ была уже под мухой.\r\n" +
-		"\r\n" +
-		"Ноты со стола свалила,\r\n" +
-		"ДО с диезом нагрубила,\r\n" +
-		"Наступила РЕ на ногу,\r\n" +
-		"До с диезом на подмогу\r\n" +
-		"\r\n" +
-		"К РЕ рванулось утешать.\r\n" +
-		"ФА, которая с диезом\r\n" +
-		"Оказалась самой трезвой,\r\n" +
-		"Стала ссору усмирять,\r\n" +
-		"\r\n" +
-		"С пола ноты собирать.\r\n" +
-		"И, построив всех рядком,\r\n" +
-		"Побеседовав ладком.\r\n" +
-		"Стали музыку играть.\r\n" +
-		"</pre>" +
-		"</td>" +
-		"<td  valign=\"top\">" +
-		"<pre>" +
-		"ДО ДИЕЗ с истошным визгом тормозит у дома ЛЯ.\r\n " +
-		"В доме том поет ансамбль, СИ солирует шутя.\r\n " +
-		"\r\n" +
-		"Сдуло ветром всё с пюпитра, тем, что ДО ДИЕЗ нагнал,\r\n " +
-		"РЕ напуган был машиной, той, что ДО ДИЕЗ пригнал.\r\n " +
-		"\r\n" +
-		"РЕ готовится к конфликту, но флегматик ФА ДИЕЗ,\r\n" +
-		"Ставит ноты все на место, продолжается концерт\r\n" +
-		"</pre>" +
-		"</td>" +
-		"</tr>" +
-		"</table>" +
+        return "<p>В прошлом конкурсе композиторов победил <a href=\"https://www.youtube.com/watch?v=3CViCvab1KM\" target=\"blank\">Daerhon</a> с композицией "Свободная Минутка". Поздравляем!</p>" +
+		"<p>Задание на следующий раз: </p>" +
+		"<p><b>СИ</b>, <b>МИ</b>, <b>СИ</b>, <b>ДО</b>, <b>ЛЯ</b>, <b>МИ</b>, <b>ЛЯ</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
