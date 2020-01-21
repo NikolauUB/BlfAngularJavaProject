@@ -54,7 +54,8 @@ public class MigrateService {
             return "Access Error!";
         }
 
-        Calendar cal = Calendar.getInstance();    
+        Calendar cal = Calendar.getInstance();
+	    /*
 	cal.set(2020, 0, 20, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
@@ -81,49 +82,49 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	
-        /*
-        cal.set(2019, 9, 14, 23, 59);
+	*/
+        
+        cal.set(2020, 3, 20, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/YWgzPL1xF0Q");
+        competitionEntity.setCompetitionSampleVideo("");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	*/
-	    /*
+	
+	  
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-        cal.set(2019, 9, 14, 23, 59);
+        cal.set(2020, 3, 20, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
         competitionEntityJazz.setCompetitionName("Обязательная народная программа");
         competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
-        competitionEntityJazz.setCompetitionSampleVideo("https://www.youtube.com/embed/J0C5YI_wfsU");
+        competitionEntityJazz.setCompetitionSampleVideo("");
         competitionEntityJazz.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityJazz.setCompetitionEnd(cal.getTime());
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
-*/
-/*	    
+
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2019, 9, 28, 23, 59);
+        cal.set(2020, 4, 4, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/MMs1z9KoCxI");
+        competitionEntityFree.setCompetitionSampleVideo("");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-*/	
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
