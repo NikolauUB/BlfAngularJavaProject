@@ -152,10 +152,11 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: затерян в истории</p>" +
+        return "<p><strong>Композитор</strong>: Michel Farinel</p>" +
                 "<p><strong>Произведение</strong>: Salarello, 17 век</p>" +
-                "<p><strong>Ноты: <a href=\"https://musescore.com/user/8094196/scores/5396944\" target=\"_blank\">Ноты с Musescore.com сложные</a></p>" +
-		"<p><strong>Ноты упрощенного варианта: <a href=\"http://dudari.ru/assets/score/Saltarello_odnogolosie_simple.pdf\" target=\"_blank\">Упрощенный вариант</a></p>" +
+                "<p><strong>Ноты: <a href=\"\" target=\"_blank\">Первоначальная версия</a></p>" +
+		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/\" target=\"_blank\">возможно более удобные для альта</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/\" target=\"_blank\">xml</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
