@@ -89,7 +89,7 @@ public class MigrateService {
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/HRtD9aKBaTU");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
@@ -97,7 +97,7 @@ public class MigrateService {
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
 	
-	  
+	/*  
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2020, 3, 20, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -110,14 +110,14 @@ public class MigrateService {
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
-
+	*/
 	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2020, 4, 4, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/VcGIx-URXuM");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
@@ -153,10 +153,10 @@ public class MigrateService {
 
     private String getClassicDescription() {
         return "<p><strong>Композитор</strong>: Michel Farinel</p>" +
-                "<p><strong>Произведение</strong>: Salarello, 17 век</p>" +
-                "<p><strong>Ноты: <a href=\"\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/\" target=\"_blank\">возможно более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/\" target=\"_blank\">xml</a></p>" +
+                "<p><strong>Произведение</strong>: Faronell's Division on a Ground</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_origin.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
+		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_alt.pdf\" target=\"_blank\">возможно более удобные для альта</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/FaronellsLAfolia_origin.xml\" target=\"_blank\">xml</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента</p>" +
                 "<p>Удачи!</p>";
     }
