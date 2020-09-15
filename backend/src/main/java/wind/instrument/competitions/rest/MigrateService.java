@@ -117,7 +117,7 @@ public class MigrateService {
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/VcGIx-URXuM");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/Q1HPbEv1C-k");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
@@ -152,12 +152,12 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Michel Farinel</p>" +
-                "<p><strong>Произведение</strong>: Faronell's Division on a Ground</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_origin.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_alt.pdf\" target=\"_blank\">возможно более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/FaronellsLAfolia_origin.xml\" target=\"_blank\">xml</a></p>" +
-                "<p>Произведение следует играть без аккомпанемента</p>" +
+        return "<p><strong>Композитор</strong>: Ян ван Эйк</p>" +
+                "<p><strong>Произведение</strong>: Doen Daphne d'over schoone Maeght</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
+		"<p><strong>Ноты: <a href=\"\" target=\"_blank\">более удобные для альта</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"\" target=\"_blank\">xml</a></p>" +
+                "<p>Произведение следует играть без аккомпанемента. Возможно упрощение за счет пропуска вариаций</p>" +
                 "<p>Удачи!</p>";
     }
 
