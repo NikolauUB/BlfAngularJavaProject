@@ -55,7 +55,7 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	cal.set(2020, 6, 27, 23, 59);
+	/*cal.set(2020, 6, 27, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
@@ -66,10 +66,10 @@ public class MigrateService {
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);
+        em.persist(competitionEntityConcert);*/
 
     
-        cal.set(2020, 8, 7, 23, 59);
+        /*cal.set(2020, 8, 7, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
@@ -80,10 +80,10 @@ public class MigrateService {
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
-        em.persist(competitionEntityComp);
-	/*
+        em.persist(competitionEntityComp);*/
+	
         
-        cal.set(2020, 3, 20, 23, 59);
+        cal.set(2020, 10, 16, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
@@ -95,7 +95,7 @@ public class MigrateService {
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	*/
+	
 	
 	/*  
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
@@ -111,9 +111,9 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	/*    
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2020, 4, 4, 23, 59);
+        cal.set(2020, 10, 2, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
@@ -124,7 +124,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	*/
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
