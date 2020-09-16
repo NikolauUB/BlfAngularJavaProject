@@ -88,7 +88,7 @@ public class MigrateService {
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/HRtD9aKBaTU");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/8mlQdeHKfGU");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
@@ -155,8 +155,8 @@ public class MigrateService {
         return "<p><strong>Композитор</strong>: Ян ван Эйк</p>" +
                 "<p><strong>Произведение</strong>: Doen Daphne d'over schoone Maeght</p>" +
                 "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"\" target=\"_blank\">более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"\" target=\"_blank\">xml</a></p>" +
+		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphnaAlt.pdf\" target=\"_blank\">более удобные для альта</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.mus\" target=\"_blank\">xml</a></p>" +
                 "<p>Произведение следует играть без аккомпанемента. Возможно упрощение за счет пропуска вариаций</p>" +
                 "<p>Удачи!</p>";
     }
