@@ -2,16 +2,7 @@
 <div style="display:inline-block; width:45%; vertical-align: top">
   <h2>Новости</h2>
   
-   <h3>Летний онлайн-концерт 2020</h3>
-    <p><a routerLink="/concert" routerLinkActive="active">Подать заявку</a></p>
-  
-  <h3>Осенний конкурс композиторов 2020</h3>
-    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
-    <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
-    <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
-   
-  
-   <h3>Осенний онлайн-фестиваль 2019</h3>
+  <h3>Осенний онлайн-фестиваль 2020</h3>
   <p> В процессе подготовки программы </p>
     <p *ngIf="isObEnded()">Голосование по обязательной классической программе закрыто.</p>
     <p *ngIf="isFreeEnded()">Голосование по обязательной свободной программе закрыто.</p>
@@ -23,7 +14,12 @@
     <p *ngIf="!isFreeStarted() && competitionList.hasFree">Срок сдачи записей обязательной свободной программы: {{convertTimeToDate(this.freeStartDate)}} <a routerLink="/free" routerLinkActive="active">Подать заявку</a></p>
     
   
-  
+   
+  <h3>Осенний конкурс композиторов 2020</h3>
+    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
+    <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
+    <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
+    
   
   <div>
     <h3>Добавлена страница статистики</h3>

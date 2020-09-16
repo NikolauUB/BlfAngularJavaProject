@@ -55,7 +55,7 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	cal.set(2020, 6, 27, 23, 59);
+	/*cal.set(2020, 6, 27, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
@@ -66,10 +66,10 @@ public class MigrateService {
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);
+        em.persist(competitionEntityConcert);*/
 
     
-        cal.set(2020, 8, 7, 23, 59);
+        /*cal.set(2020, 8, 7, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
@@ -80,22 +80,22 @@ public class MigrateService {
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
-        em.persist(competitionEntityComp);
-	/*
+        em.persist(competitionEntityComp);*/
+	
         
-        cal.set(2020, 3, 20, 23, 59);
+        cal.set(2020, 10, 16, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/HRtD9aKBaTU");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/8mlQdeHKfGU");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	*/
+	
 	
 	/*  
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
@@ -111,20 +111,20 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	/*    
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2020, 4, 4, 23, 59);
+        cal.set(2020, 10, 2, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/VcGIx-URXuM");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/Q1HPbEv1C-k");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	*/
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -152,12 +152,12 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Michel Farinel</p>" +
-                "<p><strong>Произведение</strong>: Faronell's Division on a Ground</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_origin.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/FaronellsLafolia_alt.pdf\" target=\"_blank\">возможно более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/FaronellsLAfolia_origin.xml\" target=\"_blank\">xml</a></p>" +
-                "<p>Произведение следует играть без аккомпанемента</p>" +
+        return "<p><strong>Композитор</strong>: Ян ван Эйк</p>" +
+                "<p><strong>Произведение</strong>: Doen Daphne d'over schoone Maeght</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
+		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphnaAlt.pdf\" target=\"_blank\">более удобные для альта</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.mus\" target=\"_blank\">xml</a></p>" +
+                "<p>Произведение следует играть без аккомпанемента. Возможно упрощение за счет пропуска вариаций</p>" +
                 "<p>Удачи!</p>";
     }
 
