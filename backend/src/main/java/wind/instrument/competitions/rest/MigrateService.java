@@ -55,18 +55,18 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	/*cal.set(2020, 6, 27, 23, 59);
+	cal.set(2021, 0, 11, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/uIss2Qmmc5k");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/YkRGyY3Po9w");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);*/
+        em.persist(competitionEntityConcert);
 
     
         cal.set(2021, 2, 1, 23, 59);
