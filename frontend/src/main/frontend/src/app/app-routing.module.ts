@@ -36,7 +36,7 @@ import {ShowByidComponent} from "./vote/byid/show.byid.component";
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: '',     component: VoteConcertComponent },
+  { path: '',     component: VoteFreeComponent },
   { path: 'about',     component: AboutComponent },
   { path: 'history',     component: HistoryComponent },
   { path: 'voting',     component: VoteComponent },
