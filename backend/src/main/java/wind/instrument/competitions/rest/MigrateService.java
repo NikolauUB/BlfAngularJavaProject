@@ -55,34 +55,34 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	/*cal.set(2020, 6, 27, 23, 59);
+	cal.set(2021, 0, 11, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/uIss2Qmmc5k");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/YkRGyY3Po9w");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
-        em.persist(competitionEntityConcert);*/
+        em.persist(competitionEntityConcert);
 
     
-        /*cal.set(2020, 8, 7, 23, 59);
+        cal.set(2021, 2, 1, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/z1fQM_L4exE");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
-        em.persist(competitionEntityComp);*/
+        em.persist(competitionEntityComp);
 	
-        
+      /*  
         cal.set(2020, 10, 16, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -95,7 +95,7 @@ public class MigrateService {
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	
+	*/
 	
 	/*  
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
@@ -111,7 +111,7 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	    
+	/*    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2020, 10, 2, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -124,7 +124,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	
+	*/
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -135,9 +135,9 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов победил <a href=\"https://app.box.com/s/pl9ggd46k4zbxr7ui10isqy0dna3j8qi\" target=\"blank\"> Максим Хорош</a> с композицией \"Дуэт блокфлейт альт и тенор.\". Поздравляем!</p>" +
+        return "<p>В прошлом конкурсе композиторов победил я с дуэтом для двух блокфлейт альт и бас</p>" +
 		"<p>Задание на следующий раз: </p>" +
-		"<p><b>Фа диез</b>, <b>Соль</b>, <b>Ре</b>, <b>Си</b>, <b>Соль диез</b>, <b>До диез</b>, <b>Ми</b>.</p>" +
+		"<p><b>До</b>, <b>Ре</b>, <b>Ми-бемоль</b>, <b>Фа</b>, <b>Соль</b>, <b>До</b>, <b>Ля-бемоль</b>, <b>До</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
