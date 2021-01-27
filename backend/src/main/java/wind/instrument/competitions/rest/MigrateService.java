@@ -55,6 +55,7 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
+	/*
 	cal.set(2021, 0, 11, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
@@ -67,8 +68,8 @@ public class MigrateService {
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
         em.persist(competitionEntityConcert);
-
-    
+	*/
+    /*
         cal.set(2021, 2, 1, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
@@ -81,7 +82,7 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	
+	*/
       /*  
         cal.set(2020, 10, 16, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
@@ -97,7 +98,7 @@ public class MigrateService {
 	em.persist(competitionEntity);
 	*/
 	
-	/*  
+	 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2020, 3, 20, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -110,8 +111,8 @@ public class MigrateService {
         competitionEntityJazz.setActive(false);
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
-	*/
-	/*    
+	
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2020, 10, 2, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -124,7 +125,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	*/
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
