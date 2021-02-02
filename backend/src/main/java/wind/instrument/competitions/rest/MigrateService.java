@@ -55,6 +55,7 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
+	/*
 	cal.set(2021, 0, 11, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
@@ -67,8 +68,8 @@ public class MigrateService {
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
         em.persist(competitionEntityConcert);
-
-    
+	*/
+    /*
         cal.set(2021, 2, 1, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
@@ -81,23 +82,23 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	
-      /*  
-        cal.set(2020, 10, 16, 23, 59);
+	*/
+        
+        cal.set(2021, 03, 19, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/8mlQdeHKfGU");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/L0E4KfQBwl0");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	*/
 	
-	/*  
+	
+	/* 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2020, 3, 20, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -111,20 +112,20 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	/*    
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2020, 10, 2, 23, 59);
+        cal.set(2021, 4, 4, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/Q1HPbEv1C-k");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/wVXA7U09K_o");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	*/
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -152,12 +153,12 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: Ян ван Эйк</p>" +
-                "<p><strong>Произведение</strong>: Doen Daphne d'over schoone Maeght</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/VanEyckDaphnaAlt.pdf\" target=\"_blank\">более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/VanEyckDaphna.mus\" target=\"_blank\">xml</a></p>" +
-                "<p>Произведение следует играть без аккомпанемента. Возможно упрощение за счет пропуска вариаций</p>" +
+        return "<p><strong>Композитор</strong>: Вольфганг Амадей Моцарт</p>" +
+                "<p><strong>Произведение</strong>:Ария \"Papageno's Little Bells\" из оперы \"Волшебная флейта\"</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/Papageno_Bells_Flute.png\" target=\"_blank\">Первоначальная версия</a></p>" +
+		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/Papageno_Bells_Flute_soprano.pdf\" target=\"_blank\">более удобные для сопрано</a></p>" +
+		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/Papageno_Bells_Flute.xml\" target=\"_blank\">xml</a></p>" +
+                "<p>Произведение следует играть без аккомпанемента.</p>" +
                 "<p>Удачи!</p>";
     }
 
