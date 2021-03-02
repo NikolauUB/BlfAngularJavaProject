@@ -21,20 +21,20 @@
 <h4 *ngIf="this.showVotingCloseTtl()" class="segoemessage">Голосование закрыто, а обсуждение продолжается!</h4>
 <div *ngIf="this.isComposition()" class="voteItemBorder">
     <div class="voteItemHeader btn-group" >
-        <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" (click)="showDetails(voteItem); $event.stopPropagation();">
+        <p>
           <small>Последовательность нот - первый такт этого произведения</small>
-        </a>        
+        </p>        
     </div>
     <div class="videoDiv">
       <iframe width="370" height="300"
-          [src]="https://www.youtube.com/embed/th8AZ6OZHvY | safe"
+          src="https://www.youtube.com/embed/th8AZ6OZHvY"
           allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
       </iframe>
     </div>
    
     <div class="audioDiv">
       <iframe  width="358" height="134"
-              [src]="http://dudari.ru/assets/score/CompZdanie01032021.png | safe"
+              src="http://dudari.ru/assets/score/CompZdanie01032021.png"
               frameborder="0"  >
       </iframe>
       <div style="z-index: 1; height: 12px; width: 357.5px; background: #EEE; position: relative; top: -18px; left:6px;"></div>
