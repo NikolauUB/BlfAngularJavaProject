@@ -19,7 +19,7 @@
 <h4 *ngIf="this.showVotingWillStartTtl()" class="segoemessage">Голосование начнется {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="this.showConcertWillStartTtl()" class="segoemessage">Концерт  начнется {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="this.showVotingCloseTtl()" class="segoemessage">Голосование закрыто, а обсуждение продолжается!</h4>
-<div *ngIf="true" class="voteItemBorder">
+<div *ngIf="this.isComposition()" class="voteItemBorder">
     <div class="voteItemHeader btn-group" >
         <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" (click)="showDetails(voteItem); $event.stopPropagation();">
           <small>Последовательность нот - первый такт этого произведения</small>
