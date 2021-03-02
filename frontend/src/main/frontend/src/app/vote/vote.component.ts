@@ -247,6 +247,10 @@ export class VoteComponent implements OnInit,  OnDestroy {
                 && this.isVotingStarted()
                 && this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_CONCERT;
   }
+  
+  public isComposition(): boolean {
+    return  this.competitionShortInfo.compType === CompetitionShortInfo.TYPE_COMPOSITION;
+  }
 
   public showToOpinionsTtl(): string {
     var unreadMsgs = localStorage.getItem(ChangesController.UNREAD_MESSAGES);
