@@ -19,6 +19,27 @@
 <h4 *ngIf="this.showVotingWillStartTtl()" class="segoemessage">Голосование начнется {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="this.showConcertWillStartTtl()" class="segoemessage">Концерт  начнется {{convertTimeToDate(this.startDate)}}</h4>
 <h4 *ngIf="this.showVotingCloseTtl()" class="segoemessage">Голосование закрыто, а обсуждение продолжается!</h4>
+<div *ngIf="true" class="voteItemBorder">
+    <div class="voteItemHeader btn-group" >
+        <a title="Описание" class="[ btn ]" [class.linkselected]="selectedItem.has(voteItem) && !statisticMode" (click)="showDetails(voteItem); $event.stopPropagation();">
+          <small>Последовательность нот - первый такт этого произведения</small>
+        </a>        
+    </div>
+    <div class="videoDiv">
+      <iframe width="370" height="300"
+          [src]="https://www.youtube.com/embed/th8AZ6OZHvY | safe"
+          allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+      </iframe>
+    </div>
+   
+    <div class="audioDiv">
+      <iframe  width="358" height="134"
+              [src]="voteItem.audioEmbedUrl | safe"
+              frameborder="0"  >
+      </iframe>
+      <div style="z-index: 1; height: 12px; width: 357.5px; background: #EEE; position: relative; top: -18px; left:6px;"></div>
+    </div>
+ </div>
 <span  *ngFor="let voteItem of this.getVoteDataArray()">
   <div class="voteItemBorder" [class.selected]="selectedItem.has(voteItem) && !statisticMode">
     <div class="voteItemHeader btn-group" >
