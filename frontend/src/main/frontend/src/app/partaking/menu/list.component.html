@@ -1,8 +1,5 @@
 <div id="primary" class="clear-block">
   <nav>
-    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 3}"
-       *ngIf="competitionList.hasComposition && this.competitionNotFinished(competitionList.compositionEnd)"
-       routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 0}"
        *ngIf="competitionList.hasBaroque && this.competitionNotFinished(competitionList.baroqueEnd)"
        routerLink="/baroque" routerLinkActive="active">Классическая обязательная программа</a>
@@ -15,7 +12,8 @@
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 1}"
        *ngIf="competitionList.hasJazz && this.competitionNotFinished(competitionList.jazzEnd)"
        routerLink="/jazz" routerLinkActive="active">Альтернативная обязательная программа</a>
-    
-     
+    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 3}"
+       *ngIf="competitionList.hasComposition && this.competitionNotFinished(competitionList.compositionEnd)"
+       routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
   </nav>
 </div>
