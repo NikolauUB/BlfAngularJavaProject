@@ -55,35 +55,35 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	/*
-	cal.set(2021, 0, 11, 23, 59);
+	
+	cal.set(2021, 6, 19, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/YkRGyY3Po9w");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/l6HtVxp1Y90");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
         em.persist(competitionEntityConcert);
-	*/
-    /*
-        cal.set(2021, 2, 1, 23, 59);
+	
+    
+        cal.set(2021, 8, 6, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/z1fQM_L4exE");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/Z0H0L2gL2U4");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	*/
-        
+
+/*        
         cal.set(2021, 03, 19, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -96,7 +96,7 @@ public class MigrateService {
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-	
+*/	
 	
 	/* 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
@@ -112,7 +112,7 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	    
+/*	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2021, 4, 4, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -125,7 +125,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	
+*/	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -136,9 +136,9 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов победил я с дуэтом для двух блокфлейт альт и бас</p>" +
+        return "<p>В прошлом конкурсе композиторов победил Максим Хорош с ансамблем для фльта и тенора под сопровождение гитары</p>" +
 		"<p>Задание на следующий раз: </p>" +
-		"<p><b>До</b>, <b>Ре</b>, <b>Ми-бемоль</b>, <b>Фа</b>, <b>Соль</b>, <b>До</b>, <b>Ля-бемоль</b>, <b>До</b>.</p>" +
+		"<p><b>Фа</b>, <b>Ля</b>, <b>Ре</b>, <b>Фа</b>, <b>Си</b>, <b>Ми</b>, <b>До#</b>, <b>Ля</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
