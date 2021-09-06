@@ -1,9 +1,9 @@
 <div id="primary" class="clear-block">
   <nav>
-    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 4}"
-       *ngIf="competitionList.hasConcert" routerLink="/voteConcert" routerLinkActive="active">Онлайн-Концерт</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 3}"
        *ngIf="competitionList.hasComposition" routerLink="/voteComposition" routerLinkActive="active">Композиторский конкурс</a>
+    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 4}"
+       *ngIf="competitionList.hasConcert" routerLink="/voteConcert" routerLinkActive="active">Онлайн-Концерт</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 2}"
        *ngIf="competitionList.hasFree" routerLink="/voteFree" routerLinkActive="active">Свободная программа</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 0}"
