@@ -84,7 +84,7 @@ public class MigrateService {
         em.persist(competitionEntityComp);
 */
         
-        cal.set(2021, 03, 19, 23, 59);
+        cal.set(2021, 9, 25, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
