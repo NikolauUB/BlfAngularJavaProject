@@ -154,7 +154,7 @@ public class MigrateService {
 
     private String getClassicDescription() {
         return "<p><strong>Композитор</strong>:Мишель Блавет</p>" +
-                "<p><strong>Произведение</strong>: \"Siciliana's Little Bells\" из сонаты  No. 4 in G minor \"La Lumagne\""</p>" +
+                "<p><strong>Произведение</strong>: \"Siciliana's Little Bells\" из сонаты  No. 4 in G minor \"La Lumagne\"</p>" +
                 "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
 		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana-alto.pdf\" target=\"_blank\">более удобные для альта</a></p>" +
 		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana.xml\" target=\"_blank\">xml</a></p>" +
