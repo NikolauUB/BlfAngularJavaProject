@@ -61,7 +61,7 @@ public class MigrateService {
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/00i8aR-3dbk");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
