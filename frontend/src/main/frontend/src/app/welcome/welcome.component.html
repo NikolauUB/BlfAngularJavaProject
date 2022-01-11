@@ -2,7 +2,11 @@
 <div style="display:inline-block; width:45%; vertical-align: top">
   <h2>Новости</h2>
   
-  
+  <h3>Весенний конкурс композиторов 2022</h3>
+    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
+    <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
+    <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
+    
   
   <h3>Весенний онлайн-фестиваль 2021</h3>
     <p *ngIf="isObEnded()">Голосование по обязательной классической программе закрыто.</p>
@@ -14,11 +18,7 @@
     <p *ngIf="!isObStarted() && competitionList.hasBaroque">Срок сдачи записей обязательной классической программы: {{convertTimeToDate(this.obStartDate)}} <a routerLink="/baroque" routerLinkActive="active">Подать заявку</a></p>
     <p *ngIf="!isFreeStarted() && competitionList.hasFree">Срок сдачи записей обязательной свободной программы: {{convertTimeToDate(this.freeStartDate)}} <a routerLink="/free" routerLinkActive="active">Подать заявку</a></p>
   
-  <h3>Весенний конкурс композиторов 2021</h3>
-    <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
-    <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
-    <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
-    
+ 
   
   <div>
     <h3>Добавлена страница статистики</h3>
