@@ -154,8 +154,8 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>: </p>" +
-                "<p><strong>Произведение</strong>: </p>" +
+        return "<p><strong>Композитор</strong>: Giovanni Valentini</p>" +
+                "<p><strong>Произведение</strong>: Адажио из Сонаты A-moll</p>" +
                 "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/Sonata_Lya_min_Valentini.tif\" target=\"_blank\">http://dudari.ru/assets/score/Sonata_Lya_min_Valentini.tif</a></p>" +
 	
                 "<p>Произведение следует играть без аккомпанемента.</p>" +
