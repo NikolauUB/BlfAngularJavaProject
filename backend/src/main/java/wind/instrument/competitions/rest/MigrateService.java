@@ -55,7 +55,7 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-	
+	/*
 	cal.set(2022, 0, 17, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
@@ -82,25 +82,26 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-/*
+	*/
+
         
-        cal.set(2021, 9, 25, 23, 59);
+        cal.set(2022, 3, 25, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
         competitionEntity.setCompetitionName("Обязательная классическая программа");
         competitionEntity.setCompetitionDesc(this.getClassicDescription());
-        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/X1_te90GJxs");
+        competitionEntity.setCompetitionSampleVideo("https://www.youtube.com/embed/a4noKpE2s3E");
         competitionEntity.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntity.setCompetitionEnd(cal.getTime());
         competitionEntity.setActive(false);
         competitionEntity.setFuture(true);
 	em.persist(competitionEntity);
-*/	
+	
 	
 	/* 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
-        cal.set(2020, 3, 20, 23, 59);
+        cal.set(2020, 3, 25, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
         competitionEntityJazz.setCompetitionName("Обязательная народная программа");
         competitionEntityJazz.setCompetitionDesc(this.getJazzDescription());
@@ -112,20 +113,20 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-/*	    
+	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2021, 10, 1, 23, 59);
+        cal.set(2021, 4, 11, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/thFoVAC-0_4");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/AHfBJnq-SV0");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-*/	
+	
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
@@ -153,11 +154,10 @@ public class MigrateService {
     }
 
     private String getClassicDescription() {
-        return "<p><strong>Композитор</strong>:Мишель Блавет</p>" +
-                "<p><strong>Произведение</strong>: \"Siciliana's Little Bells\" из сонаты  No. 4 in G minor \"La Lumagne\"</p>" +
-                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana.pdf\" target=\"_blank\">Первоначальная версия</a></p>" +
-		"<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana-alto.pdf\" target=\"_blank\">более удобные для альта</a></p>" +
-		"<p><strong>Исходный файл: <a href=\"http://dudari.ru/assets/score/blavet-op2-sonata-no4-ciciliana.xml\" target=\"_blank\">xml</a></p>" +
+        return "<p><strong>Композитор</strong>: Giovanni Valentini</p>" +
+                "<p><strong>Произведение</strong>: Адажио из Сонаты A-moll</p>" +
+                "<p><strong>Ноты: <a href=\"http://dudari.ru/assets/score/Sonata_Lya_min_Valentini.tif\" target=\"_blank\">http://dudari.ru/assets/score/Sonata_Lya_min_Valentini.tif</a></p>" +
+	
                 "<p>Произведение следует играть без аккомпанемента.</p>" +
                 "<p>Удачи!</p>";
     }
