@@ -75,7 +75,7 @@ public class MigrateService {
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/7nthZZ_U0Ms");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/hWKc4VAZQf");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
@@ -137,9 +137,9 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов победила Людмила с блокфлейтовым дуэтом 'Осенних листьев хоровод'</p>" +
+        return "<p>В прошлом конкурсе композиторов победил Максим</p>" +
 		"<p>Задание на следующий раз: </p>" +
-		"<p><b>Ре</b>, <b>Сиb</b>, <b>Ля</b>, <b>Соль</b>, <b>Фа</b>, <b>Миb</b>, <b>Ре</b>, <b>Сиb</b>.</p>" +
+		"<p><b>Ля</b>, <b>Ми</b>, <b>Ми</b>, <b>Ля</b>, <b>Соль#</b>, <b>Си</b>, <b>Ре</b>, <b>Фа</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
