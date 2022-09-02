@@ -68,23 +68,23 @@ public class MigrateService {
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
         em.persist(competitionEntityConcert);
-	
+	*/
     
-        cal.set(2022, 2, 1, 23, 59);
+        cal.set(2022, 8, 12, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
         competitionEntityComp.setCompetitionName("Конкурс композиторов");
         competitionEntityComp.setCompetitionDesc(this.getCompositionDescription());
-        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/U9OUz5MdIK0");
+        competitionEntityComp.setCompetitionSampleVideo("https://www.youtube.com/embed/hWKc4VAZQf4");
         competitionEntityComp.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityComp.setCompetitionEnd(cal.getTime());
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	*/
+	
 
-        
+        /*
         cal.set(2022, 3, 25, 23, 59);
         CompetitionEntity competitionEntity = new CompetitionEntity();
         competitionEntity.setCompetitionType(CompetitionType.PRESCRIBED_BAROQUE);
@@ -99,7 +99,7 @@ public class MigrateService {
 	em.persist(competitionEntity);
 	
 	
-	/* 
+	 
         CompetitionEntity competitionEntityJazz = new CompetitionEntity();
         cal.set(2020, 3, 25, 23, 59);
         competitionEntityJazz.setCompetitionType(CompetitionType.PRESCRIBED_JAZZ);
@@ -115,11 +115,11 @@ public class MigrateService {
 	*/
 	    
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
-        cal.set(2021, 4, 11, 23, 59);
+        cal.set(2022, 9, 24, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
         competitionEntityFree.setCompetitionName("Свободная программа");
         competitionEntityFree.setCompetitionDesc("Любое произведение по Вашему выбору с аккомпанементом или без.");
-        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/AHfBJnq-SV0");
+        competitionEntityFree.setCompetitionSampleVideo("https://www.youtube.com/embed/7nthZZ_U0Ms");
 	competitionEntityFree.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityFree.setCompetitionEnd(cal.getTime());
@@ -137,9 +137,9 @@ public class MigrateService {
     }
 
     private String getCompositionDescription() {
-        return "<p>В прошлом конкурсе композиторов победила Людмила с блокфлейтовым дуэтом 'Осенних листьев хоровод'</p>" +
+        return "<p>В прошлом конкурсе композиторов победил Максим</p>" +
 		"<p>Задание на следующий раз: </p>" +
-		"<p><b>Ре</b>, <b>Сиb</b>, <b>Ля</b>, <b>Соль</b>, <b>Фа</b>, <b>Миb</b>, <b>Ре</b>, <b>Сиb</b>.</p>" +
+		"<p><b>Ля</b>, <b>Ми</b>, <b>Ми</b>, <b>Ля</b>, <b>Соль#</b>, <b>Си</b>, <b>Ре</b>, <b>Фа</b>.</p>" +
                 "<p>Последовательность не является темой - это лишь некоторый фрагмент темы, которую еще предстоит придумать. " +
                 "Возможно, как угодно, менять длительность заданных нот и делать акценты в произвольном месте.</p>" +
                 "<p>Голосование в композиторском конкурсе подобно голосованию на фестивалях.</p>" +
