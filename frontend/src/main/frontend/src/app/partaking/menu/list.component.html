@@ -1,14 +1,14 @@
 <div id="primary" class="clear-block">
   <nav>
-    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 0}"
-       *ngIf="competitionList.hasBaroque && this.competitionNotFinished(competitionList.baroqueEnd)"
-       routerLink="/baroque" routerLinkActive="active">Классическая обязательная программа</a>
-    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 2}"
-       *ngIf="competitionList.hasFree && this.competitionNotFinished(competitionList.freeEnd)"
-       routerLink="/free" routerLinkActive="active">Свободная программа</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 3}"
        *ngIf="competitionList.hasComposition && this.competitionNotFinished(competitionList.compositionEnd)"
        routerLink="/composition" routerLinkActive="active">Композиторский конкурс</a>
+    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 2}"
+       *ngIf="competitionList.hasFree && this.competitionNotFinished(competitionList.freeEnd)"
+       routerLink="/free" routerLinkActive="active">Свободная программа</a>
+    <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 0}"
+       *ngIf="competitionList.hasBaroque && this.competitionNotFinished(competitionList.baroqueEnd)"
+       routerLink="/baroque" routerLinkActive="active">Классическая обязательная программа</a>
     <a class="competitionlink" [ngClass]="{'competcurrent': this.competitionShortInfo.compType == 4}"
        *ngIf="competitionList.hasConcert && this.competitionNotFinished(competitionList.concertEnd)"
        routerLink="/concert" routerLinkActive="active">Онлайн-Концерт</a>
