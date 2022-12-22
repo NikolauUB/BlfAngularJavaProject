@@ -1,13 +1,16 @@
 <div>
 <div style="display:inline-block; width:45%; vertical-align: top">
   <h2>Новости</h2>
+
+  <h3>Зимний онлайн-концерт 2023</h3>
+  <p><a routerLink="/oncert" routerLinkActive="active">Подать заявку</a></p>
   
-  <h3>Весенний конкурс композиторов 2022</h3>
+  <h3>Весенний конкурс композиторов 2023</h3>
     <p *ngIf="isCompositionEnded()">Голосование в конкурсе композиторов закрыто. <a routerLink="/voteComposition" routerLinkActive="active">Послушать записи</a></p>
     <p *ngIf="isCompositionStarted() && !isCompositionEnded()">Голосование в конкурсе композиторов началось. Окончание голосования: {{convertTimeToDate(this.compositionEndDate)}} <a routerLink="/voteComposition" routerLinkActive="active">Голосовать</a></p>
     <p *ngIf="!isCompositionStarted() && competitionList.hasComposition">Срок сдачи записей и нот для конкурса композиторов: {{convertTimeToDate(this.compositionStartDate)}} <a routerLink="/composition" routerLinkActive="active">Подать заявку</a></p>
   
-   <h3>Весенний онлайн-фестиваль 2022</h3>
+  <h3>Весенний онлайн-фестиваль 2023</h3>
     <p *ngIf="isObEnded()">Голосование по обязательной классической программе закрыто.</p>
     <p *ngIf="isFreeEnded()">Голосование по обязательной свободной программе закрыто.</p>
 
