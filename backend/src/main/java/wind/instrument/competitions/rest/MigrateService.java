@@ -55,20 +55,20 @@ public class MigrateService {
         }
 
         Calendar cal = Calendar.getInstance();
-/*
-	    cal.set(2023, 0, 16, 23, 59);
+
+	cal.set(2024, 0, 22, 23, 59);
         CompetitionEntity competitionEntityConcert = new CompetitionEntity();
         competitionEntityConcert.setCompetitionType(CompetitionType.CONCERT);
         competitionEntityConcert.setCompetitionName("Онлайн-Концерт");
         competitionEntityConcert.setCompetitionDesc(this.getConcertDescription());
-        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/nFub4zvWvu8");
+        competitionEntityConcert.setCompetitionSampleVideo("https://www.youtube.com/embed/Qelw6Yb8VsY");
         competitionEntityConcert.setCompetitionStart(cal.getTime());
         cal.add(Calendar.MONTH, 1);
         competitionEntityConcert.setCompetitionEnd(cal.getTime());
         competitionEntityConcert.setActive(false);
         competitionEntityConcert.setFuture(true);
         em.persist(competitionEntityConcert);
- */   
+ /*
         cal.set(2023, 8, 4, 23, 59);
         CompetitionEntity competitionEntityComp = new CompetitionEntity();
         competitionEntityComp.setCompetitionType(CompetitionType.COMPOSITION);
@@ -81,7 +81,7 @@ public class MigrateService {
         competitionEntityComp.setActive(false);
         competitionEntityComp.setFuture(true);
         em.persist(competitionEntityComp);
-	
+*/	
 
         /*
         cal.set(2022, 3, 25, 23, 59);
@@ -112,7 +112,7 @@ public class MigrateService {
         competitionEntityJazz.setFuture(true);
         em.persist(competitionEntityJazz);
 	*/
-	    
+	 /*   
         CompetitionEntity competitionEntityFree = new CompetitionEntity();
         cal.set(2023, 10, 27, 23, 59);
         competitionEntityFree.setCompetitionType(CompetitionType.FREE);
@@ -125,7 +125,7 @@ public class MigrateService {
         competitionEntityFree.setActive(false);
         competitionEntityFree.setFuture(true);
         em.persist(competitionEntityFree);
-	
+	*/
         /*
         Query query = em.createQuery(
                 "update CompetitionEntity ce set ce.future = 'true' where ce.active = 'true' and ce.competitionType in (" +
